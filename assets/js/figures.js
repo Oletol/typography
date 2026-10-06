@@ -1,0 +1,391 @@
+/* Supporting infographics for theory cards. MIT License.
+   Every figure is a function (root) that renders an SVG or HTML diagram with a caption.
+   Colours come from CSS custom properties, so figures follow the light and dark themes. */
+(function () {
+  "use strict";
+
+  var FALLBACK = { serif: "Georgia, serif", slab: "Georgia, serif", sans: "system-ui, sans-serif", mono: "ui-monospace, monospace", display: "system-ui, sans-serif", script: "cursive" };
+  function font(id) { return window.FONTS.find(function (f) { return f.id === id; }); }
+  function st(id) { var f = font(id); return '"' + f.family + '", ' + FALLBACK[f.cls]; }
+  function ff(id) { return "font-family:" + App.esc(st(id)).replace(/&quot;/g, "'") + ";"; }
+  function esc(x) { return App.esc(x); }
+  function L(r, e) { return App.lang === "ru" ? r : e; }
+  function cap(text) { return '<p class="fig-cap">' + esc(text) + "</p>"; }
+  function scroll(svg, minw) { return '<div class="fig-scroll"><div style="min-width:' + minw + 'px">' + svg + '</div></div><p class="fig-swipe">' + esc(L("← схему можно прокрутить по горизонтали →", "← scroll the diagram horizontally →")) + "</p>"; }
+  function ready(ids, cb) {
+    if (!document.fonts) return cb();
+    Promise.all(ids.map(function (id) { return document.fonts.load('400 40px "' + font(id).family + '"', "АаHxхое"); })).then(cb, cb);
+  }
+  var cv = document.createElement("canvas").getContext("2d");
+  function m(id, size, txt, w) {
+    cv.font = (w || 400) + " " + size + 'px "' + font(id).family + '"';
+    var r = cv.measureText(txt);
+    return { w: r.width, asc: r.actualBoundingBoxAscent, desc: r.actualBoundingBoxDescent, l: r.actualBoundingBoxLeft, r: r.actualBoundingBoxRight };
+  }
+  function label(x, y, text, cls, anchor) { return '<text x="' + x + '" y="' + y + '" class="ft ' + (cls || "t-ink") + '" text-anchor="' + (anchor || "start") + '">' + esc(text) + "</text>"; }
+  function lead(x1, y1, x2, y2) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" class="s-acc" stroke-width="1.2"/><circle cx="' + x1 + '" cy="' + y1 + '" r="3.5" class="f-acc"/>'; }
+
+  window.Figures = {
+
+    /* ---------- anatomy ---------- */
+
+    elements: function (root) {
+      ready(["pt-serif"], function () {
+        var id = "pt-serif", S = 190, base = 270, W = 760;
+        var glyphs = [{ g: "н", x: 60 }, { g: "о", x: 300 }, { g: "е", x: 520 }];
+        var xh = m(id, S, "х").asc, svg = "";
+        glyphs.forEach(function (o) { o.m = m(id, S, o.g); o.l = o.x - o.m.l; o.w = o.m.l + o.m.r; svg += '<text x="' + o.x + '" y="' + base + '" style="' + ff(id) + "font-size:" + S + 'px" class="t-ink">' + o.g + "</text>"; });
+        var n = glyphs[0], o = glyphs[1], e = glyphs[2], top = base - xh;
+        svg += '<line x1="20" x2="740" y1="' + base + '" y2="' + base + '" class="s-line" stroke-dasharray="4 4"/><line x1="20" x2="740" y1="' + top + '" y2="' + top + '" class="s-line" stroke-dasharray="4 4"/>';
+        svg += lead(n.l + n.w * 0.13, base - xh * 0.55, n.l + n.w * 0.13, 70) + label(n.l + n.w * 0.13, 62, L("основной штрих", "stem"), "t-ink", "middle");
+        svg += lead(n.l + n.w * 0.5, base - xh * 0.5, n.l + n.w * 0.62, 100) + label(n.l + n.w * 0.62, 92, L("перекладина", "crossbar"), "t-ink", "start");
+        svg += lead(n.l + n.w * 0.02, base - 4, n.l - 6, 320) + label(n.l - 6, 336, L("засечка", "serif"), "t-ink", "middle");
+        svg += lead(o.l + o.w * 0.5, base - xh * 0.5, o.l + o.w * 0.5, 320) + label(o.l + o.w * 0.5, 336, L("внутрибуквенный просвет", "counter"), "t-ink", "middle");
+        svg += lead(o.l + o.w * 0.08, base - xh * 0.5, o.l + o.w * 0.08 - 10, 70) + label(o.l + o.w * 0.08 - 10, 62, L("толстая часть", "thick stroke"), "t-ink", "middle");
+        svg += lead(o.l + o.w * 0.5, top + xh * 0.035, o.l + o.w * 0.72, 100) + label(o.l + o.w * 0.72, 92, L("тонкая часть — контраст", "thin stroke — contrast"), "t-ink", "start");
+        svg += lead(e.l + e.w * 0.86, base - xh * 0.27, e.l + e.w * 0.9, 320) + label(e.l + e.w * 0.9, 336, L("апертура", "aperture"), "t-ink", "middle");
+        svg += label(745, top - 6, L("линия строчных", "x-height"), "t-mut", "end") + label(745, base - 6, L("базовая линия", "baseline"), "t-mut", "end");
+        root.innerHTML = scroll('<svg viewBox="0 0 ' + W + ' 350" class="fig-svg" role="img" aria-label="' + esc(L("Элементы знака", "Parts of a letter")) + '">' + svg + "</svg>", 600) +
+          cap(L("Элементы знака на примере антиквы PT Serif. Апертура — просвет полуоткрытой формы: чем он шире, тем легче различаются е, с, о в мелком кегле.", "Parts of a letter shown in PT Serif. The aperture is the opening of a semi-closed form: the wider it is, the easier e, c and o are told apart at small sizes."));
+      });
+    },
+
+    xheight: function (root) {
+      var ids = ["literata", "cormorant"];
+      ready(ids, function () {
+        var S = 70, base = 130, W = 760, svg = "";
+        ids.forEach(function (id, i) {
+          var x = 50 + i * 380, xh = m(id, S, "х").asc, cp = m(id, S, "Х").asc;
+          svg += '<text x="' + x + '" y="' + base + '" style="' + ff(id) + "font-size:" + S + 'px" class="t-ink">' + esc(L("Хорошо", "Example")) + "</text>";
+          svg += '<rect x="' + (x - 22) + '" y="' + (base - xh) + '" width="10" height="' + xh + '" class="f-acc" opacity=".85"/>';
+          svg += '<line x1="' + (x - 26) + '" x2="' + (x + 300) + '" y1="' + (base - xh) + '" y2="' + (base - xh) + '" class="s-acc" stroke-dasharray="5 4"/>';
+          svg += '<line x1="' + (x - 26) + '" x2="' + (x + 300) + '" y1="' + base + '" y2="' + base + '" class="s-line"/>';
+          svg += label(x, 170, font(id).family + " · 70 px", "t-ink fw-b") + label(x, 190, L("высота строчных ≈ ", "x-height ≈ ") + (xh / S).toFixed(2) + " em", "t-mut") + label(x, 208, Math.round(xh / cp * 100) + L(" % от высоты прописных", "% of cap height"), "t-mut");
+        });
+        root.innerHTML = scroll('<svg viewBox="0 0 ' + W + ' 220" class="fig-svg">' + svg + "</svg>", 620) +
+          cap(L("Одинаковый кегль, разный видимый размер: у Literata строчные знаки заметно выше, чем у Cormorant, поэтому при равном font-size она выглядит крупнее и лучше читается в мелком кегле.", "Same font size, different apparent size: Literata has much taller lowercase than Cormorant, so at equal font-size it looks larger and reads better at small sizes."));
+      });
+    },
+
+    screen: function (root) {
+      root.innerHTML = '<div class="fig-grid3">' +
+        '<div class="fig-tile"><p class="fig-h">' + esc(L("Контраст", "Contrast")) + '</p><span style="' + ff("playfair-display") + 'font-size:46px;line-height:1">Ромб</span><span style="' + ff("playfair-display") + 'font-size:11px">' + esc(L("Тонкие штрихи в 11 px почти исчезают", "Hairlines nearly vanish at 11 px")) + '</span><p class="fig-note">' + esc(L("Высокий контраст — для заголовков", "High contrast suits headings")) + "</p></div>" +
+        '<div class="fig-tile"><p class="fig-h">' + esc(L("Апертура", "Aperture")) + '</p><div class="fig-row"><span><span style="' + ff("arimo") + 'font-size:46px;line-height:1">се</span><small>' + esc(L("закрытая", "closed")) + '</small></span><span><span style="' + ff("pt-sans") + 'font-size:46px;line-height:1">се</span><small>' + esc(L("открытая", "open")) + '</small></span></div><p class="fig-note">Arimo · PT Sans</p></div>' +
+        '<div class="fig-tile"><p class="fig-h">' + esc(L("Различимость", "Distinctness")) + '</p><div class="fig-row"><span><span style="' + ff("arimo") + 'font-size:28px;line-height:1.1;white-space:nowrap">Il1 O0</span><small>' + esc(L("неразличимы", "ambiguous")) + '</small></span><span><span style="' + ff("jetbrains-mono") + 'font-size:26px;line-height:1.1;white-space:nowrap">Il1 O0</span><small>' + esc(L("различимы", "distinct")) + '</small></span></div><p class="fig-note">Arimo · JetBrains Mono</p></div>' +
+        "</div>" + cap(L("Три признака, которые определяют удобочитаемость шрифта на экране при малом кегле.", "Three features that determine on-screen legibility at small sizes."));
+    },
+
+    fontname: function (root) {
+      var R = { maker: L("проект или производитель", "project or foundry"), fam: L("семейство", "family"), cls: L("класс", "class"), ver: L("версия", "version"), opsz: L("оптический размер", "optical size"), wt: L("насыщенность", "weight"), slope: L("наклон", "slope"), width: L("ширина", "width") };
+      var names = [
+        [["PT", "maker"], ["Sans", "cls"], ["Caption", "opsz"], ["Bold", "wt"]],
+        [["Source", "fam"], ["Serif", "cls"], ["4", "ver"], ["Display", "opsz"], ["Semibold", "wt"], ["Italic", "slope"]],
+        [["Roboto", "fam"], ["Condensed", "width"], ["Light", "wt"]]
+      ];
+      root.innerHTML = '<div class="fig-names">' + names.map(function (n) {
+        return '<div class="fn-row">' + n.map(function (p) { return '<span class="fn-part fn-' + p[1] + '"><b>' + esc(p[0]) + "</b><small>" + esc(R[p[1]]) + "</small></span>"; }).join("") + "</div>";
+      }).join("") + "</div>" + cap(L("Название шрифта читается слева направо: от общего (семейство) к частному (оптический размер, ширина, насыщенность, наклон).", "A font name reads left to right: from the general (family) to the specific (optical size, width, weight, slope)."));
+    },
+
+    /* ---------- classes ---------- */
+
+    classtree: function (root) {
+      var C = [
+        ["literata", L("Антиква", "Serif"), L("засечки, контраст", "serifs, contrast"), L("старого стиля · переходная · классицистическая · современная", "old-style · transitional · didone · contemporary")],
+        ["roboto-slab", L("Брусковые", "Slab serif"), L("прямоугольные засечки, низкий контраст", "rectangular serifs, low contrast"), L("текстовые · плакатные", "text · poster")],
+        ["inter", L("Гротески", "Sans serif"), L("без засечек, низкий контраст", "no serifs, low contrast"), L("старые · неогротески · гуманистические · геометрические", "grotesque · neo-grotesque · humanist · geometric")],
+        ["jetbrains-mono", L("Моноширинные", "Monospace"), L("одинаковая ширина знаков", "equal character width"), L("код · таблицы · технические тексты", "code · tables · technical text")],
+        ["unbounded", L("Акцидентные", "Display"), L("выразительность, крупный кегль", "expressive, large sizes"), L("заголовки · логотипы · афиши", "headings · logos · posters")],
+        ["caveat", L("Рукописные", "Script"), L("имитация письма", "imitate handwriting"), L("короткие надписи · акценты", "short lines · accents")]
+      ];
+      root.innerHTML = '<div class="fig-tree"><div class="ft-root">' + esc(L("Шрифты", "Typefaces")) + '</div><div class="ft-kids">' + C.map(function (c) {
+        return '<div class="ft-node"><span class="ft-spec" style="' + ff(c[0]) + '">Аа</span><b>' + esc(c[1]) + "</b><small>" + esc(c[2]) + '</small><span class="ft-sub">' + esc(c[3]) + "</span></div>";
+      }).join("") + "</div></div>" + cap(L("Укрупнённая классификация, используемая в курсе: шесть классов и их подгруппы. Признаки разграничения — засечки, контраст, ось контраста, пропорции, апертура.", "The simplified classification used in the course: six classes and their subgroups. Distinguishing features: serifs, contrast, contrast axis, proportions, aperture."));
+    },
+
+    grotesques: function (root) {
+      var G = [
+        ["oswald", L("Старый гротеск", "Grotesque"), L("узкие пропорции, лёгкая неравномерность", "narrow proportions, slight irregularity")],
+        ["roboto", L("Неогротеск", "Neo-grotesque"), L("закрытая апертура, нейтральность", "closed aperture, neutrality")],
+        ["pt-sans", L("Гуманистический", "Humanist"), L("открытая апертура, пропорции антиквы", "open aperture, serif proportions")],
+        ["montserrat", L("Геометрический", "Geometric"), L("окружность и прямоугольник", "circle and rectangle")]
+      ];
+      root.innerHTML = '<div class="fig-grid4">' + G.map(function (g) {
+        return '<div class="fig-tile"><span style="' + ff(g[0]) + 'font-size:44px;line-height:1">Rсео</span><p class="fig-h">' + esc(g[1]) + '</p><p class="fig-note">' + esc(font(g[0]).family + " — " + g[2]) + "</p></div>";
+      }).join("") + "</div>" + cap(L("Сравните форму букв с, е и о: апертура и овал — главные признаки подгруппы гротеска.", "Compare the letters c, e and o: aperture and the oval are the main signs of a sans subgroup."));
+    },
+
+    /* ---------- character ---------- */
+
+    neutrality: function (root) {
+      var P = [["inter", 4], ["pt-serif", 22], ["playfair-display", 45], ["unbounded", 68], ["great-vibes", 92]];
+      root.innerHTML = '<div class="fig-scale"><div class="fs-poles"><span>' + esc(L("Передача информации", "Conveying information")) + "</span><span>" + esc(L("Эмоциональный заряд", "Emotional charge")) + '</span></div><div class="fs-bar"></div><div class="fs-items">' +
+        P.map(function (p) { return '<div class="fs-item" style="left:' + p[1] + '%"><span style="' + ff(p[0]) + 'font-size:30px;line-height:1">Аа</span><small>' + esc(font(p[0]).family) + "</small></div>"; }).join("") +
+        '</div><div class="fs-poles fs-under"><span>' + esc(L("внимание — смыслу текста", "attention goes to meaning")) + "</span><span>" + esc(L("внимание — форме и эмоции", "attention goes to form and emotion")) + "</span></div></div>" +
+        cap(L("Шкала нейтральности по А. Корольковой. Чем правее шрифт, тем большую долю внимания он забирает у содержания и тем короче должен быть текст.", "Neutrality scale after A. Korolkova. The further right a typeface sits, the more attention it takes from the content and the shorter the text should be."));
+    },
+
+    wheel: function (root) {
+      var SEC = [["sans", -90, 214, L("Гротески", "Sans")], ["concept", -45, 262, L("Концептуально-логические", "Conceptual")], ["imit", 0, 318, L("Имитации", "Imitations")], ["hand", 45, 14, L("Рукописные", "Handwritten")], ["hist", 90, 44, L("Исторические почерки", "Historical scripts")], ["callig", 135, 84, L("Каллиграфические", "Calligraphic")], ["serif", 180, 140, L("Антиквы", "Serif")], ["slab", -135, 188, L("Брусковые", "Slab serif")]];
+      var C = 300, R = 190, RINGS = [0.36, 0.66, 1];
+      function pt(a, r) { a = a * Math.PI / 180; return [C + Math.cos(a) * r, C + Math.sin(a) * r]; }
+      function arc(a0, a1, r0, r1) { var p0 = pt(a0, r1), p1 = pt(a1, r1), p2 = pt(a1, r0), p3 = pt(a0, r0); return "M" + p0 + " A" + r1 + "," + r1 + " 0 0 1 " + p1 + " L" + p2 + " A" + r0 + "," + r0 + " 0 0 0 " + p3 + " Z"; }
+      var svg = '<svg viewBox="0 0 600 600" class="fig-svg fig-wheel" role="img" aria-label="' + esc(L("Круг шрифтов", "Type wheel")) + '">';
+      SEC.forEach(function (s) {
+        for (var i = 1; i < RINGS.length; i++) svg += '<path d="' + arc(s[1] - 22.5, s[1] + 22.5, RINGS[i - 1] * R, RINGS[i] * R) + '" style="fill:hsl(' + s[2] + ' 60% ' + (i === 1 ? 84 : 70) + '%)" class="s-card" stroke-width="1.5"/>';
+        var lp = pt(s[1], R + 40), words = s[3].split(/[- ]/), lines = s[3].length > 13 && words.length > 1 ? [words[0] + (s[3].indexOf("-") > 0 ? "-" : ""), words.slice(1).join(" ")] : [s[3]];
+        svg += '<text class="ft fw-b t-ink" text-anchor="middle" x="' + lp[0] + '" y="' + (lp[1] - (lines.length - 1) * 8 + 5) + '">' + lines.map(function (l, i) { return '<tspan x="' + lp[0] + '" dy="' + (i ? 17 : 0) + '">' + esc(l) + "</tspan>"; }).join("") + "</text>";
+      });
+      svg += '<circle cx="' + C + '" cy="' + C + '" r="' + RINGS[0] * R + '" fill="#fff" fill-opacity=".85"/>';
+      svg += '<text class="ft fw-b" style="fill:#15223a" text-anchor="middle" x="' + C + '" y="' + (C + 5) + '">' + esc(L("ТЕКСТОВЫЕ", "TEXT")) + "</text>";
+      svg += '<text class="ft fs-s" style="fill:#15223a" text-anchor="middle" x="' + C + '" y="' + (C + (RINGS[0] + RINGS[1]) / 2 * R + 4) + '">' + esc(L("РЕГУЛЯРНЫЕ", "REGULAR")) + "</text>";
+      svg += '<text class="ft fs-s" style="fill:#15223a" text-anchor="middle" x="' + C + '" y="' + (C + (RINGS[1] + 1) / 2 * R + 4) + '">' + esc(L("АКЦИДЕНТНЫЕ", "DISPLAY")) + "</text>";
+      svg += '<defs><marker id="fwArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="f-acc"/></marker></defs>';
+      var a0 = pt(-62, RINGS[0] * R + 4), a1 = pt(-62, R - 4);
+      svg += '<line x1="' + a0[0] + '" y1="' + a0[1] + '" x2="' + a1[0] + '" y2="' + a1[1] + '" class="s-acc" stroke-width="3" marker-end="url(#fwArr)"/>';
+      svg += "</svg>";
+      root.innerHTML = '<div class="fig-wheel-wrap">' + svg + '<div class="fig-legend"><p><b>' + esc(L("От центра к краю", "From centre to edge")) + "</b> — " + esc(L("растёт выразительность: текстовые → регулярные → акцидентные. Чем дальше от центра, тем крупнее кегль и короче текст.", "expressiveness grows: text → regular → display. The further out, the larger the size and the shorter the text.")) + "</p><p><b>" + esc(L("По кругу", "Around the wheel")) + "</b> — " + esc(L("жанр шрифта: от книжных антикв до имитаций и исторических почерков.", "the genre: from book serifs to imitations and historical scripts.")) + "</p></div></div>" +
+        cap(L("Схема по мотивам классификации А. Корольковой: положение шрифта задаётся двумя координатами — жанром и степенью выразительности.", "Diagram after A. Korolkova's classification: a typeface is placed by two coordinates — genre and degree of expressiveness."));
+    },
+
+    factors: function (root) {
+      var optics = '<svg viewBox="0 0 220 120" class="fig-svg"><line x1="0" x2="220" y1="25" y2="25" class="s-warn" stroke-dasharray="5 4"/><line x1="0" x2="220" y1="95" y2="95" class="s-warn" stroke-dasharray="5 4"/><rect x="20" y="25" width="70" height="70" class="f-ink"/><circle cx="160" cy="60" r="38" class="f-ink"/></svg>';
+      var logic = '<svg viewBox="0 0 220 120" class="fig-svg"><g transform="translate(110 60) rotate(-30)"><rect x="-26" y="-5" width="52" height="10" rx="2" class="f-acc"/></g><path d="M40 95 C 70 20, 110 20, 130 60 S 175 100, 190 30" class="s-ink f-none" stroke-width="3"/><text x="110" y="114" class="ft fs-s t-mut" text-anchor="middle">' + esc(L("перо под углом 30°", "pen at 30°")) + "</text></svg>";
+      var trad = '<div style="' + ff("pt-serif") + 'font-size:44px;line-height:1.2;text-align:center">д л ф<br><span style="font-size:22px">' + esc(L("привычные формы", "familiar forms")) + "</span></div>";
+      root.innerHTML = '<div class="fig-grid3">' +
+        '<div class="fig-tile"><p class="fig-h">' + esc(L("Оптика", "Optics")) + "</p>" + optics + '<p class="fig-note">' + esc(L("Круг касается линий в одной точке и кажется меньше квадрата той же высоты", "A circle touches the guides at one point and looks smaller than a square of the same height")) + "</p></div>" +
+        '<div class="fig-tile"><p class="fig-h">' + esc(L("Логика", "Logic")) + "</p>" + logic + '<p class="fig-note">' + esc(L("Все знаки подчинены одному принципу — следу инструмента или конструктивному правилу", "All letters follow one principle — the trace of a tool or a construction rule")) + "</p></div>" +
+        '<div class="fig-tile"><p class="fig-h">' + esc(L("Традиция", "Tradition")) + "</p>" + trad + '<p class="fig-note">' + esc(L("Форма опирается на исторически сложившийся образ знаков и привычки читателя", "Form rests on the established image of letters and reading habits")) + "</p></div></div>" +
+        cap(L("Три фактора, определяющие форму шрифтового знака.", "Three factors that shape a letter."));
+    },
+
+    tool: function (root) {
+      function o(cx, rot, innerRx, innerRy, axis) {
+        return '<ellipse cx="' + cx + '" cy="110" rx="62" ry="78" class="f-ink"/><ellipse cx="' + cx + '" cy="110" rx="' + innerRx + '" ry="' + innerRy + '" transform="rotate(' + rot + " " + cx + ' 110)" class="f-card"/>' +
+          '<line x1="' + (cx + axis[0]) + '" y1="' + (110 + axis[1]) + '" x2="' + (cx - axis[0]) + '" y2="' + (110 - axis[1]) + '" class="s-warn" stroke-width="2" stroke-dasharray="6 4"/>';
+      }
+      var svg = '<svg viewBox="0 0 640 260" class="fig-svg">' +
+        o(150, -30, 36, 66, [-48, -82]) + o(470, 0, 24, 66, [0, -96]) +
+        '<g transform="translate(270 70) rotate(-30)"><rect x="-22" y="-6" width="44" height="12" rx="2" class="f-acc"/></g>' +
+        '<path d="M580 40 l14 40 l-14 14 l-14 -14 z" class="f-acc"/>' +
+        label(150, 222, L("Широконечное перо", "Broad-nib pen"), "t-ink fw-b", "middle") + label(150, 242, L("трансляция · наклонная ось", "translation · inclined axis"), "t-mut", "middle") +
+        label(470, 222, L("Остроконечное перо", "Pointed pen"), "t-ink fw-b", "middle") + label(470, 242, L("экспансия · вертикальная ось", "expansion · vertical axis"), "t-mut", "middle") +
+        "</svg>";
+      root.innerHTML = scroll(svg, 480) + cap(L("Контраст как след инструмента (по Г. Нордзею): пунктир показывает ось контраста — линию, соединяющую самые тонкие участки овала.", "Contrast as the trace of the tool (after G. Noordzij): the dashed line is the contrast axis connecting the thinnest parts of the oval."));
+    },
+
+    uiroles: function (root) {
+      root.innerHTML = '<div class="fig-ui"><div class="fu-phone"><p class="fu-hero" style="' + ff("unbounded") + '">' + esc(L("Лето в городе", "Summer in the city")) + '</p><div class="fu-ui" style="' + ff("golos-text") + '"><label>' + esc(L("Дата", "Date")) + '</label><span class="fu-input">12.07.2027</span><label>' + esc(L("Количество билетов", "Tickets")) + '</label><span class="fu-input">2</span><span class="fu-btn">' + esc(L("Купить билеты", "Buy tickets")) + '</span><small>' + esc(L("Возврат возможен за 24 часа до начала", "Refunds up to 24 hours before the start")) + "</small></div></div>" +
+        '<div class="fu-notes"><p><span class="fu-tag fu-a">A</span><b>' + esc(L("Акцидентный шрифт", "Display face")) + "</b> — " + esc(L("один крупный заголовок, передающий характер продукта.", "one large heading that carries the product's character.")) + '</p><p><span class="fu-tag fu-b">B</span><b>' + esc(L("Нейтральный интерфейсный шрифт", "Neutral interface face")) + "</b> — " + esc(L("подписи, поля, кнопки, сообщения: всё, что пользователь читает, выполняя задачу.", "labels, fields, buttons, messages: everything users read while doing a task.")) + "</p></div></div>" +
+        cap(L("Распределение ролей в интерфейсе: характер сосредоточен в одном элементе, основной набор остаётся нейтральным.", "Role distribution in an interface: character is concentrated in one element, the bulk of the text stays neutral."));
+    },
+
+    /* ---------- weights ---------- */
+
+    family: function (root) {
+      var faces = [["400", "normal", "Regular"], ["400", "italic", "Italic"], ["700", "normal", "Bold"], ["700", "italic", "Bold Italic"]];
+      root.innerHTML = '<div class="fig-fam"><div class="ff-level"><span class="ff-tag">' + esc(L("Суперсемейство", "Superfamily")) + '</span><div class="ff-box ff-root">PT</div></div>' +
+        '<div class="ff-level"><span class="ff-tag">' + esc(L("Семейство (гарнитура)", "Family (typeface)")) + '</span><div class="ff-row">' + ["pt-serif", "pt-sans", "pt-mono"].map(function (id) { return '<div class="ff-box' + (id === "pt-sans" ? " is-on" : "") + '" style="' + ff(id) + 'font-size:20px">' + font(id).family + "</div>"; }).join("") + "</div></div>" +
+        '<div class="ff-level"><span class="ff-tag">' + esc(L("Начертания PT Sans", "PT Sans styles")) + '</span><div class="ff-row">' + faces.map(function (f) { return '<div class="ff-box ff-face"><span style="' + ff("pt-sans") + "font-size:22px;font-weight:" + f[0] + ";font-style:" + f[1] + '">' + f[2] + "</span><code>" + f[0] + " · " + f[1] + "</code></div>"; }).join("") + "</div></div></div>" +
+        cap(L("Иерархия понятий: суперсемейство объединяет гарнитуры разных классов, гарнитура (семейство) — начертания, различающиеся насыщенностью и наклоном. В CSS семейство указывается в font-family, начертание — в font-weight и font-style.", "Hierarchy of terms: a superfamily unites typefaces of different classes; a typeface (family) unites styles that differ in weight and slope. In CSS the family goes in font-family, the style in font-weight and font-style."));
+    },
+
+    files: function (root) {
+      function blocks(n, cls) { var h = ""; for (var i = 0; i < n; i++) h += '<span class="fl-b ' + cls + '"></span>'; return h; }
+      root.innerHTML = '<div class="fig-files">' +
+        '<div class="fl-row"><b>' + esc(L("Статичный шрифт, 4 начертания", "Static font, 4 styles")) + '</b><div class="fl-blocks">' + blocks(4, "fl-cyr") + blocks(4, "fl-lat") + '</div><small>' + esc(L("Regular, Italic, Bold, Bold Italic × кириллица и латиница = 8 файлов", "Regular, Italic, Bold, Bold Italic × Cyrillic and Latin = 8 files")) + "</small></div>" +
+        '<div class="fl-row"><b>' + esc(L("Вариативный шрифт (прямой и курсив)", "Variable font (upright and italic)")) + '</b><div class="fl-blocks">' + blocks(2, "fl-cyr") + blocks(2, "fl-lat") + '</div><small>' + esc(L("весь диапазон насыщенности в одном файле на подмножество = 4 файла", "the whole weight range in one file per subset = 4 files")) + "</small></div>" +
+        '<div class="fl-key"><span><i class="fl-b fl-cyr"></i>' + esc(L("кириллица", "Cyrillic")) + '</span><span><i class="fl-b fl-lat"></i>' + esc(L("латиница", "Latin")) + "</span></div></div>" +
+        cap(L("Каждое начертание статического шрифта — отдельный запрос к серверу для каждого подмножества знаков. Вариативный файл тяжелее одного статического, но выгоднее, если нужны три и более насыщенности.", "Each static style is a separate request per character subset. A variable file is heavier than one static file but pays off when three or more weights are needed."));
+    },
+
+    emphasis: function (root) {
+      var R = [
+        ["ok", L("Термин <em>апертура</em> обозначает степень раскрытости знака.", "The term <em>aperture</em> denotes how open a letter is."), L("курсив — смысловое выделение", "italic — semantic emphasis")],
+        ["ok", L("<strong>Важно:</strong> изменения вступают в силу с 1 марта.", "<strong>Important:</strong> changes take effect on 1 March."), L("полужирный — ключевое слово", "bold — a key word")],
+        ["ok", '<span style="text-transform:uppercase;letter-spacing:.08em;font-size:.85em">' + L("Раздел 3", "Section 3") + "</span>", L("прописные с разрядкой — короткая надпись", "tracked caps — a short label")],
+        ["bad", L("Это <u>очень важная</u> мысль.", "This is a <u>very important</u> idea."), L("подчёркивание путают со ссылкой", "underline is mistaken for a link")],
+        ["bad", '<span style="text-transform:uppercase">' + L("Внимание: проверьте данные", "Attention: check your data") + "</span>", L("прописные без разрядки", "caps without tracking")],
+        ["bad", '<strong><em style="text-transform:uppercase">' + L("Срочно прочитайте", "Read urgently") + "</em></strong>", L("три средства сразу", "three devices at once")]
+      ];
+      root.innerHTML = '<div class="fig-emph">' + R.map(function (r) {
+        return '<div class="fe-row fe-' + r[0] + '"><span class="fe-mark">' + (r[0] === "ok" ? "✓" : "✕") + '</span><span class="fe-text" style="' + ff("pt-serif") + '">' + r[1] + '</span><small>' + esc(r[2]) + "</small></div>";
+      }).join("") + "</div>" + cap(L("Одно средство выделения на один случай. Сочетание нескольких средств и подчёркивание вне ссылок нарушают ровность набора.", "One emphasis device per case. Combining devices or underlining outside links disrupts the evenness of the text."));
+    },
+
+    /* ---------- setting ---------- */
+
+    measure: function (root) {
+      function block(x, w, lines, title, sub, cls) {
+        var h = "";
+        for (var i = 0; i < lines; i++) h += '<rect x="' + x + '" y="' + (40 + i * 16) + '" width="' + (i === lines - 1 ? w * 0.6 : w) + '" height="6" rx="3" class="' + cls + '"/>';
+        h += '<path d="M' + (x + w - 4) + " " + 43 + " C " + (x + w * 0.6) + " " + 52 + ", " + (x + w * 0.3) + " " + 50 + ", " + (x + 6) + " " + 57 + '" class="s-warn f-none" stroke-width="1.6" marker-end="url(#mArr)"/>';
+        return h + label(x, 22, title, "t-ink fw-b") + label(x, 40 + lines * 16 + 14, sub, "t-mut fs-s");
+      }
+      var svg = '<svg viewBox="0 0 760 190" class="fig-svg"><defs><marker id="mArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="f-warn-s"/></marker></defs>' +
+        block(10, 120, 7, L("< 45 знаков", "< 45 chars"), L("частые переводы строки", "frequent line breaks"), "f-mut") +
+        block(170, 230, 5, "45–75", L("оптимальный диапазон", "optimal range"), "f-good-s") +
+        block(440, 310, 4, L("> 75 знаков", "> 75 chars"), L("трудно найти начало строки", "hard to find the next line"), "f-mut") + "</svg>";
+      root.innerHTML = scroll(svg, 600) + cap(L("Стрелка — возвратное движение глаз к началу следующей строки. В длинной строке оно становится трудным, в короткой — слишком частым.", "The arrow is the return sweep of the eyes to the next line. In a long line it is hard, in a short one too frequent."));
+    },
+
+    mobile: function (root) {
+      root.innerHTML = '<div class="fig-mobile"><div class="fm-phone"><div class="fm-screen"><span class="fm-pad fm-l"></span><p style="' + ff("pt-serif") + '">' + esc(L("На экране шириной 375 px при кегле 17 px и полях по 16 px строка содержит около 40 знаков. Это нормальная длина для мобильного чтения.", "On a 375 px screen with 17 px text and 16 px margins a line holds about 40 characters. That is a normal length for mobile reading.")) + '</p><span class="fm-pad fm-r"></span></div></div>' +
+        '<ul class="fm-notes"><li><b>375 px</b> — ' + esc(L("типичная ширина области просмотра", "a typical viewport width")) + "</li><li><b>16 px</b> — " + esc(L("боковые поля", "side margins")) + "</li><li><b>16–18 px</b> — " + esc(L("кегль основного текста", "body size")) + "</li><li><b>35–50</b> — " + esc(L("знаков в строке", "characters per line")) + "</li></ul></div>" +
+        cap(L("На смартфоне длину строки задаёт ширина экрана: уменьшать кегль или поля, чтобы вместить больше знаков, не следует.", "On a phone the screen width sets the line length: do not shrink the size or margins to fit more characters."));
+    },
+
+    halfleading: function (root) {
+      ready(["onest"], function () {
+        var S = 64, LH = 1.6, lb = S * LH, top = 30, x = 150;
+        var mm = m("onest", S, "Шрифт xg"), ca = S * 1.0, half = (lb - ca) / 2;
+        var base = top + half + ca * 0.8;
+        var svg = '<svg viewBox="0 0 760 ' + (lb + 70) + '" class="fig-svg">' +
+          '<rect x="' + x + '" y="' + top + '" width="420" height="' + lb + '" class="f-soft s-line"/>' +
+          '<rect x="' + x + '" y="' + top + '" width="420" height="' + half + '" class="f-warnbg"/>' +
+          '<rect x="' + x + '" y="' + (top + lb - half) + '" width="420" height="' + half + '" class="f-warnbg"/>' +
+          '<text x="' + (x + 20) + '" y="' + base + '" style="' + ff("onest") + "font-size:" + S + 'px" class="t-ink">' + esc(L("Шрифт", "Type")) + "</text>" +
+          '<line x1="' + x + '" x2="' + (x + 420) + '" y1="' + base + '" y2="' + base + '" class="s-acc" stroke-dasharray="4 3"/>' +
+          label(x - 10, top + half / 2 + 5, L("полуинтерлиньяж", "half-leading"), "t-warn fs-s", "end") + label(x - 10, top + lb - half / 2 + 5, L("полуинтерлиньяж", "half-leading"), "t-warn fs-s", "end") +
+          label(x - 10, top + lb / 2 + 5, "font-size: " + S + "px", "t-ink fs-s", "end") +
+          '<line x1="' + (x + 440) + '" x2="' + (x + 440) + '" y1="' + top + '" y2="' + (top + lb) + '" class="s-ink"/><line x1="' + (x + 434) + '" x2="' + (x + 446) + '" y1="' + top + '" y2="' + top + '" class="s-ink"/><line x1="' + (x + 434) + '" x2="' + (x + 446) + '" y1="' + (top + lb) + '" y2="' + (top + lb) + '" class="s-ink"/>' +
+          label(x + 456, top + lb / 2 - 4, "line-height: " + LH, "t-ink fw-b") + label(x + 456, top + lb / 2 + 16, "= " + Math.round(lb) + " px", "t-mut") +
+          label(x, top + lb + 30, L("(" + Math.round(lb) + " − " + S + ") / 2 = " + String(Math.round(half * 10) / 10).replace(".", ",") + " px сверху и снизу строки", "(" + Math.round(lb) + " − " + S + ") / 2 = " + Math.round(half * 10) / 10 + " px above and below the line"), "t-mut") + "</svg>";
+        root.innerHTML = scroll(svg, 600) + cap(L("Строка в CSS: разница между line-height и кеглем делится поровну над строкой и под ней. Поэтому первая строка блока начинается ниже верхней границы контейнера.", "A CSS line box: the difference between line-height and font size is split equally above and below. That is why the first line starts below the top of its container."));
+        void mm;
+      });
+    },
+
+    vwchart: function (root) {
+      var X0 = 60, X1 = 720, Y0 = 230, Y1 = 20, vmin = 320, vmax = 1440, smin = 10, smax = 64;
+      function X(v) { return X0 + (v - vmin) / (vmax - vmin) * (X1 - X0); }
+      function Y(s) { return Y0 - (s - smin) / (smax - smin) * (Y0 - Y1); }
+      function path(fn) { var d = ""; for (var v = vmin; v <= vmax; v += 20) d += (d ? " L" : "M") + X(v).toFixed(1) + " " + Y(fn(v)).toFixed(1); return d; }
+      var vw = function (v) { return v * 0.04; }, cl = function (v) { return Math.min(48, Math.max(24, 16 + v * 0.025)); };
+      var svg = '<svg viewBox="0 0 760 290" class="fig-svg">';
+      [16, 32, 48, 64].forEach(function (s) { svg += '<line x1="' + X0 + '" x2="' + X1 + '" y1="' + Y(s) + '" y2="' + Y(s) + '" class="s-line"/>' + label(X0 - 8, Y(s) + 4, s + " px", "t-mut fs-s", "end"); });
+      [320, 768, 1024, 1440].forEach(function (v) { svg += label(X(v), Y0 + 20, v + " px", "t-mut fs-s", "middle"); });
+      svg += '<rect x="' + X0 + '" y="' + Y(16) + '" width="' + (X1 - X0) + '" height="' + (Y0 - Y(16)) + '" class="f-warnbg" opacity=".6"/>';
+      svg += '<path d="' + path(vw) + '" class="s-warn f-none" stroke-width="3"/><path d="' + path(cl) + '" class="s-acc f-none" stroke-width="3"/>';
+      svg += label(X(1400), Y(vw(1400)) - 12, "font-size: 4vw", "t-warn fw-b", "end") + label(X(700), Y(cl(700)) - 12, "clamp(1.5rem, 1rem + 2.5vw, 3rem)", "t-acc fw-b", "middle");
+      svg += label(X0 + 6, Y(16) + 20, L("зона нечитаемого кегля", "unreadably small"), "t-warn fs-s") + label((X0 + X1) / 2, Y0 + 44, L("ширина области просмотра", "viewport width"), "t-mut", "middle") + "</svg>";
+      root.innerHTML = scroll(svg, 600) + cap(L("Кегль в vw растёт без ограничений и не реагирует на масштабирование страницы. clamp() задаёт нижнюю и верхнюю границы в rem, поэтому учитывает настройки пользователя.", "A vw size grows without limits and ignores page zoom. clamp() sets lower and upper bounds in rem, so it respects user settings."));
+    },
+
+    ptpx: function (root) {
+      var rows = [[9, 12], [12, 16], [14, 18.67], [18, 24], [24, 32]];
+      root.innerHTML = '<div class="fig-ptpx"><div class="pp-scale">' + rows.map(function (r) {
+        return '<div class="pp-row"><span class="pp-pt">' + r[0] + ' pt</span><span class="pp-track"><span class="pp-bar" style="width:' + (r[1] / 32 * 100).toFixed(1) + '%"></span></span><span class="pp-px">' + String(r[1]).replace(".", App.lang === "ru" ? "," : ".") + ' px</span><span class="pp-sample" style="font-size:' + r[1] + 'px">Аа</span></div>';
+      }).join("") + '</div><div class="pp-dpr"><div class="pp-grid1"><span></span></div><span>1 CSS px · DPR 1</span><div class="pp-grid2">' + "<span></span>".repeat(4) + '</div><span>1 CSS px · DPR 2</span><div class="pp-grid3">' + "<span></span>".repeat(9) + "</div><span>1 CSS px · DPR 3</span></div></div>" +
+        cap(L("1 pt = 1/72 дюйма, 1 CSS px = 1/96 дюйма, поэтому 1 pt = 4/3 px. CSS-пиксель — условная единица: на экранах высокой плотности он отображается несколькими физическими пикселями (device pixel ratio).", "1 pt = 1/72 inch and 1 CSS px = 1/96 inch, so 1 pt = 4/3 px. A CSS pixel is a reference unit: on high-density screens it is drawn with several physical pixels (device pixel ratio)."));
+    },
+
+    /* ---------- scale ---------- */
+
+    modscale: function (root) {
+      var steps = [-1, 0, 1, 2, 3, 4], r = 1.25;
+      root.innerHTML = '<div class="fig-steps">' + steps.map(function (k) {
+        var px = 16 * Math.pow(r, k);
+        return '<div class="fst"><span style="' + ff("onest") + "font-size:" + px.toFixed(1) + 'px;line-height:1">Аа</span><b>' + (k > 0 ? "+" : "") + k + "</b><small>" + px.toFixed(1).replace(".0", "").replace(".", App.lang === "ru" ? "," : ".") + " px</small></div>";
+      }).join('<span class="fst-x">× 1,25</span>'.replace(",", App.lang === "ru" ? "," : ".")) + "</div>" +
+        cap(L("Модульная шкала с отношением 1,25 от базового кегля 16 px: каждая ступень в 1,25 раза больше предыдущей.", "A modular scale with ratio 1.25 from a 16 px base: each step is 1.25 times the previous one."));
+    },
+
+    ratios: function (root) {
+      var R = [1.125, 1.25, 1.5];
+      root.innerHTML = '<div class="fig-grid3">' + R.map(function (r) {
+        var lv = [3, 2, 1, 0].map(function (k) { return 11.5 * Math.pow(r, k); });
+        return '<div class="fig-tile"><p class="fig-h">' + String(r).replace(".", App.lang === "ru" ? "," : ".") + '</p><div style="' + ff("onest") + '">' +
+          '<div style="font-size:' + lv[0] + 'px;font-weight:700;line-height:1.1">' + esc(L("Заголовок", "Heading")) + '</div><div style="font-size:' + lv[1] + 'px;font-weight:700;line-height:1.2;margin-top:4px">' + esc(L("Подзаголовок", "Subheading")) + '</div><div style="font-size:' + lv[2] + 'px;font-weight:600;margin-top:4px">' + esc(L("Раздел", "Section")) + '</div><div style="font-size:' + lv[3] + 'px;color:var(--muted);margin-top:2px">' + esc(L("Основной текст абзаца", "Body text of a paragraph")) + "</div></div>" +
+          '<p class="fig-note">' + esc(r === 1.125 ? L("сдержанная, плотная иерархия: интерфейсы, документация", "restrained, dense: interfaces, docs") : r === 1.25 ? L("умеренная: большинство сайтов", "moderate: most websites") : L("выразительная: промостраницы, лонгриды", "expressive: landing pages, long reads")) + "</p></div>";
+      }).join("") + "</div>" + cap(L("Одна и та же структура при разных коэффициентах шкалы.", "The same structure at different scale ratios."));
+    },
+
+    headspace: function (root) {
+      function lines(y, n) { var h = ""; for (var i = 0; i < n; i++) h += '<rect x="20" y="' + (y + i * 14) + '" width="' + (i === n - 1 ? 260 : 420) + '" height="6" rx="3" class="f-mut"/>'; return h; }
+      var svg = '<svg viewBox="0 0 760 250" class="fig-svg">' + lines(20, 4) +
+        '<rect x="20" y="' + 128 + '" width="300" height="20" rx="3" class="f-ink"/>' + lines(178, 4) +
+        '<rect x="460" y="76" width="14" height="52" class="f-acc" opacity=".35"/><line x1="450" x2="484" y1="76" y2="76" class="s-acc"/><line x1="450" x2="484" y1="128" y2="128" class="s-acc"/>' + label(494, 107, L("отбивка над заголовком — 2 строки", "space above — 2 lines"), "t-acc fw-b") +
+        '<rect x="460" y="148" width="14" height="26" class="f-acc" opacity=".35"/><line x1="450" x2="484" y1="148" y2="148" class="s-acc"/><line x1="450" x2="484" y1="174" y2="174" class="s-acc"/>' + label(494, 166, L("под заголовком — 1 строка", "below — 1 line"), "t-acc fw-b") +
+        label(330, 143, L("Заголовок", "Heading"), "t-mut fs-s") + "</svg>";
+      root.innerHTML = scroll(svg, 560) + cap(L("Закон близости: заголовок ближе к тексту, который он вводит, чем к предыдущему разделу. Отступы удобно выражать в долях базового интерлиньяжа.", "The law of proximity: a heading sits closer to the text it introduces than to the previous section. Express spacing in multiples of the base line height."));
+    },
+
+    /* ---------- pairing ---------- */
+
+    roles: function (root) {
+      root.innerHTML = '<div class="fig-roles"><div class="fr-page"><p class="fr-h" style="' + ff("playfair-display") + '">' + esc(L("Как читать шрифт", "How to read a typeface")) + '</p><p class="fr-t" style="' + ff("source-sans-3") + '">' + esc(L("Основной текст набран гуманистическим гротеском: он нейтрален и хорошо читается на экране. Чтобы подключить шрифт, вызовите", "Body text is set in a humanist sans: neutral and legible on screen. To load the font, call")) + ' <code style="' + ff("jetbrains-mono") + '">loadFont()</code>.</p><span class="fr-btn" style="' + ff("source-sans-3") + '">' + esc(L("Подписаться", "Subscribe")) + "</span></div>" +
+        '<ul class="fr-key"><li><b style="' + ff("playfair-display") + '">Playfair Display</b> — ' + esc(L("заголовки", "headings")) + '</li><li><b style="' + ff("source-sans-3") + '">Source Sans 3</b> — ' + esc(L("основной текст и интерфейс", "body text and interface")) + '</li><li><b style="' + ff("jetbrains-mono") + '">JetBrains Mono</b> — ' + esc(L("программный код", "code")) + "</li></ul></div>" +
+        cap(L("У каждой гарнитуры — постоянная роль. Три гарнитуры оправданы только при трёх разных функциях текста.", "Each typeface has a fixed role. Three typefaces are justified only by three different text functions."));
+    },
+
+    contrastcommon: function (root) {
+      var rows = [[L("Засечки", "Serifs"), "≠", "="], [L("Пропорции", "Proportions"), "=", "="], [L("Высота строчных", "x-height"), "=", "="], [L("Апертура", "Aperture"), "=", "≈"], [L("Форма овалов", "Oval shape"), "=", "≈"]];
+      root.innerHTML = '<div class="fig-cc"><div class="fc-pairs"><div class="fig-tile is-good"><span style="' + ff("pt-serif") + 'font-size:26px;font-weight:700">' + esc(L("Заголовок", "Heading")) + '</span><span style="' + ff("pt-sans") + 'font-size:16px">' + esc(L("Основной текст абзаца", "Body paragraph text")) + '</span><p class="fig-note">PT Serif + PT Sans — ' + esc(L("контраст и общность", "contrast and unity")) + '</p></div><div class="fig-tile is-bad"><span style="' + ff("roboto") + 'font-size:26px;font-weight:700">' + esc(L("Заголовок", "Heading")) + '</span><span style="' + ff("arimo") + 'font-size:16px">' + esc(L("Основной текст абзаца", "Body paragraph text")) + '</span><p class="fig-note">Roboto + Arimo — ' + esc(L("различие незаметно: конфликт", "difference unnoticeable: conflict")) + "</p></div></div>" +
+        '<table class="fc-table"><tr><th></th><th>PT Serif + PT Sans</th><th>Roboto + Arimo</th></tr>' + rows.map(function (r) { return "<tr><td>" + esc(r[0]) + '</td><td class="' + (r[1] === "≠" ? "fc-diff" : "") + '">' + r[1] + "</td><td>" + r[2] + "</td></tr>"; }).join("") + "</table></div>" +
+        cap(L("Удачная пара: различие по одному явному признаку (≠) при общности остальных (=). Неудачная: различий нет, но гарнитуры не идентичны (≈).", "A good pair differs in one clear feature (≠) and shares the rest (=). A poor pair has no clear difference, yet the faces are not identical (≈)."));
+    },
+
+    /* ---------- accessibility ---------- */
+
+    contrastscale: function (root) {
+      var M = [[3, "#949494", L("AA для крупного текста", "AA large text")], [4.5, "#767676", L("AA для обычного текста · AAA для крупного", "AA normal text · AAA large text")], [7, "#595959", L("AAA для обычного текста", "AAA normal text")], [21, "#000000", L("максимум: чёрный на белом", "maximum: black on white")]];
+      function X(r) { return 4 + Math.log(r) / Math.log(21) * 92; }
+      root.innerHTML = '<div class="fig-cs"><div class="cs-bar"><span style="left:0">1:1</span><span style="right:0">21:1</span></div><div class="cs-marks">' + M.map(function (mk) {
+        return '<div class="cs-mark" style="left:' + X(mk[0]) + '%"><i></i><b>' + String(mk[0]).replace(".", App.lang === "ru" ? "," : ".") + ":1</b></div>";
+      }).join("") + '</div><div class="cs-samples">' + M.map(function (mk) {
+        return '<div class="cs-sample"><span style="color:' + mk[1] + '">' + esc(L("Образец текста", "Sample text")) + " " + mk[1] + "</span><small>" + String(mk[0]).replace(".", App.lang === "ru" ? "," : ".") + ":1 — " + esc(mk[2]) + "</small></div>";
+      }).join("") + "</div></div>" + cap(L("Пороговые значения контраста WCAG и соответствующие им оттенки серого на белом фоне. Шкала логарифмическая.", "WCAG contrast thresholds and the matching greys on white. The scale is logarithmic."));
+    },
+
+    /* ---------- web fonts ---------- */
+
+    fontface: function (root) {
+      var F = [["400", "normal", "onest-400.woff2"], ["400", "italic", "onest-400-italic.woff2"], ["700", "normal", "onest-700.woff2"], ["700", "italic", "onest-700-italic.woff2"]];
+      root.innerHTML = '<div class="fig-ff"><div class="ffc-css"><code>h2 {<br>&nbsp;&nbsp;font-family: "Onest";<br>&nbsp;&nbsp;<b>font-weight: 700;</b><br>}</code></div><div class="ffc-arrow">→</div><div class="ffc-faces">' + F.map(function (f) {
+        var on = f[0] === "700" && f[1] === "normal";
+        return '<div class="ffc-face' + (on ? " is-on" : "") + '"><code>@font-face · "Onest" · ' + f[0] + " · " + f[1] + '</code><span>' + f[2] + "</span></div>";
+      }).join("") + "</div></div>" + cap(L("Браузер сопоставляет font-family, font-weight и font-style элемента с описаниями @font-face и загружает только подходящий файл — и только тогда, когда он действительно нужен на странице.", "The browser matches the element's font-family, font-weight and font-style against the @font-face rules and downloads only the matching file, and only when the page actually needs it."));
+    },
+
+    subsets: function (root) {
+      var S = [["cyrillic", "U+0400–045F …", L("кириллица", "Cyrillic"), true], ["latin", "U+0000–00FF …", L("латиница, цифры, знаки", "Latin, digits, punctuation"), true], ["cyrillic-ext", "U+0460–052F …", L("расширенная кириллица", "extended Cyrillic"), false], ["greek", "U+0370–03FF", L("греческий", "Greek"), false], ["vietnamese", "U+0102–0103 …", L("вьетнамский", "Vietnamese"), false]];
+      root.innerHTML = '<div class="fig-sub"><div class="fsb-page"><small>' + esc(L("Текст страницы", "Page text")) + '</small><p style="' + ff("onest") + '">' + esc(L("Привет! Курс 2027 года — 9 модулей.", "Hello! The 2027 course has 9 modules.")) + '</p></div><div class="fsb-files">' + S.map(function (s) {
+        return '<div class="fsb-file' + (s[3] ? " is-on" : "") + '"><b>' + s[0] + ".woff2</b><code>" + s[1] + "</code><small>" + esc(s[2]) + " · " + esc(s[3] ? L("загружается", "downloaded") : L("не загружается", "not downloaded")) + "</small></div>";
+      }).join("") + "</div></div>" + cap(L("Шрифт разделён на подмножества с собственным unicode-range. Браузер загружает только те файлы, знаки которых встречаются на странице: для русского текста — кириллицу и латиницу (в ней цифры и знаки препинания).", "The font is split into subsets with their own unicode-range. The browser downloads only files whose characters appear on the page: for Russian text, Cyrillic and Latin (which holds digits and punctuation)."));
+    },
+
+    fdtimeline: function (root) {
+      var X0 = 210, X1 = 740, T = 4000;
+      function X(t) { return X0 + Math.min(t, T) / T * (X1 - X0); }
+      var rows = [["block", 3000, Infinity], ["swap", 100, Infinity], ["fallback", 100, 3000], ["optional", 100, 0]];
+      var svg = '<svg viewBox="0 0 760 ' + (rows.length * 46 + 40) + '" class="fig-svg">';
+      rows.forEach(function (r, i) {
+        var y = 20 + i * 46, b = r[1], sw = r[2] === Infinity ? T : b + r[2];
+        svg += label(X0 - 14, y + 20, "font-display: " + r[0], "t-ink fw-b fs-s", "end");
+        svg += '<rect x="' + X(0) + '" y="' + y + '" width="' + (X(b) - X(0)) + '" height="28" class="f-ink" opacity=".8"/>';
+        if (sw > b) svg += '<rect x="' + X(b) + '" y="' + y + '" width="' + (X(sw) - X(b)) + '" height="28" class="f-acc" opacity=".55"/>';
+        if (sw < T) svg += '<rect x="' + X(sw) + '" y="' + y + '" width="' + (X(T) - X(sw)) + '" height="28" class="f-mut" opacity=".35"/>';
+      });
+      var yl = 20 + rows.length * 46 + 6;
+      [0, 1000, 2000, 3000].forEach(function (t) { svg += label(X(t), yl + 4, t / 1000 + (App.lang === "ru" ? " с" : " s"), "t-mut fs-s", "middle"); });
+      root.innerHTML = scroll(svg + "</svg>", 600) + '<div class="fig-key"><span><i style="background:var(--ink);opacity:.8"></i>' + esc(L("блокировка: текст невидим", "block: text invisible")) + '</span><span><i style="background:var(--accent);opacity:.55"></i>' + esc(L("подмена: резервный шрифт, затем веб-шрифт", "swap: fallback, then web font")) + '</span><span><i style="background:var(--muted);opacity:.35"></i>' + esc(L("отказ: остаётся резервный шрифт", "failure: fallback stays")) + "</span></div>" + cap(L("Периоды отображения текста для разных значений font-display (длительности соответствуют рекомендациям спецификации CSS Fonts).", "Text rendering periods for each font-display value (durations follow the CSS Fonts specification's recommendations)."));
+    },
+
+    preload: function (root) {
+      function row(y, x, w, cls, text) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="20" rx="3" class="' + cls + '"/>' + label(x + w + 8, y + 15, text, "t-mut fs-s"); }
+      var svg = '<svg viewBox="0 0 760 250" class="fig-svg">' +
+        label(10, 22, L("Без preload", "Without preload"), "t-ink fw-b") + row(32, 10, 120, "f-mut", "HTML") + row(58, 120, 150, "f-mut", "CSS") + row(84, 270, 190, "f-warn-s", L("шрифт: запрос после разбора CSS", "font: requested after CSS is parsed")) +
+        label(10, 142, L("С preload", "With preload"), "t-ink fw-b") + row(152, 10, 120, "f-mut", "HTML") + row(178, 120, 150, "f-mut", "CSS") + row(204, 120, 190, "f-good-s", L("шрифт: загружается параллельно с CSS", "font: loads in parallel with CSS")) +
+        '<line x1="460" x2="460" y1="30" y2="110" class="s-warn" stroke-dasharray="4 3"/><line x1="310" x2="310" y1="150" y2="230" class="s-acc" stroke-dasharray="4 3"/>' + "</svg>";
+      root.innerHTML = scroll(svg, 600) + cap(L("Подсказка <link rel=\"preload\"> сообщает браузеру о шрифте до разбора CSS. Применяется только к одному-двум файлам, которые нужны на первом экране.", "A <link rel=\"preload\"> hint tells the browser about the font before CSS is parsed. Use it only for the one or two files needed on the first screen."));
+    },
+
+    rumarks: function (root) {
+      var R = [["« »", L("кавычки-«ёлочки»", "guillemets"), L("основные кавычки", "primary quotes"), "«шрифт»"], ["„ “", L("кавычки-„лапки“", "low-high quotes"), L("вложенные кавычки", "nested quotes"), "«о „Шрифте“»"], ["—", L("тире", "em dash"), L("между частями предложения, с пробелами", "between clauses, with spaces"), "кегль — размер"], ["–", L("короткое тире", "en dash"), L("числовые диапазоны, без пробелов", "number ranges, no spaces"), "10–15"], ["-", L("дефис", "hyphen"), L("внутри слова", "inside words"), "веб-шрифт"], ["−", L("минус", "minus"), L("в математических выражениях", "in maths"), "7 − 3 = 4"], ["°", L("неразрывный пробел", "non-breaking space"), L("после предлогов, перед тире, между числом и единицей", "after prepositions, before dashes, between number and unit"), "25°км"], ["№", L("знак номера", "numero sign"), L("с неразрывным пробелом", "with a non-breaking space"), "№°5"]];
+      root.innerHTML = '<div class="fig-marks">' + R.map(function (r) {
+        return '<div class="fmk"><span class="fmk-g" style="' + ff("pt-serif") + '">' + esc(r[0]) + '</span><b>' + esc(r[1]) + "</b><small>" + esc(r[2]) + '</small><span class="fmk-ex" style="' + ff("pt-serif") + '">' + esc(r[3]).replace(/°/g, '<span class="tk-nb">°</span>') + "</span></div>";
+      }).join("") + "</div>" + cap(L("Знаки русского набора. Знаком ° в примерах обозначен неразрывный пробел.", "Russian typesetting marks. The ° sign in the examples marks a non-breaking space."));
+    }
+  };
+})();

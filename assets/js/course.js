@@ -122,7 +122,7 @@
 
   var modules = [
     {
-      id: "anatomy", minutes: 50,
+      id: "anatomy", minutes: 55,
       title: t("Анатомия шрифта", "Anatomy of type"),
       goal: t("Освоить терминологию строения знака и понять, как элементы шрифта влияют на восприятие текста на экране.", "Master the terminology of letter structure and understand how the parts of a typeface affect on-screen reading."),
       topics: [],
@@ -153,6 +153,7 @@
         {
           kind: "idea",
           title: t("Элементы знака", "Parts of a letterform"),
+          figure: "elements",
           body: t("Для описания и сравнения гарнитур используется устойчивая терминология, обозначающая отдельные элементы знака.", "A stable terminology for individual parts of a letterform is used to describe and compare typefaces."),
           points: [
             t("Основной штрих (stem) — главный, как правило вертикальный, элемент знака; соединительный штрих (hairline) — тонкий элемент, связывающий основные.", "Stem — the main, usually vertical, stroke; hairline — the thin stroke connecting the main ones."),
@@ -191,6 +192,7 @@
         {
           kind: "idea",
           title: t("Высота строчных и удобочитаемость", "x-height and readability"),
+          figure: "xheight",
           body: t("Высота строчных во многом определяет видимый размер шрифта. Гарнитуры, разработанные для экранного чтения и интерфейсов, как правило, имеют увеличенную высоту строчных: это повышает различимость знаков при малом кегле.", "x-height largely determines the apparent size of a typeface. Typefaces designed for screen reading and interfaces tend to have a large x-height, which improves character recognition at small sizes."),
           points: [
             t("Чрезмерная высота строчных сокращает выносные элементы и ослабляет различие очертаний слов, что может снижать скорость чтения длинных текстов.", "An excessive x-height shortens ascenders and descenders and weakens word-shape distinctions, which may slow down reading of long texts."),
@@ -219,6 +221,7 @@
         {
           kind: "idea",
           title: t("Контраст, засечки и апертура на экране", "Contrast, serifs and aperture on screen"),
+          figure: "screen",
           body: t("Элементы, обеспечивающие выразительность шрифта в крупном кегле, при малом кегле могут снижать удобочитаемость. На экране это проявляется сильнее, чем в печати, из-за ограниченного числа пикселей, приходящихся на штрих.", "Features that make a typeface expressive at large sizes may reduce readability at small sizes. On screen this is more pronounced than in print because few pixels are available per stroke."),
           points: [
             t("Тонкие соединительные штрихи высококонтрастных антикв при малом кегле и низкой плотности пикселей теряют чёткость; такие гарнитуры уместны преимущественно в заголовках.", "The hairlines of high-contrast serifs lose definition at small sizes and low pixel density; such typefaces suit headings primarily."),
@@ -243,6 +246,25 @@
           code: t("/* значение по умолчанию */\nh1, p { font-optical-sizing: auto; }", "/* default value */\nh1, p { font-optical-sizing: auto; }"),
           demo: "opsz",
           sources: [R.mdnOpticalSizing, R.mdnVariable]
+        },
+        {
+          kind: "idea",
+          title: t("Как читать название шрифта", "How to read a font name"),
+          figure: "fontname",
+          body: t("Название начертания строится по устойчивой схеме: сначала семейство, затем уточнения — класс, оптический размер, ширина, насыщенность и наклон. Умение читать название помогает выбрать нужный файл, верно указать font-weight и font-style и не перепутать варианты одной гарнитуры.", "A style name follows a stable pattern: first the family, then the qualifiers — class, optical size, width, weight and slope. Reading names correctly helps you pick the right file, set font-weight and font-style, and avoid mixing up variants of one typeface."),
+          points: [
+            t("Первое слово нередко указывает на проект или производителя: PT — шрифты проекта ParaType Public Types, IBM Plex — корпоративное семейство IBM.", "The first word often names the project or foundry: PT — fonts of ParaType's Public Types project; IBM Plex — IBM's corporate family."),
+            t("Класс: Serif, Sans, Slab, Mono. Оптический размер: Caption — для мелкого кегля; Text, Subhead, Display — для всё более крупного. Иногда слово входит в имя семейства: Playfair Display изначально предназначена для крупного кегля.", "Class: Serif, Sans, Slab, Mono. Optical size: Caption — for small sizes; Text, Subhead, Display — for progressively larger ones. Sometimes the word is part of the family name: Playfair Display was designed for large sizes."),
+            t("Ширина: Condensed, Narrow — узкое; Extended, Wide — широкое. Насыщенность: от Thin до Black (модуль 4). Наклон: Italic, Oblique.", "Width: Condensed, Narrow — narrow; Extended, Wide — wide. Weight: Thin to Black (Module 4). Slope: Italic, Oblique."),
+            t("Технические пометки: Variable (VF) — вариативный файл; Pro — как правило, расширенный набор знаков; SC — капитель.", "Technical labels: Variable (VF) — a variable file; Pro — usually an extended character set; SC — small caps.")
+          ],
+          sources: [R.gfPtSans, R.mdnOpticalSizing]
+        },
+        {
+          kind: "task",
+          title: t("Разберите название шрифта", "Parse a font name"),
+          body: t("Определите, что обозначают слова в названиях реальных шрифтов: производителя, класс, оптический размер, ширину, насыщенность или наклон.", "Identify what the words in real font names denote: foundry, class, optical size, width, weight or slope."),
+          demo: "tFontName"
         },
         {
           kind: "check",
@@ -342,6 +364,7 @@
         {
           kind: "idea",
           title: t("Принципы классификации", "Principles of classification"),
+          figure: "classtree",
           body: t("Классификации шрифтов основываются на совокупности формальных признаков и историческом происхождении гарнитур. Ни одна из существующих систем не является исчерпывающей: многие современные шрифты сочетают признаки нескольких групп.", "Type classifications rest on a combination of formal features and the historical origin of typefaces. No existing system is exhaustive: many contemporary typefaces combine features of several groups."),
           points: [
             t("Основные признаки: наличие и форма засечек, степень контраста, наклон оси контраста, пропорции и характер апертуры.", "Main features: presence and form of serifs, degree of contrast, inclination of the contrast axis, proportions and aperture."),
@@ -389,6 +412,7 @@
         {
           kind: "idea",
           title: t("Гротески: подгруппы", "Sans serif: subgroups"),
+          figure: "grotesques",
           body: t("Гротески (рубленые шрифты, sans serif) лишены засечек; как правило, они имеют низкий контраст и увеличенную высоту строчных. Подгруппы различаются пропорциями, формой овалов и апертурой.", "Sans serif typefaces lack serifs; they typically have low contrast and a large x-height. Subgroups differ in proportions, oval shapes and aperture."),
           points: [
             t("Старые гротески (XIX — начало XX в.): некоторая неравномерность рисунка, лёгкий контраст. Пример узкого гротеска — Oswald.", "Grotesques (19th–early 20th c.): some irregularity of design and slight contrast. A condensed example: Oswald."),
@@ -541,12 +565,13 @@
         {
           kind: "try",
           title: t("Один текст — разные голоса", "One text, different voices"),
-          body: t("Введите короткую фразу и сравните, как меняется её восприятие в восьми гарнитурах. Сформулируйте для каждого образца два-три определения: строгий, дружелюбный, праздничный, технологичный, архаичный. Затем отметьте флажок и сопоставьте свои определения с положением шрифта на круге.", "Enter a short phrase and compare how its perception changes across eight typefaces. Give each sample two or three adjectives: strict, friendly, festive, technical, archaic. Then tick the box and compare your adjectives with the typeface's position on the wheel."),
+          body: t("Введите короткую фразу и сравните, как меняется её восприятие в восьми гарнитурах. Сформулируйте для каждого образца два-три определения: строгий, дружелюбный, праздничный, технологичный, архаичный. Затем отметьте флажок и сравните свои определения с характеристикой каждого шрифта и степенью выраженности его характера.", "Enter a short phrase and compare how its perception changes across eight typefaces. Give each sample two or three adjectives: strict, friendly, festive, technical, archaic. Then tick the box and compare your adjectives with each typeface's character and how strongly it is expressed."),
           demo: "voices"
         },
         {
           kind: "idea",
           title: t("Нейтральность и выразительность", "Neutrality and expressiveness"),
+          figure: "neutrality",
           body: t("Характер шрифта — совокупность ассоциаций, которые форма знаков вызывает у читателя. А. Королькова предлагает располагать шрифты на шкале между двумя полюсами: шрифтами для передачи информации, не отвлекающими от содержания, и шрифтами с сильным эмоциональным зарядом. Выбирая положение на шкале, дизайнер распределяет внимание читателя между смыслом текста и его эмоциональной окраской.", "Typeface character is the set of associations that letterforms evoke in the reader. Alexandra Korolkova proposes placing typefaces on a scale between two poles: faces that convey information without distracting from the content, and faces with a strong emotional charge. By choosing a position on the scale, the designer distributes the reader's attention between the meaning of the text and its emotional colouring."),
           points: [
             t("Чем больше объём текста, тем ближе к нейтральному полюсу должен быть шрифт.", "The more text there is, the closer to the neutral pole the typeface should be."),
@@ -558,6 +583,7 @@
         {
           kind: "idea",
           title: t("Круг шрифтов: жанр и степень выразительности", "The type wheel: genre and expressiveness"),
+          figure: "wheel",
           body: t("Шкалу нейтральности удобно развернуть в круг. В центре находятся текстовые шрифты: их характер приглушён, и разные гарнитуры этой зоны близки по впечатлению. Далее располагаются регулярные шрифты для заголовков и коротких текстов. На периферии — акцидентные шрифты с ярко выраженным характером. Направление от центра задаёт жанр: антиквы, брусковые, гротески, концептуально-логические шрифты, имитации, рукописные, исторические почерки, каллиграфические.", "The neutrality scale can be unfolded into a wheel. Text faces sit at the centre: their character is muted, and different typefaces in this zone make a similar impression. Next come regular faces for headings and short texts. Display faces with a strong character occupy the edge. The direction from the centre sets the genre: serif, slab serif, sans serif, conceptual and logical, imitations, handwritten, historical scripts, calligraphic."),
           points: [
             t("Удалённость от центра определяет допустимый объём текста и минимальный кегль.", "Distance from the centre determines the acceptable amount of text and the minimum size."),
@@ -598,6 +624,7 @@
         {
           kind: "idea",
           title: t("Оптика, логика, традиция", "Optics, logic, tradition"),
+          figure: "factors",
           body: t("Форма шрифтового знака складывается под действием трёх факторов. Их анализ позволяет объяснить характер шрифта, а не только описать его.", "The form of a letter is shaped by three factors. Analysing them makes it possible to explain a typeface's character rather than merely describe it."),
           points: [
             t("Оптика: форма корректируется с учётом особенностей зрительного восприятия — нависания округлых знаков, утончения штрихов в местах соединений, компенсации горизонталей.", "Optics: form is corrected for visual perception — overshoot of round letters, thinning of strokes at joins, compensation of horizontals."),
@@ -616,12 +643,14 @@
         {
           kind: "idea",
           title: t("Логика инструмента и характер", "Tool logic and character"),
+          figure: "tool",
           body: t("Г. Нордзей описывает контраст штриха как результат движения инструмента. Широконечное перо даёт трансляционный контраст с наклонной осью (антиква старого стиля), остроконечное перо с переменным нажимом — экспансионный контраст с вертикальной осью (классицистическая антиква). Поэтому ось и тип контраста, рассмотренные в модуле 2, — это не только признаки классификации, но и источник характера: живой и динамичный у антиквы старого стиля, торжественный и статичный у дидонов.", "Gerrit Noordzij describes stroke contrast as the result of the tool's movement. A broad-nib pen produces translation contrast with an inclined axis (old-style serif); a pointed pen with varying pressure produces expansion contrast with a vertical axis (didone). The axis and type of contrast covered in Module 2 are therefore not only classification features but also a source of character: lively and dynamic in old-style serifs, ceremonial and static in didones."),
           sources: [R.noordzij, R.gfContrast]
         },
         {
           kind: "web",
           title: t("Характер в интерфейсе", "Character in interfaces"),
+          figure: "uiroles",
           body: t("В интерфейсе текст выполняет служебную функцию: подписи полей, кнопки, сообщения, таблицы. Пользователь решает задачу, а не читает, поэтому интерфейсный шрифт должен оставаться незаметным. Характер продукта передаётся через заголовки, крупные цифры, иллюстрации и тон текстов, тогда как основной набор интерфейса выполняется нейтральной гарнитурой из центра круга.", "In an interface, text performs a service function: field labels, buttons, messages, tables. Users perform tasks rather than read, so the interface typeface should stay unobtrusive. Product character is conveyed through headings, large figures, illustrations and tone of voice, while the bulk of the interface is set in a neutral typeface from the centre of the wheel."),
           points: [
             t("Интерфейсные гарнитуры (Inter, Golos, Onest, системные шрифты) рассчитаны на мелкий кегль и плотные экраны.", "Interface typefaces (Inter, Golos, Onest, system fonts) are designed for small sizes and dense screens."),
@@ -708,6 +737,7 @@
         {
           kind: "idea",
           title: t("Гарнитура, семейство, начертание", "Typeface, family, style"),
+          figure: "family",
           body: t("Гарнитура — совокупность шрифтов, объединённых общим рисунком. Начертание — вариант гарнитуры, различающийся насыщенностью, наклоном или шириной. Набор начертаний одной гарнитуры образует семейство; в CSS он объединяется общим значением font-family.", "A typeface is a set of fonts sharing a common design. A style is a variant of the typeface differing in weight, slope or width. All styles of one typeface form a family; in CSS they share a common font-family value."),
           points: [
             t("Насыщенность (weight) — толщина штрихов: от светлого до сверхжирного.", "Weight — stroke thickness, from thin to black."),
@@ -807,6 +837,7 @@
         {
           kind: "web",
           title: t("Начертания и производительность", "Styles and performance"),
+          figure: "files",
           body: t("Каждое начертание статического шрифта загружается отдельным файлом, а при разделении на подмножества — несколькими. Количество подключаемых начертаний прямо влияет на объём загрузки и скорость отображения текста.", "Each style of a static font is loaded as a separate file, or several files when split into subsets. The number of styles directly affects payload size and text rendering speed."),
           points: [
             t("Пример из каталога курса: PT Serif в четырёх начертаниях (400, 700 и их курсивы) — 8 файлов кириллицы и латиницы общим объёмом около 210 КБ; вариативный Inter с диапазоном 100–900 и курсивом — 4 файла, около 136 КБ.", "An example from the course catalogue: PT Serif in four styles (400, 700 and their italics) is 8 Cyrillic and Latin files, about 210 KB; variable Inter with a 100–900 range plus italic is 4 files, about 136 KB."),
@@ -818,6 +849,7 @@
         {
           kind: "idea",
           title: t("Средства выделения в тексте", "Means of emphasis in text"),
+          figure: "emphasis",
           body: t("Выделение должно быть соразмерно задаче и не нарушать ровность набора. Как правило, достаточно одного средства выделения; сочетание нескольких (полужирный курсив прописными) снижает удобочитаемость.", "Emphasis should match its purpose without disrupting the evenness of the setting. One means of emphasis is usually enough; combining several (bold italic capitals) reduces readability."),
           points: [
             t("Курсив — для смыслового выделения в основном тексте, названий, иноязычных слов; полужирное — для ключевых терминов, подписей и элементов интерфейса.", "Italic for semantic emphasis in body text, titles and foreign words; bold for key terms, labels and interface elements."),
@@ -898,6 +930,7 @@
         {
           kind: "idea",
           title: t("Длина строки: 45–75 знаков", "Line length: 45–75 characters"),
+          figure: "measure",
           body: t("Оптимальная длина строки основного текста составляет 45–75 знаков с пробелами, в среднем около 65. Чрезмерно длинная строка затрудняет возвратное движение глаз к началу следующей строки; чрезмерно короткая дробит синтагмы и повышает частоту переводов строки.", "The optimal line length for body text is 45–75 characters including spaces, about 65 on average. Overlong lines hinder the return sweep to the next line; overly short lines fragment phrases and increase the frequency of line breaks."),
           points: [
             t("По данным пользовательских исследований Baymard Institute, оптимальный диапазон составляет 50–75 знаков.", "User research by the Baymard Institute places the optimum at 50–75 characters."),
@@ -921,6 +954,7 @@
         {
           kind: "web",
           title: t("Длина строки на мобильных устройствах", "Line length on mobile devices"),
+          figure: "mobile",
           body: t("На мобильных устройствах длина строки определяется шириной экрана. При кегле 16–18 px и боковых полях 16–20 px строка содержит примерно 35–50 знаков, что считается приемлемым для чтения с экрана смартфона.", "On mobile devices line length is determined by the screen width. At 16–18 px with 16–20 px side margins a line holds roughly 35–50 characters, which is considered acceptable for reading on a smartphone."),
           points: [
             t("Уменьшение кегля ради увеличения числа знаков в строке снижает удобочитаемость.", "Reducing the font size to fit more characters per line impairs readability."),
@@ -957,6 +991,7 @@
         {
           kind: "web",
           title: t("Полуинтерлиньяж", "Half-leading"),
+          figure: "halfleading",
           body: t("В CSS разница между значением line-height и высотой шрифта распределяется поровну над строкой и под ней (полуинтерлиньяж, half-leading). Вследствие этого текстовый блок имеет дополнительные отступы сверху и снизу, что затрудняет точное выравнивание текста относительно пиктограмм и границ контейнера.", "In CSS the difference between line-height and the font's height is distributed equally above and below the line (half-leading). As a result, a text block carries extra space at the top and bottom, which complicates precise alignment with icons and container edges."),
           points: [
             t("Величина этих отступов возрастает с увеличением line-height; её необходимо учитывать при переносе отступов из макета.", "This space grows with line-height and must be accounted for when transferring spacing from a mockup."),
@@ -984,6 +1019,24 @@
         },
         {
           kind: "web",
+          title: t("Пункт и пиксель", "Points and pixels"),
+          figure: "ptpx",
+          body: t("В полиграфии и текстовых редакторах кегль измеряется в пунктах (pt), в CSS — в пикселях и производных единицах. В CSS обе единицы привязаны к дюйму: 1 pt = 1/72 дюйма, 1 px = 1/96 дюйма, следовательно 1 pt = 4/3 px, а 12 pt = 16 px.", "In print and word processors type is measured in points (pt), in CSS in pixels and derived units. In CSS both are tied to the inch: 1 pt = 1/72 inch, 1 px = 1/96 inch, hence 1 pt = 4/3 px and 12 pt = 16 px."),
+          points: [
+            t("CSS-пиксель — опорная единица, а не точка экрана. На экранах высокой плотности он отображается несколькими физическими пикселями: при device pixel ratio 2 — квадратом 2 × 2.", "A CSS pixel is a reference unit, not a screen dot. On high-density screens it is drawn with several physical pixels: a 2 × 2 square at a device pixel ratio of 2."),
+            t("Пороговые значения WCAG заданы в пунктах: крупный текст — от 18 pt (24 px) или от 14 pt полужирного начертания (≈ 18,67 px).", "WCAG thresholds are given in points: large text starts at 18 pt (24 px) or 14 pt bold (≈ 18.67 px)."),
+            t("Пункты в CSS уместны только в стилях для печати (@media print); для экрана используют rem.", "Points belong only in print styles (@media print); use rem for screens.")
+          ],
+          sources: [R.mdnLength, R.wcagContrast]
+        },
+        {
+          kind: "task",
+          title: t("Пункты, пиксели и плотность экрана", "Points, pixels and screen density"),
+          body: t("Переведите значения из пунктов в пиксели и обратно, рассчитайте число физических пикселей при заданной плотности экрана.", "Convert between points and pixels and calculate physical pixels for a given screen density."),
+          demo: "tPtPx"
+        },
+        {
+          kind: "web",
           title: t("Единица rem и пользовательские настройки", "The rem unit and user settings"),
           body: t("Браузер позволяет пользователю изменить базовый размер шрифта. Значения в px эту настройку игнорируют, значения в rem учитывают: 1rem равен базовому размеру, по умолчанию 16 px. Масштабирование страницы действует в обоих случаях, однако настройкой базового размера шрифта пользуются, в частности, люди со слабым зрением.", "Browsers let users change the default font size. Values in px ignore this setting, values in rem respect it: 1rem equals the base size, 16 px by default. Page zoom works in both cases, but the base font-size setting is relied upon, among others, by people with low vision."),
           points: [
@@ -997,6 +1050,7 @@
         {
           kind: "web",
           title: t("Адаптивный кегль и ограничения единицы vw", "Fluid font size and the limits of vw"),
+          figure: "vwchart",
           body: t("Кегль, заданный исключительно в единицах vw, не изменяется при масштабировании страницы, что квалифицируется как несоответствие критерию WCAG 1.4.4 (типовая ошибка F94). Рекомендуется сочетать rem и vw в функции clamp(), задающей минимальное значение, плавное изменение и максимальное значение.", "A font size set solely in vw does not change with page zoom, which constitutes a failure of WCAG 1.4.4 (common failure F94). Combine rem and vw within clamp(), which defines a minimum, a fluid range and a maximum."),
           points: [
             t("Адаптивный кегль наиболее востребован для заголовков; кегль основного текста обычно варьируется в пределах 1–2 px.", "Fluid sizing matters most for headings; body text size usually varies by 1–2 px."),
@@ -1104,6 +1158,7 @@
         {
           kind: "idea",
           title: t("Модульная шкала", "The modular scale"),
+          figure: "modscale",
           body: t("Модульная шкала — последовательность кеглей, каждый из которых получается умножением предыдущего на постоянный коэффициент. Базовым значением обычно служит кегль основного текста. Шкала обеспечивает согласованность размеров и сокращает число произвольных решений.", "A modular scale is a sequence of sizes, each obtained by multiplying the previous one by a constant ratio. The base is usually the body text size. The scale ensures consistency between sizes and reduces arbitrary decisions."),
           points: [
             t("Формула: кегль = базовый кегль × коэффициентⁿ, где n — номер ступени (отрицательный для мелких элементов).", "Formula: size = base × ratioⁿ, where n is the step (negative for small elements)."),
@@ -1120,6 +1175,7 @@
         {
           kind: "idea",
           title: t("Выбор коэффициента", "Choosing a ratio"),
+          figure: "ratios",
           body: t("Коэффициент определяет контрастность иерархии. Небольшие коэффициенты дают сдержанную, плотную систему; крупные — выразительную, с резким разрывом между заголовками и текстом.", "The ratio determines the contrast of the hierarchy. Small ratios give a restrained, compact system; large ones an expressive system with sharp contrast between headings and text."),
           points: [
             t("1.125–1.2 — интерфейсы, информационно насыщенные страницы, мобильные экраны.", "1.125–1.2: interfaces, information-dense pages, mobile screens."),
@@ -1183,6 +1239,7 @@
         {
           kind: "web",
           title: t("Интерлиньяж и отступы заголовков", "Heading line height and spacing"),
+          figure: "headspace",
           body: t("Заголовки набираются с меньшим интерлиньяжем, чем основной текст (1.1–1.25), а вертикальные отступы между элементами целесообразно выводить из базового интерлиньяжа. Это создаёт вертикальный ритм — согласованность интервалов по всей странице.", "Headings use tighter line height than body text (1.1–1.25), and vertical spacing between elements is best derived from the base line height. This creates vertical rhythm, a consistency of intervals across the page."),
           points: [
             t("Отступ над заголовком делается больше, чем под ним: margin-block: 2em 0.5em.", "Space above a heading is larger than below: margin-block: 2em 0.5em."),
@@ -1272,6 +1329,7 @@
         {
           kind: "idea",
           title: t("Функции шрифтов в макете", "Functions of typefaces in a layout"),
+          figure: "roles",
           body: t("Вторая гарнитура оправдана, только если она выполняет отдельную функцию: заголовки и основной текст, интерфейс и содержание, текст и программный код. Во многих случаях иерархию достаточно построить средствами одной гарнитуры — кеглем, насыщенностью и курсивом.", "A second typeface is justified only when it serves a distinct function: headings vs body, interface vs content, text vs code. In many cases one typeface suffices, with hierarchy built through size, weight and italic."),
           points: [
             t("Большинство макетов допускает вторую гарнитуру, немногие — третью; четыре и более практически всегда избыточны.", "Most layouts tolerate a second typeface, few a third; four or more are almost always excessive."),
@@ -1283,6 +1341,7 @@
         {
           kind: "idea",
           title: t("Контраст и общность", "Contrast and affinity"),
+          figure: "contrastcommon",
           body: t("Удачная пара сочетает явное различие по одному-двум признакам с общностью по остальным. Различие обеспечивает функциональное разграничение, общность — целостность макета.", "A successful pair combines a clear difference in one or two features with affinity in the others. The difference separates functions; the affinity keeps the layout coherent."),
           points: [
             t("Параметры сравнения: пропорции, апертура, насыщенность и наклон, форма овалов, контраст штриха.", "Parameters for comparison: proportions, aperture, weight and slope, oval shape, stroke contrast."),
@@ -1419,6 +1478,7 @@
         {
           kind: "idea",
           title: t("Требования к контрасту текста", "Text contrast requirements"),
+          figure: "contrastscale",
           body: t("Контраст определяется как отношение относительной яркости более светлого и более тёмного цветов и выражается величиной от 1:1 до 21:1. Требования WCAG 2.1 положены в основу российского стандарта ГОСТ Р 52872-2019, действующего с 1 апреля 2020 года.", "Contrast is the ratio of the relative luminance of the lighter and darker colours, ranging from 1:1 to 21:1. WCAG 2.1 requirements underlie the Russian standard GOST R 52872-2019, in force since 1 April 2020."),
           points: [
             t("Уровень AA (критерий 1.4.3): не менее 4.5:1 для обычного текста и 3:1 для крупного. Крупным считается текст от 18 pt (около 24 px) или от 14 pt полужирного начертания (около 18.5 px).", "Level AA (1.4.3): at least 4.5:1 for normal text and 3:1 for large text. Large text is 18 pt (about 24 px) or 14 pt bold (about 18.5 px) and above."),
@@ -1611,6 +1671,7 @@
         {
           kind: "web",
           title: t("Правило @font-face", "The @font-face rule"),
+          figure: "fontface",
           body: t("Правило @font-face связывает имя семейства с файлом шрифта и описывает, какое начертание и какие знаки этот файл содержит. Каждому сочетанию насыщенности, стиля и подмножества знаков соответствует отдельное правило.", "@font-face binds a family name to a font file and describes which style and which characters the file contains. Each combination of weight, style and character subset gets its own rule."),
           points: [
             t("font-family — имя, по которому семейство вызывается в CSS; src — адрес файла и формат.", "font-family is the name used in CSS; src gives the file URL and format."),
@@ -1624,6 +1685,7 @@
         {
           kind: "web",
           title: t("Формат WOFF2 и подмножества знаков", "WOFF2 and character subsets"),
+          figure: "subsets",
           body: t("Формат WOFF2 поддерживается всеми современными браузерами и обеспечивает наилучшее сжатие; другие форматы для новых проектов не требуются. Разделение шрифта на подмножества сокращает объём: русскоязычному сайту, как правило, нужны кириллическое и латинское подмножества.", "WOFF2 is supported by all modern browsers and compresses best; other formats are unnecessary for new projects. Splitting a font into subsets reduces size: a Russian-language site usually needs the Cyrillic and Latin subsets."),
           points: [
             t("Латинское подмножество необходимо и в русском тексте: в нём находятся цифры, знаки препинания и латинские слова.", "The Latin subset is needed even for Russian text: it contains digits, punctuation and Latin words."),
@@ -1640,6 +1702,7 @@
         {
           kind: "web",
           title: t("Стратегии отображения: font-display", "Display strategies: font-display"),
+          figure: "fdtimeline",
           body: t("Пока веб-шрифт загружается, браузер либо скрывает текст (FOIT — flash of invisible text), либо показывает его резервным шрифтом с последующей заменой (FOUT — flash of unstyled text). Дескриптор font-display управляет этим поведением через периоды блокировки, подмены и отказа.", "While a web font loads, the browser either hides text (FOIT, flash of invisible text) or shows it in a fallback and swaps later (FOUT, flash of unstyled text). font-display controls this through block, swap and failure periods."),
           points: [
             t("swap — текст сразу виден резервным шрифтом, веб-шрифт применяется в любой момент после загрузки; подходит, если гарнитура важна для облика сайта.", "swap: text is visible immediately in the fallback and the web font is applied whenever it arrives; suits typefaces essential to the site's identity."),
@@ -1665,6 +1728,7 @@
         {
           kind: "web",
           title: t("Предварительная загрузка", "Preloading"),
+          figure: "preload",
           body: t("Браузер узнаёт о необходимости шрифта поздно — после загрузки CSS и построения дерева отображения. Подсказка preload позволяет начать загрузку раньше, но применять её следует только к одному-двум файлам, необходимым для первого экрана.", "The browser discovers a font late, after loading CSS and building the render tree. preload starts the download earlier but should be used only for the one or two files needed for the first screen."),
           points: [
             t("Для шрифтов атрибут crossorigin обязателен даже при загрузке с того же домена: шрифты запрашиваются в анонимном режиме CORS. Без атрибута файл будет загружен дважды.", "Fonts require the crossorigin attribute even from the same origin, as they are fetched in anonymous CORS mode. Without it the file is downloaded twice."),
@@ -1719,6 +1783,7 @@
         {
           kind: "idea",
           title: t("Нормы русского набора", "Russian typesetting norms"),
+          figure: "rumarks",
           body: t("Русская типографская традиция использует собственные знаки и правила, которые не совпадают с английскими. На экране их нарушение так же заметно, как в печати, и снижает доверие к тексту.", "Russian typographic tradition has its own characters and rules that differ from English. On screen their violation is as noticeable as in print and undermines trust in the text."),
           points: [
             t("Кавычки: основные — «ёлочки», вложенные — „лапки“: «шрифт — это „голос“ текста».", "Quotes: primary «guillemets», nested „low-high quotes“: «шрифт — это „голос“ текста»."),

@@ -654,6 +654,62 @@
           };
         }
       });
+    },
+
+    /* ---------- added: font names, points and pixels ---------- */
+
+    tFontName: function (root) {
+      var R = { maker: L("проект или производитель", "project or foundry"), fam: L("семейство", "family"), cls: L("класс", "class"), ver: L("версия", "version"), opsz: L("оптический размер", "optical size"), wt: L("насыщенность", "weight"), slope: L("наклон", "slope"), width: L("ширина", "width"), tech: L("технический признак файла", "technical file feature") };
+      var BANK = [
+        [["PT", "maker"], ["Sans", "cls"], ["Caption", "opsz"], ["Bold", "wt"]],
+        [["Source", "fam"], ["Serif", "cls"], ["4", "ver"], ["Display", "opsz"], ["Semibold", "wt"], ["Italic", "slope"]],
+        [["Roboto", "fam"], ["Condensed", "width"], ["Light", "wt"]],
+        [["IBM", "maker"], ["Plex", "fam"], ["Sans", "cls"], ["Condensed", "width"], ["Medium", "wt"], ["Italic", "slope"]],
+        [["Noto", "fam"], ["Serif", "cls"], ["Display", "opsz"], ["Black", "wt"]],
+        [["Fira", "fam"], ["Sans", "cls"], ["Extra Condensed", "width"], ["Thin", "wt"]],
+        [["PT", "maker"], ["Serif", "cls"], ["Caption", "opsz"], ["Italic", "slope"]],
+        [["Literata", "fam"], ["Variable", "tech"]],
+        [["Roboto", "fam"], ["Mono", "cls"], ["Bold", "wt"], ["Italic", "slope"]],
+        [["Source", "fam"], ["Sans", "cls"], ["3", "ver"], ["ExtraBold", "wt"]],
+        [["Roboto", "fam"], ["Slab", "cls"], ["Black", "wt"]],
+        [["Open", "fam"], ["Sans", "cls"], ["Condensed", "width"], ["Light", "wt"]]
+      ];
+      var ROLES = Object.keys(R);
+      var ACC = { maker: L("проект или производителя", "project or foundry"), cls: L("класс", "class"), ver: L("версию", "version"), opsz: L("оптический размер", "optical size"), wt: L("насыщенность", "weight"), slope: L("наклон", "slope"), width: L("ширину", "width"), tech: L("технический признак файла", "technical file feature") };
+      drill(root, {
+        rounds: 8, pass: 6,
+        gen: function (n) {
+          var name = pick(BANK), full = name.map(function (p) { return p[0]; }).join(" ");
+          var parts = name.filter(function (p) { return p[1] !== "fam"; });
+          var target = pick(parts);
+          if (n % 2 === 0) {
+            return {
+              q: L("Название шрифта: <b>" + esc(full) + "</b>. Какое слово обозначает <b>" + esc(ACC[target[1]]) + "</b>?", "Font name: <b>" + esc(full) + "</b>. Which word denotes the <b>" + esc(R[target[1]]) + "</b>?"),
+              choices: name.map(function (p) { return '<span style="font-size:18px">' + esc(p[0]) + "</span>"; }), answer: name.indexOf(target),
+              ex: name.map(function (p) { return p[0] + " — " + R[p[1]]; }).join("; ") + "."
+            };
+          }
+          var opts = shuffle([target[1]].concat(shuffle(ROLES.filter(function (r) { return r !== target[1] && r !== "fam"; })).slice(0, 3)));
+          return {
+            q: L("Название шрифта: <b>" + esc(full) + "</b>. Что обозначает слово <b>«" + esc(target[0]) + "»</b>?", "Font name: <b>" + esc(full) + "</b>. What does <b>“" + esc(target[0]) + "”</b> denote?"),
+            choices: opts.map(function (r) { return esc(R[r]); }), answer: opts.indexOf(target[1]),
+            ex: name.map(function (p) { return p[0] + " — " + R[p[1]]; }).join("; ") + "."
+          };
+        }
+      });
+    },
+
+    tPtPx: function (root) {
+      var gens = [
+        function () { var p = pick([9, 10.5, 12, 14, 18, 24, 36]); return { q: L("Кегль в текстовом редакторе — " + num(p, 1) + " pt. Какому значению в CSS-пикселях он соответствует?", "A word processor uses " + p + " pt. What is it in CSS pixels?"), answer: p * 4 / 3, tol: 0.1, unit: "px", ex: L("1 pt = 4/3 px, так как 1 pt = 1/72 дюйма, а 1 px = 1/96 дюйма.", "1 pt = 4/3 px because 1 pt = 1/72 inch and 1 px = 1/96 inch.") }; },
+        function () { var x = pick([16, 20, 24, 32]); return { q: L("Кегль на сайте — " + x + " px. Сколько это пунктов?", "The site uses " + x + " px. How many points is that?"), answer: x * 0.75, tol: 0.1, unit: "pt", ex: L("1 px = 0,75 pt.", "1 px = 0.75 pt.") }; },
+        function () { var w = pick([360, 375, 390, 414]), d = pick([2, 3]); return { q: L("Ширина области просмотра смартфона — " + w + " CSS px, device pixel ratio — " + d + ". Сколько физических пикселей экрана приходится на эту ширину?", "A phone viewport is " + w + " CSS px wide with a device pixel ratio of " + d + ". How many physical pixels is that?"), answer: w * d, tol: 0, unit: L("пикс.", "px"), ex: L("CSS-пиксель отображается DPR × DPR физическими пикселями; по ширине — DPR пикселями.", "A CSS pixel is drawn with DPR × DPR physical pixels; DPR pixels across.") }; },
+        function () { return { q: L("WCAG считает крупным обычный текст от 18 pt. Каков этот порог в CSS-пикселях?", "WCAG treats regular text from 18 pt as large. What is that threshold in CSS pixels?"), answer: 24, tol: 0.1, unit: "px", ex: L("18 × 4/3 = 24 px.", "18 × 4/3 = 24 px.") }; },
+        function () { return { q: L("Полужирный текст считается крупным по WCAG от 14 pt. Каков этот порог в CSS-пикселях?", "Bold text counts as large in WCAG from 14 pt. What is that threshold in CSS pixels?"), answer: 14 * 4 / 3, tol: 0.1, unit: "px", ex: L("14 × 4/3 ≈ 18,67 px.", "14 × 4/3 ≈ 18.67 px.") }; },
+        function () { var x = pick([12, 16, 18]); return { q: L("Кегль задан как " + num(x / 16, 3) + " rem, корневой кегль — 16 px. Сколько это пунктов?", "The size is " + (x / 16) + " rem with a 16 px root. How many points is that?"), answer: x * 0.75, tol: 0.1, unit: "pt", ex: L(num(x / 16, 3) + " rem = " + x + " px = " + num(x * 0.75, 2) + " pt.", (x / 16) + " rem = " + x + " px = " + x * 0.75 + " pt.") }; }
+      ];
+      var order;
+      drill(root, { rounds: 6, pass: 5, gen: function (n) { if (n === 0) order = shuffle(gens); return order[n](); } });
     }
   });
 

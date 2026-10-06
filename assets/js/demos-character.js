@@ -44,8 +44,18 @@
       pick: "Выберите точку на круге, чтобы увидеть образец шрифта.",
       sample: "Съешь же ещё этих мягких французских булок",
       note: "Схема построена по мотивам классификации А. Корольковой: направление от центра задаёт жанр, удалённость от центра — степень выразительности. Размещение шрифтов из каталога курса — учебная интерпретация и может обсуждаться.",
+      voice: {
+        "pt-serif": ["книжный, сдержанный, академичный", "характер приглушён"],
+        "inter": ["нейтральный, деловой, технологичный", "характер приглушён"],
+        "playfair-display": ["торжественный, элегантный, контрастный", "характер выражен"],
+        "unbounded": ["современный, технологичный, броский", "характер ярко выражен"],
+        "press-start-2p": ["игровой, ретро, цифровой", "характер ярко выражен"],
+        "caveat": ["неформальный, дружелюбный, личный", "характер выражен"],
+        "ruslan-display": ["архаичный, сказочный, исторический", "характер ярко выражен"],
+        "great-vibes": ["праздничный, изысканный, церемониальный", "характер ярко выражен"]
+      },
       phrase: "Текст образца", phraseDef: "Приглашаем на открытие сезона",
-      reveal: "Показать положение на круге",
+      reveal: "Показать характеристику шрифта",
       fam: "Гарнитура",
       fStart: "Начать чтение", fDone: "Прочитано", fAgain: "Повторить",
       fFont: "Непривычная гарнитура для текста Б",
@@ -80,8 +90,18 @@
       pick: "Select a point on the wheel to see a specimen.",
       sample: "Sphinx of black quartz, judge my vow",
       note: "The diagram follows Alexandra Korolkova's classification: the direction from the centre sets the genre, the distance from the centre sets the degree of expressiveness. Placing the course's typefaces is a teaching interpretation open to discussion.",
+      voice: {
+        "pt-serif": ["bookish, restrained, academic", "muted character"],
+        "inter": ["neutral, businesslike, technical", "muted character"],
+        "playfair-display": ["ceremonial, elegant, high-contrast", "noticeable character"],
+        "unbounded": ["contemporary, technical, bold", "strong character"],
+        "press-start-2p": ["playful, retro, digital", "strong character"],
+        "caveat": ["informal, friendly, personal", "noticeable character"],
+        "ruslan-display": ["archaic, fairy-tale, historical", "strong character"],
+        "great-vibes": ["festive, refined, ceremonial", "strong character"]
+      },
       phrase: "Sample text", phraseDef: "Join us for the season opening",
-      reveal: "Show position on the wheel",
+      reveal: "Show the typeface character",
       fam: "Typeface",
       fStart: "Start reading", fDone: "Done", fAgain: "Repeat",
       fFont: "Unfamiliar typeface for text B",
@@ -153,8 +173,8 @@
       root.innerHTML = '<label class="ctl"><span class="ctl-head"><span>' + esc(s("phrase")) + '</span></span><input type="text" class="pj-input" id="vcIn" maxlength="60" value="' + esc(s("phraseDef")) + '"></label>' +
         '<label class="toggles"><span><input type="checkbox" id="vcShow"> ' + esc(s("reveal")) + "</span></label>" +
         '<div class="vc-grid">' + ids.map(function (id) {
-          var p = PLACED.filter(function (x) { return x[0] === id; })[0];
-          return '<figure class="vc-cell"><p class="vc-text" style="font-family:' + esc(stack(id)) + (id === "press-start-2p" ? ";font-size:15px;line-height:1.6" : "") + '"></p><figcaption><span>' + esc(font(id).family) + '</span><span class="vc-pos" hidden>' + esc(s("sec")[p[1]][0]) + " · " + esc(s("ringShort")[ringOf(p[2])]) + "</span></figcaption></figure>";
+          var d = s("voice")[id];
+          return '<figure class="vc-cell"><p class="vc-text" style="font-family:' + esc(stack(id)) + (id === "press-start-2p" ? ";font-size:13px;line-height:1.7" : "") + '"></p><figcaption><span>' + esc(font(id).family) + '</span><span class="vc-pos" hidden>' + esc(d[0]) + '<br><span class="vc-lvl">' + esc(d[1]) + "</span></span></figcaption></figure>";
         }).join("") + "</div>";
       var inp = root.querySelector("#vcIn");
       function upd() { root.querySelectorAll(".vc-text").forEach(function (e) { e.textContent = inp.value; }); }

@@ -169,6 +169,7 @@
         var b = view.querySelector(".task-badge"); if (b) b.hidden = false;
       }
     };
+    view.querySelectorAll("[data-fig]").forEach(function (f) { if (window.Figures && window.Figures[f.dataset.fig]) window.Figures[f.dataset.fig](f); });
     var demoEl = view.querySelector("[data-demo]");
     if (demoEl && window.Demos[demoEl.dataset.demo]) window.Demos[demoEl.dataset.demo](demoEl);
     var quizEl = view.querySelector(".quiz");
@@ -195,12 +196,13 @@
       '<p class="kind kind-' + c.kind + '">' + esc(T(kindKey)) + (c.kind === "task" ? '<span class="task-badge"' + (taskDone ? "" : " hidden") + ">" + icon("check") + esc(T("taskDoneBadge")) + "</span>" : "") + "</p>" +
       "<h2>" + esc(L(c.title)) + "</h2>";
     if (c.body) html += '<p class="lesson-body">' + esc(L(c.body)) + "</p>";
+    if (c.figure) html += '<div class="fig" data-fig="' + esc(c.figure) + '"></div>';
     if (c.points) html += '<ul class="points">' + c.points.map(function (pt) { return "<li>" + esc(L(pt)) + "</li>"; }).join("") + "</ul>";
     if (c.code) html += '<pre class="code"><code>' + esc(L(c.code)) + "</code></pre>";
     if (c.demo) html += '<div class="demo" data-demo="' + esc(c.demo) + '"></div>';
     if (c.quiz) {
       html += '<form class="quiz"><fieldset><legend>' + esc(L(c.quiz.q)) + "</legend>" +
-        quizOrder(c.quiz, "q25:" + m.id + ":" + step).map(function (i) {
+        quizOrder(c.quiz, "k10:" + (c.quiz.q.ru || L(c.quiz.q))).map(function (i) {
           return '<label class="opt"><input type="radio" name="q" value="' + i + '"><span>' + esc(L(c.quiz.options[i])) + "</span></label>";
         }).join("") +
         '</fieldset><div class="quiz-foot"><button type="submit" class="btn btn-primary">' + esc(T("checkAnswer")) + '</button><p class="quiz-result" role="status"></p></div></form>';
@@ -225,7 +227,7 @@
   }
 
   /* Display order of quiz options: the correct answer is placed at a position derived
-     from a hash of the card id, so its position varies between questions but stays
+     from a hash of the question text, so its position varies between questions but stays
      stable for each question. quiz.fixedOrder keeps the authored order. */
   function quizOrder(q, key) {
     var n = q.options.length, idx = [];
