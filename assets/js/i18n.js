@@ -4,9 +4,9 @@
 
   var S = {
     ru: {
-      htmlTitle: "Типографика для веба — Cherdak",
-      appName: "Типографика для веба",
-      tagline: "Интерактивный курс по выбору и настройке шрифта в веб-дизайне: классификация гарнитур, начертание, кегль, интерлиньяж, длина строки и их реализация средствами CSS.",
+      htmlTitle: "Типографика интерфейсов — Cherdak",
+      appName: "Типографика интерфейсов",
+      tagline: "Интерактивный курс по выбору и настройке шрифта в дизайне интерфейсов: классификация и характер гарнитур, начертание, кегль, интерлиньяж, длина строки и их реализация средствами CSS.",
       langSwitch: "Язык интерфейса",
       skip: "К содержанию",
       themeToggle: "Переключить тему",
@@ -37,6 +37,10 @@
       kindIdea: "Теория",
       kindCheck: "Контроль",
       kindWeb: "Веб-специфика",
+      kindTask: "Задание",
+      taskDoneBadge: "Выполнено",
+      tasksTitle: "Задания модуля",
+      tasksCount: function (a, b) { return "выполнено " + a + " из " + b; },
       deeper: "Дополнительная литература",
       back: "Назад",
       next: "Дальше",
@@ -121,9 +125,9 @@
     },
 
     en: {
-      htmlTitle: "Web Typography Lab — Cherdak",
-      appName: "Web Typography Lab",
-      tagline: "An interactive course on selecting and setting type in web design: type classification, styles, size, line height, line length and their implementation in CSS.",
+      htmlTitle: "Interface Typography Lab — Cherdak",
+      appName: "Interface Typography Lab",
+      tagline: "An interactive course on selecting and setting type in interface design: type classification and character, styles, size, line height, line length and their implementation in CSS.",
       langSwitch: "Interface language",
       skip: "Skip to content",
       themeToggle: "Toggle theme",
@@ -154,6 +158,10 @@
       kindIdea: "Theory",
       kindCheck: "Review",
       kindWeb: "Web specifics",
+      kindTask: "Exercise",
+      taskDoneBadge: "Completed",
+      tasksTitle: "Module exercises",
+      tasksCount: function (a, b) { return a + " of " + b + " completed"; },
       deeper: "Further reading",
       back: "Back",
       next: "Next",

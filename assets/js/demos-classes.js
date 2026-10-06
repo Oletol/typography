@@ -96,6 +96,7 @@
             if (i + 1 < ROUNDS) { nx.textContent = s("next"); nx.addEventListener("click", function () { i++; show(); }); }
             else {
               res.textContent += " " + s("final", score, ROUNDS);
+              if (score >= 8 && App.task) App.task.done();
               nx.textContent = s("restart"); nx.addEventListener("click", start);
             }
             root.querySelector(".guess-next").appendChild(nx);

@@ -110,13 +110,19 @@
     typograf: { type: "online", lang: "ru", site: "Студия Артемия Лебедева", url: "https://www.artlebedev.ru/typograf/", title: t("Типограф — автоматическая расстановка кавычек, тире и неразрывных пробелов", "Typograf (in Russian)") },
     habrDashes: { type: "online", lang: "ru", site: "Хабр", url: "https://habr.com/ru/articles/20588/", title: t("Чёрточки: только ли тире, минус и дефис?", "Dashes in Russian typography (in Russian)") },
     melQuotes: { type: "online", lang: "ru", site: "Мел", url: "https://mel.fm/gramotnost/9275361-kavychki-elochki-ili-lapki-kak-rasstavlyat-ikh-pravilno", title: t("Кавычки-ёлочки или лапки: как расставлять их правильно", "Guillemets or low-high quotes (in Russian)") },
+    gfOvershoot: { type: "online", lang: "en", site: "Google Fonts Knowledge", url: "https://fonts.google.com/knowledge/glossary/overshoot", title: t("Глоссарий: Overshoot (нависание)", "Glossary: Overshoot") },
+    vcKorolkova: { type: "online", lang: "ru", author: "Александра Королькова", site: "vc.ru", url: "https://vc.ru/design/248026-kak-shrifty-ispolzuyut-v-dizayne", title: t("Как шрифты используют в дизайне — шкала нейтральности и выразительности (2021)", "How typefaces are used in design (2021, in Russian)") },
+    korolkovaBook: { type: "book", lang: "ru", author: "Александра Королькова", site: "Wikipedia", note: t("об авторе", "about the author"), url: "https://en.wikipedia.org/wiki/Alexandra_Korolkova", title: t("«Живая типографика» (2007; 4-е изд. 2012)", "Living Typography (in Russian; 2007, 4th ed. 2012)") },
+    emigreLicko: { type: "online", lang: "en", author: "Zuzana Licko", site: "Emigre", url: "https://www.emigre.com/Essays/ZuzanaLicko/Tind2015", title: t("Интервью 2015 г.: «People read best what we read most»", "Interview (2015): “People read best what we read most”") },
+    brumberger: { type: "online", lang: "en", author: "Eva Brumberger", site: "Technical Communication", url: "https://www.ingentaconnect.com/contentone/stc/tc/2003/00000050/00000002/art00008", title: t("The Rhetoric of Typography: The Awareness and Impact of Typeface Appropriateness (2003)", "The Rhetoric of Typography: The Awareness and Impact of Typeface Appropriateness (2003)") },
+    noordzij: { type: "book", lang: "en", author: "Gerrit Noordzij", site: "Typotheque", url: "https://www.typotheque.com/books/the-stroke", title: t("The Stroke: Theory of Writing — теория контраста как следа инструмента", "The Stroke: Theory of Writing") },
     gfKnowledge: { type: "online", lang: "en", site: "Google Fonts", url: "https://fonts.google.com/knowledge", title: t("Google Fonts Knowledge", "Google Fonts Knowledge") },
     typeScale: { type: "online", lang: "en", url: "https://typescale.com/", title: t("Type Scale — генератор шкалы", "Type Scale — scale generator") }
   };
 
   var modules = [
     {
-      id: "anatomy", minutes: 40,
+      id: "anatomy", minutes: 50,
       title: t("Анатомия шрифта", "Anatomy of type"),
       goal: t("Освоить терминологию строения знака и понять, как элементы шрифта влияют на восприятие текста на экране.", "Master the terminology of letter structure and understand how the parts of a typeface affect on-screen reading."),
       topics: [],
@@ -137,6 +143,12 @@
             t("Линии верхних и нижних выносных элементов (ascender, descender) — границы элементов, выходящих за высоту строчных (б, d, h; р, у, p, g).", "Ascender and descender lines — the limits of strokes extending beyond the x-height (b, d, h; p, g, y).")
           ],
           sources: [R.gfBaseline, R.gfXHeight, R.gfCapHeight, R.gfAscender, R.gfDescender]
+        },
+        {
+          kind: "task",
+          title: t("Найдите линии шрифта", "Find the type lines"),
+          body: t("Установите базовую линию, линию строчных и линию прописных на образце. Шрифт выбирается случайно; задание можно повторять с другими гарнитурами.", "Place the baseline, x-height and cap height on the specimen. The typeface is chosen at random; repeat the exercise with other typefaces."),
+          demo: "tLines"
         },
         {
           kind: "idea",
@@ -197,6 +209,12 @@
           code: "body {\n  font-family: \"Montserrat\", Georgia, serif;\n  font-size-adjust: ex-height 0.52;\n}",
           demo: "fsadjust",
           sources: [R.mdnFontSizeAdjust]
+        },
+        {
+          kind: "task",
+          title: t("Согласуйте высоту строчных", "Match the x-heights"),
+          body: t("Подберите кегль второго шрифта так, чтобы его строчные знаки визуально совпали с эталоном. Проверка сравнивает измеренные значения x-height.", "Adjust the second typeface's size so that its lowercase letters match the reference. The check compares measured x-heights."),
+          demo: "tXMatch"
         },
         {
           kind: "idea",
@@ -311,7 +329,7 @@
       readings: [R.gordon, R.skillboxCyrillic, R.bringhurst, R.vcAnatomy, R.gfXHeight, R.gfCapHeight, R.gfCounter, R.gfAperture, R.gfContrast, R.gfEm, R.mdnFontSizeAdjust, R.mdnOpticalSizing, R.mdnLineHeight]
     },
     {
-      id: "classes", minutes: 45,
+      id: "classes", minutes: 55,
       title: t("Классификация шрифтов", "Type classification"),
       goal: t("Различать классы шрифтов, их стилистические и функциональные характеристики и область применения в интерфейсах.", "Distinguish type classes, their stylistic and functional characteristics, and their use in interfaces."),
       topics: [],
@@ -381,9 +399,15 @@
           sources: [R.gfSansSerif, R.voxWiki]
         },
         {
-          kind: "try", demo: "guess",
-          title: t("Тренажёр: определение класса шрифта", "Trainer: identifying the type class"),
+          kind: "task", demo: "guess",
+          title: t("Определите класс шрифта", "Identify the type class"),
           body: t("Определите класс шрифта по образцу. Гарнитуры выбираются случайным образом из каталога курса (59 шрифтов), поэтому при повторном прохождении набор будет другим.", "Identify the class of each sample. Typefaces are drawn at random from the course catalogue (59 fonts), so each attempt brings a different set.")
+        },
+        {
+          kind: "task",
+          title: t("Определите подгруппу шрифта", "Identify the subgroup"),
+          body: t("Для шести случайно выбранных шрифтов укажите историко-стилистическую подгруппу.", "Name the historical and stylistic subgroup of six randomly chosen typefaces."),
+          demo: "tSubclass"
         },
         {
           kind: "web",
@@ -418,6 +442,12 @@
             answer: 1,
             explain: t("Браузер не подбирает шрифт по сходству рисунка. Без родового семейства он использует шрифт по умолчанию, обычно антикву. Поэтому список следует завершать ключевым словом sans-serif.", "Browsers do not match fonts by design. Without a generic family they use the default font, usually a serif. The list should therefore end with sans-serif.")
           }
+        },
+        {
+          kind: "task",
+          title: t("Составьте список font-family", "Compose a font-family list"),
+          body: t("Для трёх задач составьте список шрифтов с резервными вариантами и родовым семейством. Проверка оценивает класс резервных шрифтов и завершение списка.", "For three tasks compose a font list with fallbacks and a generic family. The check assesses the fallback class and the end of the list."),
+          demo: "tStack"
         },
         {
           kind: "idea",
@@ -503,7 +533,169 @@
       readings: [R.voxWiki, R.localfontsClass, R.bringhurst, R.gfSerif, R.gfSansSerif, R.mdnFontFamily, R.modernStacks, R.mdnNumeric, R.meduza, R.skillboxCyrillic]
     },
     {
-      id: "weights", minutes: 40,
+      id: "character", minutes: 55,
+      title: t("Характер шрифта", "Typeface character"),
+      goal: t("Оценивать характер шрифта и выбирать степень его выразительности в соответствии с задачей, объёмом текста и средой чтения.", "Assess typeface character and choose its degree of expressiveness to suit the task, the amount of text and the reading environment."),
+      topics: [t("Нейтральность и выразительность", "Neutrality and expressiveness"), t("Круг шрифтов: жанр и степень выразительности", "The type wheel: genre and expressiveness"), t("Привычность и удобочитаемость", "Familiarity and readability"), t("Оптика, логика, традиция", "Optics, logic, tradition"), t("Характер в интерфейсе", "Character in interfaces")],
+      cards: [
+        {
+          kind: "try",
+          title: t("Один текст — разные голоса", "One text, different voices"),
+          body: t("Введите короткую фразу и сравните, как меняется её восприятие в восьми гарнитурах. Сформулируйте для каждого образца два-три определения: строгий, дружелюбный, праздничный, технологичный, архаичный. Затем отметьте флажок и сопоставьте свои определения с положением шрифта на круге.", "Enter a short phrase and compare how its perception changes across eight typefaces. Give each sample two or three adjectives: strict, friendly, festive, technical, archaic. Then tick the box and compare your adjectives with the typeface's position on the wheel."),
+          demo: "voices"
+        },
+        {
+          kind: "idea",
+          title: t("Нейтральность и выразительность", "Neutrality and expressiveness"),
+          body: t("Характер шрифта — совокупность ассоциаций, которые форма знаков вызывает у читателя. А. Королькова предлагает располагать шрифты на шкале между двумя полюсами: шрифтами для передачи информации, не отвлекающими от содержания, и шрифтами с сильным эмоциональным зарядом. Выбирая положение на шкале, дизайнер распределяет внимание читателя между смыслом текста и его эмоциональной окраской.", "Typeface character is the set of associations that letterforms evoke in the reader. Alexandra Korolkova proposes placing typefaces on a scale between two poles: faces that convey information without distracting from the content, and faces with a strong emotional charge. By choosing a position on the scale, the designer distributes the reader's attention between the meaning of the text and its emotional colouring."),
+          points: [
+            t("Чем больше объём текста, тем ближе к нейтральному полюсу должен быть шрифт.", "The more text there is, the closer to the neutral pole the typeface should be."),
+            t("Выразительный шрифт оправдан там, где эмоция входит в сообщение: в заголовке промостраницы, логотипе, афише.", "An expressive face is justified where emotion is part of the message: a promo headline, a logo, a poster."),
+            t("Исследования показывают, что читатели воспринимают «персону» шрифта и соотносят её с содержанием текста; несоответствие влияет на восприятие текста (Brumberger, 2003).", "Research shows that readers perceive a typeface's persona and relate it to the content; a mismatch affects how the text is perceived (Brumberger, 2003).")
+          ],
+          sources: [R.vcKorolkova, R.brumberger]
+        },
+        {
+          kind: "idea",
+          title: t("Круг шрифтов: жанр и степень выразительности", "The type wheel: genre and expressiveness"),
+          body: t("Шкалу нейтральности удобно развернуть в круг. В центре находятся текстовые шрифты: их характер приглушён, и разные гарнитуры этой зоны близки по впечатлению. Далее располагаются регулярные шрифты для заголовков и коротких текстов. На периферии — акцидентные шрифты с ярко выраженным характером. Направление от центра задаёт жанр: антиквы, брусковые, гротески, концептуально-логические шрифты, имитации, рукописные, исторические почерки, каллиграфические.", "The neutrality scale can be unfolded into a wheel. Text faces sit at the centre: their character is muted, and different typefaces in this zone make a similar impression. Next come regular faces for headings and short texts. Display faces with a strong character occupy the edge. The direction from the centre sets the genre: serif, slab serif, sans serif, conceptual and logical, imitations, handwritten, historical scripts, calligraphic."),
+          points: [
+            t("Удалённость от центра определяет допустимый объём текста и минимальный кегль.", "Distance from the centre determines the acceptable amount of text and the minimum size."),
+            t("Жанр определяет ассоциации: книжная традиция, техника, рукотворность, история.", "Genre determines associations: book tradition, technology, handcraft, history."),
+            t("Классификация по характеру дополняет формальную классификацию модуля 2, а не заменяет её.", "Classification by character complements the formal classification of Module 2 rather than replacing it.")
+          ],
+          sources: [R.vcKorolkova]
+        },
+        {
+          kind: "try",
+          title: t("Практикум: шрифты каталога на круге", "Practice: the course typefaces on the wheel"),
+          body: t("Выберите точки в разных зонах круга и сравните образцы. Обратите внимание, что у центра различия между жанрами сглаживаются, а на периферии усиливаются. Найдите шрифты, положение которых вы бы оспорили, и сформулируйте аргументы.", "Select points in different zones of the wheel and compare the specimens. Notice that genre differences fade near the centre and grow towards the edge. Find typefaces whose position you would dispute and formulate your arguments."),
+          demo: "charwheel"
+        },
+        {
+          kind: "task",
+          title: t("Определите зону круга", "Assign the wheel zone"),
+          body: t("Отнесите шесть шрифтов к текстовым, регулярным или акцидентным.", "Assign six typefaces to the text, regular or display zone."),
+          demo: "tZones"
+        },
+        {
+          kind: "idea",
+          title: t("Лучше всего читается привычное", "We read best what is familiar"),
+          body: t("Удобочитаемость определяется не только объективными свойствами формы знаков, но и опытом читателя. Зузана Личко сформулировала это так: «Люди читают лучше всего то, что они читают чаще всего». Готический шрифт, трудный для современного читателя, был привычным для немецкого читателя начала XX века. Поэтому текстовые шрифты консервативны: новаторство в них ограничено деталями, а эксперименты с формой уместны в акцидентном наборе.", "Readability depends not only on the objective properties of letterforms but also on the reader's experience. Zuzana Licko put it this way: “People read best what we read most.” Blackletter, difficult for today's readers, was familiar to German readers in the early twentieth century. This is why text faces are conservative: innovation is limited to details, while experiments with form belong to display setting."),
+          points: [
+            t("Для основного текста выбирайте гарнитуры с привычными пропорциями и формами знаков.", "For body text choose typefaces with familiar proportions and letterforms."),
+            t("Непривычная форма замедляет чтение, но привлекает внимание: это допустимо в заголовке, а не в абзаце.", "Unfamiliar forms slow reading but attract attention: acceptable in a headline, not in a paragraph."),
+            t("Привычность зависит от аудитории: моноширинный шрифт привычен разработчику, но не широкому читателю.", "Familiarity depends on the audience: a monospaced face is familiar to developers but not to the general reader.")
+          ],
+          sources: [R.emigreLicko, R.korolkovaBook]
+        },
+        {
+          kind: "try",
+          title: t("Практикум: привычная и непривычная форма", "Practice: familiar and unfamiliar forms"),
+          body: t("Прочитайте два текста и сравните скорость чтения. Повторите упражнение с другой акцидентной гарнитурой.", "Read the two texts and compare reading speed. Repeat with another display typeface."),
+          demo: "familiar"
+        },
+        {
+          kind: "idea",
+          title: t("Оптика, логика, традиция", "Optics, logic, tradition"),
+          body: t("Форма шрифтового знака складывается под действием трёх факторов. Их анализ позволяет объяснить характер шрифта, а не только описать его.", "The form of a letter is shaped by three factors. Analysing them makes it possible to explain a typeface's character rather than merely describe it."),
+          points: [
+            t("Оптика: форма корректируется с учётом особенностей зрительного восприятия — нависания округлых знаков, утончения штрихов в местах соединений, компенсации горизонталей.", "Optics: form is corrected for visual perception — overshoot of round letters, thinning of strokes at joins, compensation of horizontals."),
+            t("Логика: все знаки подчинены единому принципу построения — следу инструмента (пера, кисти) или конструктивному правилу (модулю, геометрии).", "Logic: all letters follow a single construction principle — the trace of a tool (pen, brush) or a constructive rule (module, geometry)."),
+            t("Традиция: форма опирается на исторически сложившийся образ знаков и привычки читателя; для кириллицы это отдельная традиция, а не перерисованная латиница.", "Tradition: form rests on the historically established image of letters and on reading habits; Cyrillic has its own tradition and is not redrawn Latin.")
+          ],
+          sources: [R.noordzij, R.skillboxCyrillic]
+        },
+        {
+          kind: "try",
+          title: t("Практикум: оптическая компенсация", "Practice: optical compensation"),
+          body: t("Определите, в каком из двух вариантов фигуры выглядят одинаковыми по высоте. Затем включите направляющие и проверьте свой ответ.", "Decide in which of the two versions the shapes look equal in height. Then switch on the guides and check your answer."),
+          demo: "optics",
+          sources: [R.gfOvershoot]
+        },
+        {
+          kind: "idea",
+          title: t("Логика инструмента и характер", "Tool logic and character"),
+          body: t("Г. Нордзей описывает контраст штриха как результат движения инструмента. Широконечное перо даёт трансляционный контраст с наклонной осью (антиква старого стиля), остроконечное перо с переменным нажимом — экспансионный контраст с вертикальной осью (классицистическая антиква). Поэтому ось и тип контраста, рассмотренные в модуле 2, — это не только признаки классификации, но и источник характера: живой и динамичный у антиквы старого стиля, торжественный и статичный у дидонов.", "Gerrit Noordzij describes stroke contrast as the result of the tool's movement. A broad-nib pen produces translation contrast with an inclined axis (old-style serif); a pointed pen with varying pressure produces expansion contrast with a vertical axis (didone). The axis and type of contrast covered in Module 2 are therefore not only classification features but also a source of character: lively and dynamic in old-style serifs, ceremonial and static in didones."),
+          sources: [R.noordzij, R.gfContrast]
+        },
+        {
+          kind: "web",
+          title: t("Характер в интерфейсе", "Character in interfaces"),
+          body: t("В интерфейсе текст выполняет служебную функцию: подписи полей, кнопки, сообщения, таблицы. Пользователь решает задачу, а не читает, поэтому интерфейсный шрифт должен оставаться незаметным. Характер продукта передаётся через заголовки, крупные цифры, иллюстрации и тон текстов, тогда как основной набор интерфейса выполняется нейтральной гарнитурой из центра круга.", "In an interface, text performs a service function: field labels, buttons, messages, tables. Users perform tasks rather than read, so the interface typeface should stay unobtrusive. Product character is conveyed through headings, large figures, illustrations and tone of voice, while the bulk of the interface is set in a neutral typeface from the centre of the wheel."),
+          points: [
+            t("Интерфейсные гарнитуры (Inter, Golos, Onest, системные шрифты) рассчитаны на мелкий кегль и плотные экраны.", "Interface typefaces (Inter, Golos, Onest, system fonts) are designed for small sizes and dense screens."),
+            t("Фирменный акцидентный шрифт ограничивают маркетинговыми страницами и крупными заголовками.", "A brand display face is limited to marketing pages and large headings."),
+            t("Характер должен сохраняться при подмене: резервный шрифт в font-family выбирают того же жанра.", "Character must survive fallback: choose a fallback in font-family from the same genre.")
+          ],
+          code: t("/* нейтральный интерфейс, характер — в заголовках */\n:root {\n  --font-ui: \"Golos Text\", system-ui, sans-serif;\n  --font-display: \"Unbounded\", \"Arial Black\", sans-serif;\n}\nbody, button, input { font-family: var(--font-ui); }\n.hero-title { font-family: var(--font-display); }", "/* neutral interface, character in headings */\n:root {\n  --font-ui: \"Golos Text\", system-ui, sans-serif;\n  --font-display: \"Unbounded\", \"Arial Black\", sans-serif;\n}\nbody, button, input { font-family: var(--font-ui); }\n.hero-title { font-family: var(--font-display); }"),
+          sources: [R.modernStacks, R.meduza]
+        },
+        {
+          kind: "try",
+          title: t("Характер и кегль на экране", "Character and size on screen"),
+          body: t("Сравните, как проявляется характер шрифта в разных кеглях. Определите минимальный кегль, при котором особенности формы ещё различимы.", "Compare how the typeface's character shows at different sizes. Find the smallest size at which its features are still distinguishable."),
+          demo: "sizechar"
+        },
+        {
+          kind: "task",
+          title: t("Голос для задачи", "A voice for the task"),
+          body: t("Для каждой задачи выберите гарнитуру, характер и степень выразительности которой соответствуют содержанию и объёму текста.", "For each task choose the typeface whose character and degree of expressiveness suit the content and the amount of text."),
+          demo: "brandvoice"
+        },
+        {
+          kind: "check",
+          title: t("Контроль: жанры круга", "Review: genres of the wheel"),
+          match: {
+            q: t("Сопоставьте описания с жанрами круга шрифтов.", "Match the descriptions to the genres of the type wheel."),
+            pairs: [
+              { term: t("Имитации", "Imitations"), def: t("Шрифт воспроизводит растр старых игровых приставок", "The typeface reproduces the pixel grid of early game consoles") },
+              { term: t("Концептуально-логические", "Conceptual and logical"), def: t("Все знаки построены из окружностей и прямых одной толщины", "All letters are built from circles and straight lines of one weight") },
+              { term: t("Исторические почерки", "Historical scripts"), def: t("Шрифт стилизует древнерусский устав", "The typeface stylises early Russian ustav script") },
+              { term: t("Каллиграфические", "Calligraphic"), def: t("Форма и контраст заданы остроконечным пером с нажимом", "Form and contrast come from a pointed pen with pressure") },
+              { term: t("Рукописные", "Handwritten"), def: t("Неровный ритм и форма, как при письме фломастером", "Uneven rhythm and form, as if written with a felt-tip pen") }
+            ]
+          }
+        },
+        {
+          kind: "check",
+          title: t("Контрольный вопрос", "Review question"),
+          quiz: {
+            q: t("Почему эксперименты с непривычной формой знаков уместны в заголовке промостраницы, но не в основном тексте статьи?", "Why are experiments with unfamiliar letterforms acceptable in a promo headline but not in article body text?"),
+            options: [
+              t("Непривычная форма замедляет чтение: в коротком заголовке это привлекает внимание, в протяжённом тексте утомляет читателя", "Unfamiliar forms slow reading: in a short headline this attracts attention, in long text it tires the reader"),
+              t("Акцидентные шрифты не поддерживают кириллицу в мелком кегле", "Display faces do not support Cyrillic at small sizes"),
+              t("Браузеры не применяют акцидентные шрифты к элементу <p>", "Browsers do not apply display faces to the <p> element")
+            ],
+            answer: 0,
+            explain: t("Удобочитаемость зависит от привычности формы. Замедление допустимо, когда текст короток и цель — привлечь внимание.", "Readability depends on familiarity. Slowing the reader down is acceptable when the text is short and the goal is to attract attention.")
+          }
+        },
+        {
+          kind: "check",
+          title: t("Контрольный вопрос", "Review question"),
+          quiz: {
+            q: t("Какой фактор объясняет, почему буква О выходит за линию прописных и базовую линию?", "Which factor explains why the letter O extends beyond the cap height and baseline?"),
+            options: [t("Традиция", "Tradition"), t("Логика инструмента", "Tool logic"), t("Оптика", "Optics")],
+            answer: 2,
+            explain: t("Округлая форма касается направляющей в одной точке и при равной геометрической высоте выглядит меньше; нависание компенсирует эту иллюзию.", "A round form touches the guide at a single point and looks smaller at equal geometric height; overshoot compensates for this illusion.")
+          }
+        }
+      ],
+      cheatsheet: [
+        t("Характер шрифта — ассоциации, которые вызывает форма знаков; его выбирают так же осознанно, как кегль и интерлиньяж.", "Typeface character is the associations evoked by letterforms; choose it as deliberately as size and line height."),
+        t("Шкала нейтральности: чем больше текста, тем ближе к нейтральному полюсу шрифт.", "Neutrality scale: the more text, the closer to the neutral pole."),
+        t("Круг шрифтов: центр — текстовые, далее регулярные, периферия — акцидентные; направление задаёт жанр.", "Type wheel: centre — text faces, then regular, edge — display; direction sets the genre."),
+        t("Лучше всего читается привычное: эксперименты с формой — в заголовках, не в основном тексте.", "We read best what is familiar: experiment with form in headings, not in body text."),
+        t("Форму знака объясняют оптика, логика построения и традиция.", "Letterforms are explained by optics, construction logic and tradition."),
+        t("Тип и ось контраста отражают инструмент и во многом определяют характер антиквы.", "Contrast type and axis reflect the tool and largely determine a serif's character."),
+        t("В интерфейсе основной набор нейтрален; характер продукта — в заголовках, цифрах, тоне текстов.", "In interfaces the bulk of text is neutral; product character lives in headings, figures and tone of voice."),
+        t("Характер проверяется в реальном кегле и с резервным шрифтом того же жанра.", "Check character at the real size and with a fallback of the same genre.")
+      ],
+      readings: [R.vcKorolkova, R.korolkovaBook, R.emigreLicko, R.brumberger, R.noordzij, R.gfOvershoot, R.meduza, R.skillboxCyrillic]
+    },
+    {
+      id: "weights", minutes: 50,
       title: t("Начертание и насыщенность", "Styles and weights"),
       goal: t("Выбирать начертания для выделения и построения иерархии с учётом их технической реализации и производительности страницы.", "Choose styles for emphasis and hierarchy with regard to their technical implementation and page performance."),
       topics: [],
@@ -564,6 +756,12 @@
           sources: [R.mdnFontWeight, R.mdnFontFace]
         },
         {
+          kind: "task",
+          title: t("Какое начертание применит браузер", "Which weight will the browser use"),
+          body: t("По набору доступных начертаний и значению font-weight определите начертание, которое выберет браузер.", "Given the available weights and a font-weight value, determine which weight the browser will choose."),
+          demo: "tWeightMatch"
+        },
+        {
           kind: "web",
           title: t("Синтезированные начертания", "Synthesised styles"),
           body: t("Если в семействе нет полужирного или курсивного начертания, браузер по умолчанию синтезирует его: утолщает штрихи или механически наклоняет прямое начертание. Синтезированные начертания уступают по качеству спроектированным: нарушаются пропорции, внутрибуквенные просветы заплывают, курсивные формы знаков отсутствуют.", "If a family lacks a bold or italic style, the browser synthesises it by default, thickening strokes or mechanically slanting the upright. Synthesised styles are inferior to designed ones: proportions are distorted, counters fill in, and true italic forms are missing."),
@@ -586,6 +784,12 @@
           ],
           demo: "italic",
           sources: [R.skyengItalic, R.skillboxCyrillic, R.mdnVariable]
+        },
+        {
+          kind: "task",
+          title: t("Распознайте синтезированное начертание", "Spot the synthesised style"),
+          body: t("В каждом наборе один образец набран начертанием, которого нет в шрифте. Найдите его.", "In each set one sample uses a style missing from the font. Find it."),
+          demo: "tFaux"
         },
         {
           kind: "web",
@@ -681,7 +885,7 @@
       readings: [R.mdnFontWeight, R.mdnFontSynthesis, R.mdnVariable, R.webdevVariable, R.mdnFontFace, R.skyengItalic, R.skillboxCyrillic, R.butterickCaps, R.butterickLetterspacing, R.mdnEm]
     },
     {
-      id: "setting", minutes: 40,
+      id: "setting", minutes: 50,
       title: t("Кегль, интерлиньяж, длина строки", "Size, line height, line length"),
       goal: t("Определять параметры основного текста, обеспечивающие удобочитаемость на устройствах различного формата, и корректно реализовывать их средствами CSS.", "Determine body text parameters that ensure readability across devices and implement them correctly in CSS."),
       topics: [],
@@ -802,6 +1006,12 @@
           sources: [R.wcagResize, R.webdevDesignType]
         },
         {
+          kind: "task",
+          title: t("Расчёт единиц и интерлиньяжа", "Units and line height"),
+          body: t("Выполните расчёты в rem, px и ch, включая наследование line-height. Допускается десятичная запятая.", "Calculate values in rem, px and ch, including line-height inheritance."),
+          demo: "tUnits"
+        },
+        {
           kind: "try", demo: "wrap",
           title: t("Перенос строк и переносы слов", "Line wrapping and hyphenation"),
           body: t("Включайте и отключайте свойства и проанализируйте, как изменяются разбивка заголовка на строки и правый край абзаца в узкой колонке.", "Toggle the properties and analyse how the line breaks of the heading and the right edge of the paragraph change in a narrow column.")
@@ -829,6 +1039,12 @@
           code: t("p + p { margin-top: 1em; }   /* отступ между абзацами */\n.card { min-height: 12rem; }  /* не height */", "p + p { margin-top: 1em; }   /* space between paragraphs */\n.card { min-height: 12rem; }  /* not height */"),
           demo: "spacing",
           sources: [R.wcagSpacing, R.rutterParagraphs, R.rutterRhythm]
+        },
+        {
+          kind: "task",
+          title: t("Исправьте набор абзаца", "Fix the paragraph setting"),
+          body: t("Абзац набран с ошибками. Добейтесь выполнения всех требований на десктопе и на смартфоне одновременно.", "The paragraph is badly set. Meet all requirements on desktop and smartphone at once."),
+          demo: "tParagraph"
         },
         {
           kind: "check",
@@ -864,7 +1080,7 @@
       readings: [R.rutter, R.rutterBook, R.bringhurst, R.butterickLength, R.butterickSpacing, R.baymard, R.comeau, R.webdevDesignType, R.mdnLineHeight, R.mdnTextWrap, R.mdnHyphens, R.wcagVisual, R.wcagSpacing, R.wcagResize]
     },
     {
-      id: "scale", minutes: 40,
+      id: "scale", minutes: 50,
       title: t("Шкала и иерархия", "Type scale and hierarchy"),
       goal: t("Строить согласованную систему кеглей — от подписей до заголовка первого уровня — и описывать её средствами CSS.", "Build a consistent system of sizes from captions to the top-level heading and express it in CSS."),
       topics: [],
@@ -924,6 +1140,12 @@
           }
         },
         {
+          kind: "task",
+          title: t("Расчёт шкалы и clamp()", "Scale and clamp() calculations"),
+          body: t("Вычислите кегли ступеней, модульное отношение и коэффициенты адаптивного выражения clamp().", "Calculate step sizes, the ratio and the coefficients of a fluid clamp() expression."),
+          demo: "tScaleCalc"
+        },
+        {
           kind: "web",
           title: t("Шкала в пользовательских свойствах CSS", "The scale as CSS custom properties"),
           body: t("Ступени шкалы удобно хранить в пользовательских свойствах CSS (дизайн-токенах). Компоненты ссылаются на токены, а не на конкретные значения, поэтому изменение шкалы выполняется в одном месте и согласованно применяется ко всему сайту.", "Store the scale steps in CSS custom properties (design tokens). Components reference tokens rather than raw values, so the scale is changed in one place and applied consistently across the site."),
@@ -969,6 +1191,12 @@
           ],
           code: "h2 {\n  font-size: var(--step-3);\n  line-height: 1.2;\n  margin-block: 2rlh 0.5rlh;\n  text-wrap: balance;\n}",
           sources: [R.rutterRhythm, R.mdnLength, R.mdnTextWrap]
+        },
+        {
+          kind: "task",
+          title: t("Восстановите иерархию", "Restore the hierarchy"),
+          body: t("Исправьте кегли заголовков и отбивки так, чтобы иерархия страницы читалась однозначно.", "Fix heading sizes and spacing so that the page hierarchy reads unambiguously."),
+          demo: "tHierarchy"
         },
         {
           kind: "web",
@@ -1031,7 +1259,7 @@
       readings: [R.timBrown, R.typeScale, R.utopia, R.butterickHeadings, R.rutterRhythm, R.mdnClamp, R.mdnLength, R.mdnHeadings, R.wcagHeadings, R.webdevDesignType]
     },
     {
-      id: "pairing", minutes: 40,
+      id: "pairing", minutes: 50,
       title: t("Сочетание шрифтов", "Font pairing"),
       goal: t("Подбирать сочетания гарнитур на основе структурного сходства и функционального контраста с учётом кириллицы и объёма загрузки.", "Pair typefaces based on structural affinity and functional contrast, with attention to Cyrillic and payload size."),
       topics: [],
@@ -1075,6 +1303,12 @@
           }
         },
         {
+          kind: "task",
+          title: t("Найдите конфликтную пару", "Find the conflicting pair"),
+          body: t("В каждом наборе одна пара составлена из слишком похожих гарнитур. Найдите её.", "In each set one pair consists of typefaces that are too similar. Find it."),
+          demo: "tConflict"
+        },
+        {
           kind: "idea",
           title: t("Суперсемейства", "Superfamilies"),
           body: t("Суперсемейство — набор гарнитур разных классов, спроектированных по единым принципам: с согласованными пропорциями, высотой строчных и характером. Это наиболее надёжный способ получить гармоничное сочетание антиквы, гротеска и моноширинного шрифта.", "A superfamily is a set of typefaces of different classes designed on common principles, with consistent proportions, x-height and character. It is the most reliable way to combine a serif, a sans and a monospace harmoniously."),
@@ -1112,7 +1346,7 @@
           points: [
             t("Пример из каталога курса: вариативные Playfair Display и Source Sans 3 (прямые начертания, полный диапазон насыщенности) — 4 файла кириллицы и латиницы, около 104 КБ; статические PT Serif и PT Sans в насыщенностях 400 и 700 — 8 файлов, около 250 КБ.", "Course catalogue example: variable Playfair Display and Source Sans 3 (upright, full weight range) are 4 Cyrillic and Latin files, about 104 KB; static PT Serif and PT Sans at 400 and 700 are 8 files, about 250 KB."),
             t("Компромиссное решение — системный шрифт для интерфейса и одна веб-гарнитура для заголовков или основного текста.", "A compromise: a system font for the interface and a single web typeface for headings or body text."),
-            t("Стратегии загрузки (font-display, preload, подмножества) рассматриваются в модуле 8.", "Loading strategies (font-display, preload, subsetting) are covered in module 8.")
+            t("Стратегии загрузки (font-display, preload, подмножества) рассматриваются в модуле 9.", "Loading strategies (font-display, preload, subsetting) are covered in module 9.")
           ],
           sources: [R.webdevFontBest, R.webdevVariable]
         },
@@ -1128,8 +1362,14 @@
           sources: [R.mdnFontFamily]
         },
         {
-          kind: "try", demo: "brief",
-          title: t("Практикум: шрифтовая пара для задачи", "Practice: a font pair for a brief"),
+          kind: "task",
+          title: t("Подберите гарнитуру для роли", "Choose a typeface for a role"),
+          body: t("Подберите гарнитуру для заголовков новостного портала и для кода в документации. Проверка оценивает класс, насыщенность и согласование высоты строчных.", "Choose a typeface for news headlines and for code in documentation. The check assesses class, weight and x-height matching."),
+          demo: "tHeadPick"
+        },
+        {
+          kind: "task", demo: "brief",
+          title: t("Шрифтовая пара для задачи", "A font pair for a brief"),
           body: t("Для каждого из четырёх проектов выберите наиболее уместное сочетание. После выбора будет показано обоснование.", "For each of four projects, choose the most appropriate pairing. A rationale is shown after each choice.")
         },
         {
@@ -1166,7 +1406,7 @@
       readings: [R.butterickMixing, R.skillboxPairs, R.skillboxPairsTools, R.gfPtSans, R.skillboxCyrillic, R.mdnFontSizeAdjust, R.webdevFontBest, R.webdevVariable, R.mdnFontFamily]
     },
     {
-      id: "responsive", minutes: 45,
+      id: "responsive", minutes: 55,
       title: t("Адаптивность и доступность", "Responsive and accessible type"),
       goal: t("Обеспечивать удобочитаемость текста на экранах различного формата и для пользователей с различными потребностями в соответствии с WCAG 2.1 и ГОСТ Р 52872-2019.", "Ensure text readability across screen formats and for users with diverse needs in line with WCAG 2.1 and GOST R 52872-2019."),
       topics: [],
@@ -1201,6 +1441,12 @@
           sources: [R.webaimContrast, R.wcagContrast]
         },
         {
+          kind: "task",
+          title: t("Соответствует ли AA", "Does it pass AA"),
+          body: t("Для каждого образца определите, соответствует ли сочетание цветов и кегля требованиям WCAG AA.", "For each sample decide whether the colour and size combination meets WCAG AA."),
+          demo: "tWcagJudge"
+        },
+        {
           kind: "check",
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
@@ -1209,6 +1455,12 @@
             answer: 1,
             explain: t("Для обычного текста требуется не менее 4.5:1; #767676 — один из самых светлых серых, удовлетворяющих этому требованию на белом фоне.", "Normal text requires at least 4.5:1; #767676 is among the lightest greys that meet it on white.")
           }
+        },
+        {
+          kind: "task",
+          title: t("Исправьте контраст", "Fix the contrast"),
+          body: t("Доведите контраст до требуемого уровня, изменяя только светлоту цвета и не утрачивая его характера.", "Raise contrast to the required level by changing lightness only, without losing the colour's character."),
+          demo: "tFixContrast"
         },
         {
           kind: "web",
@@ -1346,7 +1598,7 @@
       readings: [R.gost52872, R.wcagContrast, R.wcagNonText, R.webaimContrast, R.wcagReflow, R.wcagUseOfColor, R.g183, R.wcagTarget, R.wcagImagesOfText, R.mdnLightDark, R.mdnPrefersContrast, R.mdnForcedColors, R.bdaGuide, R.dyslexieStudy, R.comeau]
     },
     {
-      id: "webfonts", minutes: 45,
+      id: "webfonts", minutes: 55,
       title: t("Веб-шрифты и кириллица", "Web fonts and Cyrillic"),
       goal: t("Подключать шрифты с учётом производительности, стабильности макета и лицензионных условий и соблюдать нормы русского набора в вёрстке.", "Load fonts with regard to performance, layout stability and licensing, and follow Russian typesetting conventions in markup."),
       topics: [],
@@ -1422,6 +1674,12 @@
           sources: [R.mdnPreload]
         },
         {
+          kind: "task",
+          title: t("Соберите правило @font-face", "Build an @font-face rule"),
+          body: t("Заполните правило подключения шрифта для двух сценариев загрузки.", "Complete the font-loading rule for two loading scenarios."),
+          demo: "tFontFace"
+        },
+        {
           kind: "idea",
           title: t("Собственный хостинг и внешние сервисы", "Self-hosting and font services"),
           body: t("Шрифты можно подключать с внешнего сервиса (например, Google Fonts) или размещать на собственном сервере. Решение влияет на производительность, защиту персональных данных и устойчивость сайта.", "Fonts can be served by an external service (e.g. Google Fonts) or self-hosted. The choice affects performance, personal data protection and resilience."),
@@ -1481,6 +1739,12 @@
           ],
           code: "<html lang=\"ru\">\n<p>Курс рассчитан на&nbsp;10&ndash;15&nbsp;занятий&nbsp;&mdash; около трёх месяцев.</p>\n<p><q>Шрифт&nbsp;&mdash; это <q>голос</q> текста</q></p>\n\nq { quotes: auto; }",
           sources: [R.mdnQuotes, R.typograf]
+        },
+        {
+          kind: "task",
+          title: t("Выберите правильный набор", "Choose the correct setting"),
+          body: t("В каждом задании выберите вариант, набранный по нормам типографики.", "In each question choose the variant that follows typesetting conventions."),
+          demo: "tTypoDrill"
         },
         {
           kind: "check",

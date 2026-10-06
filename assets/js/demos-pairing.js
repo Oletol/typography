@@ -155,6 +155,9 @@
             var r = sec.querySelector(".quiz-result");
             r.className = "quiz-result " + (ok ? "ok" : "bad");
             r.textContent = (ok ? s("right") : s("wrong")) + " " + c.ex;
+            root.dataset.right = Number(root.dataset.right || 0) + (ok ? 1 : 0);
+            root.dataset.answered = Number(root.dataset.answered || 0) + 1;
+            if (Number(root.dataset.answered) === cases.length && Number(root.dataset.right) >= cases.length - 1 && App.task) App.task.done();
           });
         });
       });

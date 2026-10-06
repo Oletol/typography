@@ -162,6 +162,13 @@
         "</div>" : "") +
       "</section>";
 
+    App.task = {
+      done: function () {
+        var p = Store.module(id); p.tasks = p.tasks || {};
+        if (!p.tasks[step]) { p.tasks[step] = true; Store.updateModule(id, { tasks: p.tasks }); }
+        var b = view.querySelector(".task-badge"); if (b) b.hidden = false;
+      }
+    };
     var demoEl = view.querySelector("[data-demo]");
     if (demoEl && window.Demos[demoEl.dataset.demo]) window.Demos[demoEl.dataset.demo](demoEl);
     var quizEl = view.querySelector(".quiz");
@@ -182,9 +189,10 @@
         "</article>";
     }
     var c = m.cards[step];
-    var kindKey = { "try": "kindTry", idea: "kindIdea", web: "kindWeb", check: "kindCheck" }[c.kind];
+    var kindKey = { "try": "kindTry", idea: "kindIdea", web: "kindWeb", check: "kindCheck", task: "kindTask" }[c.kind];
+    var tp = Store.peekModule(m.id), taskDone = c.kind === "task" && tp && tp.tasks && tp.tasks[step];
     var html = '<article class="lesson lesson-' + c.kind + '">' +
-      '<p class="kind kind-' + c.kind + '">' + esc(T(kindKey)) + "</p>" +
+      '<p class="kind kind-' + c.kind + '">' + esc(T(kindKey)) + (c.kind === "task" ? '<span class="task-badge"' + (taskDone ? "" : " hidden") + ">" + icon("check") + esc(T("taskDoneBadge")) + "</span>" : "") + "</p>" +
       "<h2>" + esc(L(c.title)) + "</h2>";
     if (c.body) html += '<p class="lesson-body">' + esc(L(c.body)) + "</p>";
     if (c.points) html += '<ul class="points">' + c.points.map(function (pt) { return "<li>" + esc(L(pt)) + "</li>"; }).join("") + "</ul>";
@@ -192,7 +200,7 @@
     if (c.demo) html += '<div class="demo" data-demo="' + esc(c.demo) + '"></div>';
     if (c.quiz) {
       html += '<form class="quiz"><fieldset><legend>' + esc(L(c.quiz.q)) + "</legend>" +
-        quizOrder(c.quiz, "q18:" + m.id + ":" + step).map(function (i) {
+        quizOrder(c.quiz, "q25:" + m.id + ":" + step).map(function (i) {
           return '<label class="opt"><input type="radio" name="q" value="' + i + '"><span>' + esc(L(c.quiz.options[i])) + "</span></label>";
         }).join("") +
         '</fieldset><div class="quiz-foot"><button type="submit" class="btn btn-primary">' + esc(T("checkAnswer")) + '</button><p class="quiz-result" role="status"></p></div></form>';
@@ -281,7 +289,16 @@
     var action = prog.done
       ? '<p class="done-note">' + icon("check") + esc(T("moduleDone")) + '</p><a class="btn btn-primary" href="' + nextHref + '">' + esc(isLast ? T("doneLastModule") : T("doneNextModule")) + icon("arrowR") + "</a>"
       : '<button type="button" class="btn btn-primary" data-done>' + icon("check") + esc(T("markDone")) + "</button>";
-    return '<article class="lesson lesson-summary">' + sheet + reads +
+    var tasks = [];
+    (m.cards || []).forEach(function (c, i) { if (c.kind === "task") tasks.push({ c: c, i: i }); });
+    var tDone = tasks.filter(function (x) { return prog.tasks && prog.tasks[x.i]; }).length;
+    var tasksHtml = tasks.length
+      ? '<div class="summary-block"><h2>' + esc(T("tasksTitle")) + ' <span class="muted small">' + esc(T("tasksCount", tDone, tasks.length)) + '</span></h2><ul class="task-list">' + tasks.map(function (x) {
+          var ok = prog.tasks && prog.tasks[x.i];
+          return '<li class="' + (ok ? "is-done" : "") + '"><a href="#/m/' + m.id + "/" + (x.i + 1) + '">' + (ok ? icon("check") : '<span class="task-dot"></span>') + "<span>" + esc(L(x.c.title)) + "</span></a></li>";
+        }).join("") + "</ul></div>"
+      : "";
+    return '<article class="lesson lesson-summary">' + tasksHtml + sheet + reads +
       '<div class="summary-actions"><a class="btn btn-ghost" href="#/m/' + m.id + "/" + stepsOf(m) + '">' + icon("arrowL") + esc(T("back")) + "</a>" + action + "</div></article>";
   }
 
@@ -298,7 +315,9 @@
   function renderProgress() {
     var rows = MODS.map(function (m, i) {
       var st = status(m);
-      return '<li><a href="#/m/' + m.id + '"><span class="muted">' + String(i + 1).padStart(2, "0") + "</span><span>" + esc(L(m.title)) + '</span><span class="pill pill-' + st.key + '">' + esc(st.text) + "</span></a></li>";
+      var tn = (m.cards || []).map(function (c, k) { return c.kind === "task" ? k : -1; }).filter(function (k) { return k >= 0; });
+      var pr = Store.peekModule(m.id), td = tn.filter(function (k) { return pr && pr.tasks && pr.tasks[k]; }).length;
+      return '<li><a href="#/m/' + m.id + '"><span class="muted">' + String(i + 1).padStart(2, "0") + "</span><span>" + esc(L(m.title)) + (tn.length ? '<span class="pg-tasks">' + esc(T("tasksCount", td, tn.length)) + "</span>" : "") + '</span><span class="pill pill-' + st.key + '">' + esc(st.text) + "</span></a></li>";
     }).join("");
     view.innerHTML = '<section class="page-head"><h1>' + esc(T("pgTitle")) + "</h1><p>" + esc(T("pgIntro")) + "</p></section>" +
       '<section class="sheet narrow">' +

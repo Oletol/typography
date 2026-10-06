@@ -64,16 +64,16 @@
         pair: ["Гарнитуры заголовков и текста образуют контрастную или гармоничную пару", "Две разные гарнитуры одного подкласса: различие воспринимается как ошибка, а не как контраст", "Акцидентные или рукописные гарнитуры использованы одновременно в двух ролях"],
         mono: ["Для фрагментов кода предусмотрена моноширинная гарнитура", "Бриф содержит фрагменты кода: выберите моноширинную акцентную гарнитуру"],
         decor: ["Гарнитура заголовков соответствует сдержанной тональности брифа", "Бриф исключает декоративные эффекты: акцидентная гарнитура в заголовках противоречит тональности"],
-        files: function (n, kb, ok) { return "Шрифтовых файлов: " + n + (kb ? ", ≈ " + kb + " КБ" : "") + (ok ? "" : " — объём велик; сократите число гарнитур или начертаний (М8)"); }
+        files: function (n, kb, ok) { return "Шрифтовых файлов: " + n + (kb ? ", ≈ " + kb + " КБ" : "") + (ok ? "" : " — объём велик; сократите число гарнитур или начертаний (М9)"); }
       },
       m: [
-        ["tone", "Гарнитуры соответствуют брифу, аудитории и тональности", "М2, М6"],
-        ["hier", "Иерархия различима при беглом просмотре: уровни заголовков, лид, подписи", "М5"],
-        ["prox", "Отбивка над заголовком больше, чем под ним: заголовок связан со своим текстом", "М5"],
-        ["zoom", "В режимах «Масштаб 200 %» и «Пользовательские интервалы» текст не обрезается и не перекрывается", "М7"],
-        ["typo", "Тексты набраны по нормам русского набора: кавычки, тире, неразрывные пробелы", "М8"],
-        ["lic", "Лицензии гарнитур допускают веб-использование и размещение файлов на собственном сервере", "М8"],
-        ["load", "Подключение продумано: WOFF2, подмножества, font-display, предзагрузка только основного файла", "М8"]
+        ["tone", "Гарнитуры соответствуют брифу, аудитории и тональности", "М3, М7"],
+        ["hier", "Иерархия различима при беглом просмотре: уровни заголовков, лид, подписи", "М6"],
+        ["prox", "Отбивка над заголовком больше, чем под ним: заголовок связан со своим текстом", "М6"],
+        ["zoom", "В режимах «Масштаб 200 %» и «Пользовательские интервалы» текст не обрезается и не перекрывается", "М8"],
+        ["typo", "Тексты набраны по нормам русского набора: кавычки, тире, неразрывные пробелы", "М9"],
+        ["lic", "Лицензии гарнитур допускают веб-использование и размещение файлов на собственном сервере", "М9"],
+        ["load", "Подключение продумано: WOFF2, подмножества, font-display, предзагрузка только основного файла", "М9"]
       ],
       rTitle: "Типографическая система", rCase: "Кейс", rBrief: "Бриф", rFonts: "Гарнитуры", rRole: "Роль", rFamily: "Гарнитура", rClass: "Класс", rWeights: "Начертания",
       rScale: "Шкала кеглей", rParams: "Параметры набора", rColors: "Цвета", rWhy: "Обоснование", rChecks: "Результаты проверки", rSpecimen: "Образец набора (десктоп, 1280 px)",
@@ -128,16 +128,16 @@
         pair: ["Heading and body faces form a contrasting or harmonious pair", "Two different faces of the same subclass: the difference reads as a mistake, not as contrast", "Display or script faces are used in two roles at once"],
         mono: ["A monospaced face is provided for code", "The brief includes code snippets: choose a monospaced accent face"],
         decor: ["The heading face matches the restrained tone of the brief", "The brief rules out decorative effects: a display heading face contradicts the tone"],
-        files: function (n, kb, ok) { return "Font files: " + n + (kb ? ", ≈ " + kb + " KB" : "") + (ok ? "" : " — a heavy payload; reduce the number of faces or weights (M8)"); }
+        files: function (n, kb, ok) { return "Font files: " + n + (kb ? ", ≈ " + kb + " KB" : "") + (ok ? "" : " — a heavy payload; reduce the number of faces or weights (M9)"); }
       },
       m: [
-        ["tone", "The typefaces match the brief, audience and tone", "M2, M6"],
-        ["hier", "The hierarchy is clear at a glance: heading levels, lead, captions", "M5"],
-        ["prox", "Space above a heading exceeds the space below it, binding it to its text", "M5"],
-        ["zoom", "In “200% zoom” and “User text spacing” modes no text is clipped or overlapped", "M7"],
-        ["typo", "Texts follow typesetting conventions: quotes, dashes, non-breaking spaces", "M8"],
-        ["lic", "Font licences permit web use and self-hosting", "M8"],
-        ["load", "Loading is planned: WOFF2, subsets, font-display, preload of the main file only", "M8"]
+        ["tone", "The typefaces match the brief, audience and tone", "M3, M7"],
+        ["hier", "The hierarchy is clear at a glance: heading levels, lead, captions", "M6"],
+        ["prox", "Space above a heading exceeds the space below it, binding it to its text", "M6"],
+        ["zoom", "In “200% zoom” and “User text spacing” modes no text is clipped or overlapped", "M8"],
+        ["typo", "Texts follow typesetting conventions: quotes, dashes, non-breaking spaces", "M9"],
+        ["lic", "Font licences permit web use and self-hosting", "M9"],
+        ["load", "Loading is planned: WOFF2, subsets, font-display, preload of the main file only", "M9"]
       ],
       rTitle: "Type system", rCase: "Case", rBrief: "Brief", rFonts: "Typefaces", rRole: "Role", rFamily: "Typeface", rClass: "Class", rWeights: "Styles",
       rScale: "Type scale", rParams: "Setting parameters", rColors: "Colours", rWhy: "Rationale", rChecks: "Review results", rSpecimen: "Type specimen (desktop, 1280 px)",
@@ -146,7 +146,7 @@
       cssPreload: "Preload the main file (in the document <head>):", cssTokens: "2. Variables: fluid scale between 360 and 1280 px viewports", cssBase: "3. Base styles"
     }
   };
-  var MOD = { size: "4", sizeM: "7", lh: "4", lhHead: "5", chars: "4", charsM: "7", hier: "5", ratioM: "5", overflow: "7", contrast: "7", linkBg: "7", linkText: "7", bodyCls: "2", bodyW: "3", italic: "3", bold: "3", pair: "6", mono: "2", decor: "6", files: "8" };
+  var MOD = { size: "5", sizeM: "8", lh: "5", lhHead: "6", chars: "5", charsM: "8", hier: "6", ratioM: "6", overflow: "8", contrast: "8", linkBg: "8", linkText: "8", bodyCls: "2", bodyW: "4", italic: "4", bold: "4", pair: "7", mono: "2", decor: "3", files: "9" };
 
   function s(k) { var v = S[App.lang][k]; return typeof v === "function" ? v.apply(null, Array.prototype.slice.call(arguments, 1)) : v; }
   var esc = function (x) { return App.esc(x); };

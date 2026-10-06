@@ -8,7 +8,7 @@
       loaded: "Файлы шрифтов, загруженные этой страницей",
       file: "Файл", size: "Объём", cached: "из кэша",
       showEn: "Показать английский текст шрифтом Bitter", showRu: "Показать русский текст шрифтом Bitter",
-      enText: "Typography for the web", ruText: "Типографика для веба",
+      enText: "Interface typography", ruText: "Типографика интерфейсов",
       loadNote: "Каждый шрифт курса разделён на два подмножества с unicode-range. Браузер загружает файл только тогда, когда на странице есть знаки из его диапазона. Если Bitter уже использовался в этом сеансе (например, в тренажёре), его файлы будут в списке заранее.",
       newMark: "новый",
       fd: "Значение font-display", delay: "Время загрузки шрифта",
@@ -22,14 +22,14 @@
       fmLines: function (a, b) { return "Строк: веб-шрифт — " + a + ", резервный — " + b; },
       fmNote: "Наложение показывает расхождение строк: синий — веб-шрифт, оранжевый — резервный шрифт.",
       typoIn: "Исходный текст", typoBtn: "Применить правила набора", typoOut: "Результат (неразрывные пробелы показаны знаком °)",
-      typoSample: "Курс \"Типографика для веба\" рассчитан на 10-15 занятий - это около 3 месяцев. Как пишет А. С. Иванова, \"шрифт - это \"голос\" текста\". В аудитории 30 мест, занятия проходят с 9:00 до 18:00 и в субботу.",
+      typoSample: "Курс \"Типографика интерфейсов\" рассчитан на 10-15 занятий - это около 3 месяцев. Как пишет А. С. Иванова, \"шрифт - это \"голос\" текста\". В аудитории 30 мест, занятия проходят с 9:00 до 18:00 и в субботу.",
       typoStat: function (n) { return "Выполнено замен: " + n + "."; }
     },
     en: {
       loaded: "Font files loaded by this page",
       file: "File", size: "Size", cached: "cached",
       showEn: "Show English text in Bitter", showRu: "Show Russian text in Bitter",
-      enText: "Typography for the web", ruText: "Типографика для веба",
+      enText: "Interface typography", ruText: "Типографика интерфейсов",
       loadNote: "Every course font is split into two subsets with unicode-range. The browser downloads a file only when the page contains characters from its range. If Bitter was already used in this session (e.g. in the trainer), its files will already be listed.",
       newMark: "new",
       fd: "font-display value", delay: "Font load time",
@@ -43,7 +43,7 @@
       fmLines: function (a, b) { return "Lines: web font " + a + ", fallback " + b; },
       fmNote: "The overlay shows the line mismatch: blue is the web font, orange the fallback.",
       typoIn: "Source text", typoBtn: "Apply Russian typesetting rules", typoOut: "Result (non-breaking spaces shown as °)",
-      typoSample: "Курс \"Типографика для веба\" рассчитан на 10-15 занятий - это около 3 месяцев. Как пишет А. С. Иванова, \"шрифт - это \"голос\" текста\". В аудитории 30 мест, занятия проходят с 9:00 до 18:00 и в субботу.",
+      typoSample: "Курс \"Типографика интерфейсов\" рассчитан на 10-15 занятий - это около 3 месяцев. Как пишет А. С. Иванова, \"шрифт - это \"голос\" текста\". В аудитории 30 мест, занятия проходят с 9:00 до 18:00 и в субботу.",
       typoStat: function (n) { return "Replacements made: " + n + "."; }
     }
   };
