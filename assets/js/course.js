@@ -122,7 +122,7 @@
 
   var modules = [
     {
-      id: "anatomy", minutes: 55,
+      id: "anatomy", minutes: 60,
       title: t("Анатомия шрифта", "Anatomy of type"),
       goal: t("Освоить терминологию строения знака и понять, как элементы шрифта влияют на восприятие текста на экране.", "Master the terminology of letter structure and understand how the parts of a typeface affect on-screen reading."),
       topics: [],
@@ -135,6 +135,7 @@
         {
           kind: "idea",
           title: t("Система линий шрифта", "The system of typeface lines"),
+          figure: "lines",
           body: t("Знаки шрифта располагаются относительно системы горизонтальных линий, которая определяет их пропорции и согласованность в строке.", "Glyphs are positioned relative to a system of horizontal lines that defines their proportions and consistency within a line."),
           points: [
             t("Базовая линия (baseline) — линия, на которой стоят знаки; нижние выносные элементы опускаются ниже неё.", "Baseline — the line on which glyphs sit; descenders extend below it."),
@@ -251,19 +252,31 @@
           kind: "idea",
           title: t("Как читать название шрифта", "How to read a font name"),
           figure: "fontname",
-          body: t("Название начертания строится по устойчивой схеме: сначала семейство, затем уточнения — класс, оптический размер, ширина, насыщенность и наклон. Умение читать название помогает выбрать нужный файл, верно указать font-weight и font-style и не перепутать варианты одной гарнитуры.", "A style name follows a stable pattern: first the family, then the qualifiers — class, optical size, width, weight and slope. Reading names correctly helps you pick the right file, set font-weight and font-style, and avoid mixing up variants of one typeface."),
+          body: t("Полное название начертания состоит из двух частей. Первая — имя семейства: его указывают в font-family. Вторая — характеристики конкретного начертания: их задают свойствами font-weight, font-style, font-stretch или они определяют, какой файл подключать. Слова всегда идут в одном порядке: от общего к частному.", "A full style name has two parts. The first is the family name, used in font-family. The second describes the particular style: it maps to font-weight, font-style and font-stretch or tells you which file to load. The words always follow the same order, from general to specific."),
           points: [
-            t("Первое слово нередко указывает на проект или производителя: PT — шрифты проекта ParaType Public Types, IBM Plex — корпоративное семейство IBM.", "The first word often names the project or foundry: PT — fonts of ParaType's Public Types project; IBM Plex — IBM's corporate family."),
-            t("Класс: Serif, Sans, Slab, Mono. Оптический размер: Caption — для мелкого кегля; Text, Subhead, Display — для всё более крупного. Иногда слово входит в имя семейства: Playfair Display изначально предназначена для крупного кегля.", "Class: Serif, Sans, Slab, Mono. Optical size: Caption — for small sizes; Text, Subhead, Display — for progressively larger ones. Sometimes the word is part of the family name: Playfair Display was designed for large sizes."),
-            t("Ширина: Condensed, Narrow — узкое; Extended, Wide — широкое. Насыщенность: от Thin до Black (модуль 4). Наклон: Italic, Oblique.", "Width: Condensed, Narrow — narrow; Extended, Wide — wide. Weight: Thin to Black (Module 4). Slope: Italic, Oblique."),
-            t("Технические пометки: Variable (VF) — вариативный файл; Pro — как правило, расширенный набор знаков; SC — капитель.", "Technical labels: Variable (VF) — a variable file; Pro — usually an extended character set; SC — small caps.")
+            t("Имя семейства может включать проект или производителя (PT, IBM, Noto), собственное имя (Plex, Roboto, Source), класс (Sans, Serif, Mono) и номер версии (Source Serif 4). Всё это вместе — значение font-family: «PT Sans», «IBM Plex Sans», «Source Serif 4».", "The family name may include a project or foundry (PT, IBM, Noto), a proper name (Plex, Roboto, Source), a class (Sans, Serif, Mono) and a version number (Source Serif 4). Together they form the font-family value: “PT Sans”, “IBM Plex Sans”, “Source Serif 4”."),
+            t("Характеристики начертания перечисляются в порядке: оптический размер → ширина → насыщенность → наклон. Например: Source Serif 4 | Display | Semibold | Italic; IBM Plex Sans | Condensed | Medium | Italic.", "Style features are listed in the order optical size → width → weight → slope. For example: Source Serif 4 | Display | Semibold | Italic; IBM Plex Sans | Condensed | Medium | Italic."),
+            t("Если признак не указан, действует значение по умолчанию: оптический размер Text, ширина Normal, насыщенность Regular (400), прямое начертание. Поэтому «PT Sans Bold» — это обычная ширина, прямое начертание, насыщенность 700.", "If a feature is omitted, the default applies: Text optical size, Normal width, Regular (400) weight, upright. So “PT Sans Bold” means normal width, upright, weight 700."),
+            t("Иногда слово-признак становится частью имени семейства: Playfair Display, PT Sans Caption и PT Sans Narrow подключаются как отдельные семейства. Это проверяют в каталоге: если вариант указан в font-family, он часть имени.", "Sometimes a feature word becomes part of the family name: Playfair Display, PT Sans Caption and PT Sans Narrow are loaded as separate families. Check the catalogue: if the variant appears in font-family, it is part of the name.")
           ],
           sources: [R.gfPtSans, R.mdnOpticalSizing]
         },
         {
+          kind: "idea",
+          title: t("Обозначения в названиях шрифтов", "Labels in font names"),
+          figure: "fontterms",
+          body: t("Слова-признаки образуют упорядоченные шкалы. Насыщенность и ширина соответствуют числовым значениям CSS, оптический размер — кеглю, для которого рассчитан рисунок. Зная шкалы, можно по названию файла определить, какое начертание в нём находится.", "Feature words form ordered scales. Weight and width map to numeric CSS values, optical size to the type size the design is made for. Knowing the scales, you can tell from a file name which style it contains."),
+          points: [
+            t("Насыщенность: Thin (100) → ExtraLight (200) → Light (300) → Regular (400) → Medium (500) → SemiBold (600) → Bold (700) → ExtraBold (800) → Black (900). Синонимы: Hairline = Thin, Heavy = Black, DemiBold = SemiBold, UltraBold = ExtraBold.", "Weight: Thin (100) → ExtraLight (200) → Light (300) → Regular (400) → Medium (500) → SemiBold (600) → Bold (700) → ExtraBold (800) → Black (900). Synonyms: Hairline = Thin, Heavy = Black, DemiBold = SemiBold, UltraBold = ExtraBold."),
+            t("Ширина: Ultra Condensed (50 %) → Extra Condensed → Condensed / Narrow → Semi Condensed → Normal (100 %) → Semi Expanded → Expanded / Wide → Extra Expanded → Ultra Expanded (200 %). В CSS — свойство font-stretch.", "Width: Ultra Condensed (50%) → Extra Condensed → Condensed / Narrow → Semi Condensed → Normal (100%) → Semi Expanded → Expanded / Wide → Extra Expanded → Ultra Expanded (200%). In CSS: font-stretch."),
+            t("Оптический размер: Caption → Small Text → Text → Subhead → Display — от мелкого кегля к крупному. Наклон: Roman (прямое, обычно не пишется), Italic (курсив), Oblique (наклонное). Тип файла: Variable — вариативный, Pro — расширенный набор знаков, SC — капитель.", "Optical size: Caption → Small Text → Text → Subhead → Display — from small to large sizes. Slope: Roman (upright, usually omitted), Italic, Oblique. File type: Variable, Pro (extended character set), SC (small caps).")
+          ],
+          sources: [R.mdnFontWeight, R.mdnVariable]
+        },
+        {
           kind: "task",
           title: t("Разберите название шрифта", "Parse a font name"),
-          body: t("Определите, что обозначают слова в названиях реальных шрифтов: производителя, класс, оптический размер, ширину, насыщенность или наклон.", "Identify what the words in real font names denote: foundry, class, optical size, width, weight or slope."),
+          body: t("Разберите 12 названий реальных шрифтов: для каждого слова укажите, что оно обозначает. Задание засчитывается при 10 полностью верных разборах.", "Parse 12 real font names: for every word, state what it denotes. The exercise is passed with 10 fully correct parses."),
           demo: "tFontName"
         },
         {
@@ -271,7 +284,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Какая гарнитура предпочтительнее для подписей интерфейса кеглем 12–14 px на экранах с низкой плотностью пикселей?", "Which typeface is preferable for 12–14 px interface labels on low-density screens?"),
-            options: [t("Высококонтрастная антиква с тонкими засечками", "A high-contrast serif with thin serifs"), t("Гротеск с открытой апертурой и увеличенной высотой строчных", "A sans with open aperture and a large x-height"), t("Рукописный шрифт с наклоном", "A slanted script typeface")],
+            options: [t("Высококонтрастная антиква с тонкими горизонтальными засечками", "A high-contrast serif with thin horizontal serifs"), t("Гротеск с открытой апертурой и увеличенной высотой строчных", "A sans with open aperture and a large x-height"), t("Рукописный шрифт с наклоном и связным начертанием знаков", "A slanted script with connected letterforms")],
             answer: 1,
             explain: t("Открытая апертура и увеличенная высота строчных повышают различимость знаков при малом кегле; тонкие штрихи высококонтрастных антикв на таких экранах теряют чёткость.", "Open aperture and a large x-height improve character recognition at small sizes; the thin strokes of high-contrast serifs lose definition on such screens.")
           }
@@ -284,6 +297,7 @@
         {
           kind: "idea",
           title: t("Особенности строчной кириллицы", "Specifics of lowercase Cyrillic"),
+          figure: "cyrlower",
           body: t("Большинство строчных кириллических знаков вписывается в высоту строчных: верхние выносные элементы имеют лишь б и ф, нижние — д, р, у, ф, ц, щ. Обилие вертикальных штрихов (и, н, п, т, ш, щ) создаёт эффект «частокола»: очертания слов менее разнообразны, чем в латинице, а текстура набора — более однородна.", "Most lowercase Cyrillic letters fit within the x-height: only б and ф have ascenders, and д, р, у, ф, ц, щ have descenders. The abundance of vertical stems (и, н, п, т, ш, щ) creates a ‘picket fence’ effect: word shapes are less varied than in Latin, and the texture of the setting is more uniform."),
           points: [
             t("Качество кириллицы в шрифтах, изначально разработанных для латиницы, существенно различается; её следует оценивать отдельно.", "The quality of Cyrillic in typefaces originally designed for Latin varies considerably and must be evaluated separately."),
@@ -320,7 +334,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("В навигационном меню с line-height: 1 и overflow: hidden у слова «ЙОГУРТ» обрезается верхняя часть первой буквы. Какова причина?", "In a navigation menu with line-height: 1 and overflow: hidden, the top of the first letter of «ЙОГУРТ» is clipped. What is the cause?"),
-            options: [t("Шрифт не содержит кириллических знаков", "The font contains no Cyrillic glyphs"), t("Диакритический знак выходит за пределы строки высотой в один кегль", "The diacritic extends beyond a line box one em high"), t("Не указан атрибут lang", "The lang attribute is missing")],
+            options: [t("Шрифт не содержит кириллицы, и знак берётся из резервного", "The font lacks Cyrillic, so the glyph comes from a fallback"), t("Знак над Й выходит за пределы строки высотой в один кегль", "The mark above Й extends beyond a one-em line box"), t("Не указан атрибут lang, и браузер неверно определяет язык", "The lang attribute is missing, so the language is misdetected")],
             answer: 1,
             explain: t("Знак над Й расположен выше линии прописных и не умещается в строку высотой 1em; overflow: hidden обрезает выступающую часть.", "The mark above Й sits above the cap height and does not fit into a 1em line box; overflow: hidden clips the protruding part.")
           }
@@ -330,7 +344,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Почему при line-height: normal высота строки у разных шрифтов с одинаковым кеглем различается?", "Why does line-height: normal produce different line heights for fonts of the same size?"),
-            options: [t("Значение normal вычисляется из вертикальных метрик, заданных в файле шрифта", "normal is calculated from the vertical metrics in the font file"), t("Браузер всегда использует коэффициент 1.2", "The browser always uses a factor of 1.2"), t("Высота строки зависит от ширины контейнера", "Line height depends on the container width")],
+            options: [t("Значение normal берётся из вертикальных метрик файла шрифта", "normal comes from the vertical metrics in the font file"), t("Браузер всегда применяет к кеглю коэффициент 1.2 без исключений", "The browser always applies a fixed factor of 1.2 to the size"), t("Высота строки зависит от ширины контейнера и длины абзаца", "Line height depends on container width and paragraph length")],
             answer: 0,
             explain: t("Значение normal определяется метриками конкретного шрифта (восхождение, нисхождение, межстрочный зазор), поэтому оно непредсказуемо при смене гарнитуры. Интерлиньяж следует задавать явно.", "normal depends on the metrics of the specific font (ascent, descent, line gap) and is unpredictable when the typeface changes. Line height should be set explicitly.")
           }
@@ -462,7 +476,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Задано font-family: \"Inter\". Файл шрифта не загрузился, а в системе Inter не установлен. Каким шрифтом будет отображён текст?", "font-family: \"Inter\" is set. The font file fails to load and Inter is not installed. How will the text be rendered?"),
-            options: [t("Ближайшим по рисунку гротеском из системы", "With the closest sans available in the system"), t("Шрифтом по умолчанию из настроек браузера, как правило антиквой", "With the browser's default font, usually a serif"), t("Текст не будет отображён", "The text will not be displayed")],
+            options: [t("Ближайшим по рисунку гротеском из числа установленных в системе", "The most similar sans installed on the system"), t("Шрифтом по умолчанию из настроек браузера, обычно антиквой", "The browser's default font, usually a serif"), t("Никаким: текст останется невидимым до загрузки файла", "None: the text stays invisible until the file loads")],
             answer: 1,
             explain: t("Браузер не подбирает шрифт по сходству рисунка. Без родового семейства он использует шрифт по умолчанию, обычно антикву. Поэтому список следует завершать ключевым словом sans-serif.", "Browsers do not match fonts by design. Without a generic family they use the default font, usually a serif. The list should therefore end with sans-serif.")
           }
@@ -527,7 +541,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Какой подгруппе гротесков соответствуют пропорции, близкие к антикве, открытая апертура и лёгкая модуляция штриха?", "Which sans subgroup has proportions close to serif type, open aperture and slight stroke modulation?"),
-            options: [t("Неогротески", "Neo-grotesque"), t("Геометрические гротески", "Geometric sans"), t("Гуманистические гротески", "Humanist sans")],
+            options: [t("Неогротески швейцарской школы", "Swiss-school neo-grotesques"), t("Геометрические гротески", "Geometric sans"), t("Гуманистические гротески", "Humanist sans")],
             answer: 2,
             explain: t("Гуманистические гротески наследуют пропорции ренессансной антиквы; открытая апертура обеспечивает их хорошую различимость в мелком кегле.", "Humanist sans inherit Renaissance serif proportions; their open aperture makes them highly legible at small sizes.")
           }
@@ -537,7 +551,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Какой набор признаков характерен для классицистической антиквы (дидоны)?", "Which set of features characterises didone serifs?"),
-            options: [t("Наклонная ось контраста, умеренный контраст, скошенные засечки", "Inclined axis, moderate contrast, angled bracketed serifs"), t("Вертикальная ось контраста, высокий контраст, тонкие горизонтальные засечки", "Vertical axis, high contrast, thin horizontal serifs"), t("Низкий контраст, прямоугольные засечки толщиной с основной штрих", "Low contrast, rectangular serifs as heavy as the stems")],
+            options: [t("Наклонная ось контраста, умеренный контраст, засечки со скруглёнными переходами", "Inclined axis, moderate contrast, bracketed serifs with smooth transitions"), t("Вертикальная ось контраста, высокий контраст, тонкие горизонтальные засечки", "Vertical axis, high contrast, thin horizontal serifs"), t("Низкий контраст, массивные прямоугольные засечки толщиной с основной штрих", "Low contrast, heavy rectangular serifs as thick as the stems")],
             answer: 1,
             explain: t("Наклонная ось контраста и скошенные засечки характерны для антиквы старого стиля, а низкий контраст и прямоугольные засечки — для брусковых шрифтов.", "An inclined axis and angled bracketed serifs characterise old-style serifs, while low contrast and rectangular serifs characterise slab serifs.")
           }
@@ -691,11 +705,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Почему эксперименты с непривычной формой знаков уместны в заголовке промостраницы, но не в основном тексте статьи?", "Why are experiments with unfamiliar letterforms acceptable in a promo headline but not in article body text?"),
-            options: [
-              t("Непривычная форма замедляет чтение: в коротком заголовке это привлекает внимание, в протяжённом тексте утомляет читателя", "Unfamiliar forms slow reading: in a short headline this attracts attention, in long text it tires the reader"),
-              t("Акцидентные шрифты не поддерживают кириллицу в мелком кегле", "Display faces do not support Cyrillic at small sizes"),
-              t("Браузеры не применяют акцидентные шрифты к элементу <p>", "Browsers do not apply display faces to the <p> element")
-            ],
+            options: [t("Непривычная форма замедляет чтение: в коротком заголовке это допустимо", "Unfamiliar forms slow reading, which is acceptable in a short headline"), t("Акцидентные шрифты не содержат кириллицы для мелкого кегля и длинных абзацев", "Display faces lack Cyrillic for small sizes and paragraphs"), t("Браузеры ограничивают применение акцидентных шрифтов в элементе <p>", "Browsers restrict display faces inside the <p> element")],
             answer: 0,
             explain: t("Удобочитаемость зависит от привычности формы. Замедление допустимо, когда текст короток и цель — привлечь внимание.", "Readability depends on familiarity. Slowing the reader down is acceptable when the text is short and the goal is to attract attention.")
           }
@@ -887,7 +897,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("В гарнитуре нет курсивного начертания, а в тексте используется элемент <em>. Что увидит пользователь при настройках по умолчанию?", "The typeface has no italic and the text uses <em>. What will the user see with default settings?"),
-            options: [t("Прямое начертание без выделения", "Upright text without emphasis"), t("Механически наклонённое прямое начертание", "A mechanically slanted upright"), t("Курсив из резервного шрифта", "Italic from the fallback font")],
+            options: [t("Прямое начертание без какого-либо выделения", "Upright text without any emphasis"), t("Механически наклонённое прямое начертание", "A mechanically slanted upright"), t("Курсивное начертание из резервного шрифта", "The italic of the fallback font")],
             answer: 1,
             explain: t("По умолчанию font-synthesis разрешает синтез, и браузер наклоняет прямое начертание. Формы знаков, характерные для курсива, при этом не воспроизводятся.", "By default font-synthesis allows synthesis and the browser slants the upright. Italic letterforms are not reproduced.")
           }
@@ -1105,9 +1115,9 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Какое значение кегля заголовка корректно масштабируется как при изменении ширины окна, так и при увеличении страницы?", "Which heading font size scales correctly with both the window width and page zoom?"),
-            options: [t("font-size: 5vw", "font-size: 5vw"), t("font-size: clamp(1.75rem, 1.2rem + 2.5vw, 3rem)", "font-size: clamp(1.75rem, 1.2rem + 2.5vw, 3rem)"), t("font-size: 40px", "font-size: 40px")],
+            options: [t("font-size: clamp(1.75em, 2.5vw + 1.5vh, 3.25em)", "font-size: clamp(1.75em, 2.5vw + 1.5vh, 3.25em)"), t("font-size: clamp(1.75rem, 1rem + 2.5vw, 3rem)", "font-size: clamp(1.75rem, 1rem + 2.5vw, 3rem)"), t("font-size: calc(3vw + 1vh + 1vmin + 0.5vmax)", "font-size: calc(3vw + 1vh + 1vmin + 0.5vmax)")],
             answer: 1,
-            explain: t("Значение 5vw не реагирует на масштабирование страницы; значение 40px не адаптируется к ширине окна и игнорирует пользовательскую настройку размера шрифта. Функция clamp() с использованием rem учитывает оба фактора.", "5vw does not respond to page zoom; 40px neither adapts to the window width nor respects the user's font-size setting. clamp() with rem accounts for both.")
+            explain: t("Если переменная часть выражена только в единицах области просмотра (vw, vh, vmin, vmax), кегль не реагирует на увеличение страницы. В clamp(1.75rem, 1rem + 2.5vw, 3rem) слагаемое и границы в rem учитывают и увеличение, и пользовательский размер шрифта.", "When the variable part uses only viewport units (vw, vh, vmin, vmax), the size ignores page zoom. In clamp(1.75rem, 1rem + 2.5vw, 3rem) the rem term and bounds respect both zoom and the user's font size.")
           }
         },
         {
@@ -1115,7 +1125,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Для абзацев задано hyphens: auto, однако в русском тексте переносы не расставляются. Какова наиболее вероятная причина?", "Paragraphs have hyphens: auto, yet Russian text is not hyphenated. What is the most likely cause?"),
-            options: [t("Не задана выключка по формату (text-align: justify)", "text-align: justify is not set"), t("Не указан атрибут lang=\"ru\" у элемента html или у блока", "The lang=\"ru\" attribute is missing on html or the block"), t("Используемый шрифт не поддерживает переносы", "The font does not support hyphenation")],
+            options: [t("Не задана выключка по формату через text-align: justify", "text-align: justify is not set"), t("Не указан атрибут lang=\\\"ru\\\" у элемента html или у блока", "The lang=\"ru\" attribute is missing on html or the block"), t("Используемый веб-шрифт не поддерживает автоматические переносы", "The web font does not support automatic hyphenation")],
             answer: 1,
             explain: t("Словарь переносов выбирается браузером на основании атрибута lang. При его отсутствии язык текста не определён и переносы не расставляются.", "The browser selects the hyphenation dictionary based on the lang attribute. Without it the language is undetermined and no hyphenation is applied.")
           }
@@ -1272,7 +1282,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("В разделе с заголовком h2 расположены карточки товаров. Название товара по макету набрано кеглем основного текста. Какая разметка корректна?", "A section with an h2 heading contains product cards. In the mockup, product names are set at body size. Which markup is correct?"),
-            options: [t("<p><b>Название</b></p> — заголовок не нужен", "<p><b>Name</b></p> — no heading needed"), t("<h3 class=\"title-s\">Название</h3> — уровень по структуре, размер классом", "<h3 class=\"title-s\">Name</h3> — level by structure, size by class"), t("<h6>Название</h6> — потому что h6 самый мелкий", "<h6>Name</h6> — because h6 is the smallest")],
+            options: [t("<p><b>Название</b></p> — заголовок для карточки не нужен", "<p><b>Name</b></p> — the card needs no heading"), t("<h3 class=\"title-s\">Название</h3> — уровень по структуре", "<h3 class=\"title-s\">Name</h3> — level by structure"), t("<h6>Название</h6> — уровень выбран по самому мелкому кеглю", "<h6>Name</h6> — level chosen for the smallest size")],
             answer: 1,
             explain: t("Название карточки — заголовок подраздела внутри h2, поэтому ему соответствует h3; кегль задаётся классом. Выбор h6 ради размера нарушает последовательность уровней.", "The card title is a subsection heading within the h2, so h3 is appropriate; size is set by a class. Choosing h6 for its size breaks the heading sequence.")
           }
@@ -1282,7 +1292,7 @@
           title: t("Анализ образца", "Sample analysis"),
           quiz: {
             q: t("Какие ошибки построения иерархии допущены в образце?", "Which hierarchy errors does the sample contain?"),
-            options: [t("Подзаголовок не отличается от основного текста, а отступ над ним меньше, чем под ним", "The subheading does not differ from body text, and the space above it is smaller than below"), t("Слишком много уровней заголовков и выключка по центру", "Too many heading levels and centred alignment"), t("Лид набран более крупным кеглем, чем основной текст", "The lead is set larger than the body text")],
+            options: [t("Подзаголовок не отличается от текста, отбивка над ним меньше, чем под ним", "The subheading looks like body text and has less space above than below"), t("Слишком много уровней заголовков, а весь текст выключен по центру страницы", "Too many heading levels and all text is centred on the page"), t("Лид набран более крупным кеглем, чем основной текст под ним", "The lead is set larger than the body text below it")],
             answer: 0,
             explain: t("Подзаголовок «Методика» набран кеглем и насыщенностью основного текста и визуально примыкает к следующему абзацу хуже, чем к предыдущему. Кроме того, рубрика, лид и подпись также не дифференцированы.", "The subheading “Method” has the size and weight of body text and is closer to the preceding paragraph than to the following one. The kicker, lead and caption are not differentiated either.")
           }
@@ -1436,7 +1446,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Для заголовков выбран Roboto, для основного текста — Arimo. Какова основная проблема сочетания?", "Roboto is chosen for headings and Arimo for body text. What is the main problem?"),
-            options: [t("Слишком высокий контраст между гарнитурами", "Too much contrast between the typefaces"), t("Две близкие гарнитуры одного подкласса: различие воспринимается как ошибка", "Two similar typefaces of the same subclass: the difference reads as an error"), t("Отсутствие кириллицы в одной из гарнитур", "One typeface lacks Cyrillic")],
+            options: [t("Слишком высокий контраст между гарнитурами заголовков и основного текста", "Too much contrast between the heading and body typefaces"), t("Две близкие гарнитуры одного подкласса: различие выглядит ошибкой", "Two similar faces of one subclass: the difference looks like an error"), t("В одной из гарнитур отсутствуют кириллица и полноценный курсив", "One of the typefaces lacks Cyrillic and a true italic")],
             answer: 1,
             explain: t("Оба шрифта — неогротески со сходным рисунком. Их сочетание не создаёт функционального различия, но нарушает единство; уместнее использовать одну гарнитуру в разных насыщенностях.", "Both are neo-grotesques with similar designs. The pairing creates no functional distinction yet breaks unity; one typeface in different weights is preferable.")
           }
@@ -1446,7 +1456,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("В каком случае использование третьей гарнитуры наиболее оправдано?", "When is a third typeface most justified?"),
-            options: [t("Для выделения важных слов в основном тексте", "To emphasise important words in body text"), t("Для фрагментов программного кода в технической документации", "For code snippets in technical documentation"), t("Для разнообразия заголовков разных разделов", "For variety across section headings")],
+            options: [t("Для выделения важных слов и терминов в основном тексте", "To emphasise important words and terms in body text"), t("Для фрагментов программного кода в технической документации", "For code snippets in technical documentation"), t("Для разнообразного оформления заголовков в разных разделах сайта", "For varied heading styles across sections of the site")],
             answer: 1,
             explain: t("Моноширинный шрифт для кода выполняет отдельную, чётко определённую функцию. Выделение в тексте решается начертаниями, а различные гарнитуры для заголовков разрушают единство системы.", "A monospace for code serves a distinct, well-defined function. Emphasis is handled by styles, and different typefaces for headings break the system's unity.")
           }
@@ -1565,7 +1575,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("В шаблоне сайта указано <meta name=\"viewport\" content=\"width=device-width, maximum-scale=1, user-scalable=no\">. В чём проблема?", "A template has <meta name=\"viewport\" content=\"width=device-width, maximum-scale=1, user-scalable=no\">. What is the problem?"),
-            options: [t("Страница не будет адаптироваться к ширине экрана", "The page will not adapt to screen width"), t("Пользователь не сможет увеличить текст жестом масштабирования", "Users cannot enlarge text with the zoom gesture"), t("Браузер не загрузит веб-шрифты", "The browser will not load web fonts")],
+            options: [t("Страница перестанет адаптироваться к ширине экрана устройства", "The page will stop adapting to the screen width"), t("Пользователь не сможет увеличить текст жестом масштабирования", "Users cannot enlarge text with the zoom gesture"), t("Браузер не будет загружать веб-шрифты и подставит системные шрифты", "The browser will skip web fonts and use system fonts")],
             answer: 1,
             explain: t("Запрет масштабирования лишает пользователей со слабым зрением возможности увеличить текст и противоречит критерию WCAG 1.4.4. Достаточно width=device-width, initial-scale=1.", "Disabling zoom prevents low-vision users from enlarging text and conflicts with WCAG 1.4.4. width=device-width, initial-scale=1 is sufficient.")
           }
@@ -1614,7 +1624,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("В макете рубрика набрана вразрядку прописными: «Н О В О С Т И». Как корректно реализовать это в вёрстке?", "A mockup sets a kicker in spaced capitals: “N E W S”. How should it be implemented?"),
-            options: [t("Набрать в HTML буквы через пробел", "Type the letters separated by spaces in HTML"), t("Набрать «Новости», применить text-transform: uppercase и letter-spacing", "Type “News” and apply text-transform: uppercase and letter-spacing"), t("Вставить рубрику изображением", "Insert the kicker as an image")],
+            options: [t("Набрать в HTML «Н О В О С Т И» с пробелами между всеми буквами", "Type the letters with spaces between them in HTML"), t("Набрать «Новости», задать text-transform и letter-spacing", "Type “News” and set text-transform and letter-spacing"), t("Вставить рубрику изображением с подписью в атрибуте alt", "Insert the kicker as an image with alt text")],
             answer: 1,
             explain: t("Пробелы между буквами разрушают слово для программ экранного доступа и поиска, изображение текста нарушает критерий 1.4.5. Регистр и разрядка задаются средствами CSS.", "Spaces between letters break the word for screen readers and search, and an image of text violates 1.4.5. Case and spacing belong in CSS.")
           }
@@ -1624,7 +1634,7 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Заказчик предлагает подключить «шрифт для людей с дислексией» вместо основного. Какой аргумент наиболее обоснован?", "A client suggests replacing the main font with a “dyslexia font”. Which argument is best supported?"),
-            options: [t("Такие шрифты доказанно ускоряют чтение у всех пользователей", "Such fonts are proven to speed up reading for everyone"), t("Исследования не подтверждают преимуществ таких шрифтов; эффективнее обеспечить удобочитаемый набор и не мешать пользовательским настройкам", "Research does not confirm benefits; readable typesetting and respecting user settings are more effective"), t("Такие шрифты обязательны по WCAG 2.1", "Such fonts are required by WCAG 2.1")],
+            options: [t("Такие шрифты доказанно ускоряют чтение у всех пользователей сайта", "Such fonts are proven to speed up reading for all users"), t("Исследования не подтверждают пользы; важнее удобочитаемый набор", "Research shows no benefit; readable typesetting matters more"), t("Применение таких шрифтов обязательно по требованиям WCAG 2.1", "Such fonts are mandatory under WCAG 2.1")],
             answer: 1,
             explain: t("Дислексия — языковое, а не зрительное нарушение; в исследовании Кустера и соавторов шрифт Dyslexie не дал преимуществ перед Arial. WCAG не предписывает конкретных гарнитур.", "Dyslexia is a language-based, not visual, disorder; Kuster et al. found no advantage of Dyslexie over Arial. WCAG prescribes no specific typefaces.")
           }
@@ -1831,9 +1841,9 @@
           title: t("Контрольный вопрос", "Review question"),
           quiz: {
             q: t("Какое значение font-display предпочтительно для основного текста, если стабильность макета важнее точного совпадения гарнитуры при первом посещении?", "Which font-display value suits body text when layout stability matters more than an exact typeface match on the first visit?"),
-            options: [t("block", "block"), t("swap", "swap"), t("optional", "optional")],
-            answer: 2,
-            explain: t("optional использует веб-шрифт, только если он доступен практически сразу, поэтому замена шрифта и смещение макета исключены; при последующих посещениях шрифт обычно уже в кэше. block скрывает текст, swap допускает замену в любой момент.", "optional uses the web font only if it is available almost immediately, so there is no swap or layout shift; on later visits the font is usually cached. block hides text; swap allows a swap at any time.")
+            options: [t("block", "block"), t("swap", "swap"), t("fallback", "fallback"), t("optional", "optional")],
+            answer: 3,
+            explain: t("optional использует веб-шрифт, только если он доступен практически сразу, поэтому замена шрифта и смещение макета исключены; при последующих посещениях шрифт обычно уже в кэше. block скрывает текст, swap и fallback допускают замену шрифта после отображения текста.", "optional uses the web font only if it is available almost immediately, so no font swap or layout shift occurs; on later visits the font is usually cached. block hides text; swap and fallback allow a swap after text is shown.")
           }
         }
       ],

@@ -76,16 +76,97 @@
     },
 
     fontname: function (root) {
-      var R = { maker: L("проект или производитель", "project or foundry"), fam: L("семейство", "family"), cls: L("класс", "class"), ver: L("версия", "version"), opsz: L("оптический размер", "optical size"), wt: L("насыщенность", "weight"), slope: L("наклон", "slope"), width: L("ширина", "width") };
-      var names = [
-        [["PT", "maker"], ["Sans", "cls"], ["Caption", "opsz"], ["Bold", "wt"]],
-        [["Source", "fam"], ["Serif", "cls"], ["4", "ver"], ["Display", "opsz"], ["Semibold", "wt"], ["Italic", "slope"]],
-        [["Roboto", "fam"], ["Condensed", "width"], ["Light", "wt"]]
+      var COLS = [["maker", L("Проект, производитель", "Project, foundry")], ["fam", L("Собственное имя", "Proper name")], ["cls", L("Класс", "Class")], ["ver", L("Версия", "Version")], ["opsz", L("Оптический размер", "Optical size")], ["width", L("Ширина", "Width")], ["wt", L("Насыщенность", "Weight")], ["slope", L("Наклон", "Slope")], ["tech", L("Файл", "File")]];
+      var ROWS = [
+        { maker: "PT", cls: "Sans", opsz: "Caption", wt: "Bold" },
+        { fam: "Source", cls: "Serif", ver: "4", opsz: "Display", wt: "Semibold", slope: "Italic" },
+        { maker: "IBM", fam: "Plex", cls: "Sans", width: "Condensed", wt: "Medium", slope: "Italic" },
+        { fam: "Roboto", width: "Condensed", wt: "Light" },
+        { fam: "Literata", tech: "Variable" }
       ];
-      root.innerHTML = '<div class="fig-names">' + names.map(function (n) {
-        return '<div class="fn-row">' + n.map(function (p) { return '<span class="fn-part fn-' + p[1] + '"><b>' + esc(p[0]) + "</b><small>" + esc(R[p[1]]) + "</small></span>"; }).join("") + "</div>";
-      }).join("") + "</div>" + cap(L("Название шрифта читается слева направо: от общего (семейство) к частному (оптический размер, ширина, насыщенность, наклон).", "A font name reads left to right: from the general (family) to the specific (optical size, width, weight, slope)."));
+      var head = '<tr class="fnt-groups"><th colspan="4" class="fnt-g1">' + esc(L("Имя семейства", "Family name")) + '</th><th colspan="4" class="fnt-g2">' + esc(L("Начертание", "Style")) + '</th><th class="fnt-g3">' + esc(L("Тип файла", "File type")) + "</th></tr>" +
+        "<tr>" + COLS.map(function (c) { return '<th class="fn-' + c[0] + '">' + esc(c[1]) + "</th>"; }).join("") + "</tr>";
+      var body = ROWS.map(function (r) { return "<tr>" + COLS.map(function (c) { return r[c[0]] ? '<td><span class="fnt-w fn-' + c[0] + '">' + esc(r[c[0]]) + "</span></td>" : '<td class="fnt-empty">·</td>'; }).join("") + "</tr>"; }).join("");
+      root.innerHTML = '<div class="fig-scroll"><table class="fnt">' + head + body + "</table></div>" +
+        '<p class="fig-swipe">' + esc(L("← таблицу можно прокрутить по горизонтали →", "← scroll the table horizontally →")) + "</p>" +
+        cap(L("Слова названия всегда идут в одном порядке: сначала имя семейства (кто сделал, как называется, какой класс, какая версия), затем характеристики начертания (оптический размер, ширина, насыщенность, наклон). Пустые ячейки означают, что признак не указан — значит, используется значение по умолчанию: Text, Normal, Regular, прямое.", "Words in a name always come in the same order: first the family name (who made it, its name, class, version), then the style (optical size, width, weight, slope). Empty cells mean the default applies: Text, Normal, Regular, upright."));
     },
+
+    fontterms: function (root) {
+      var W = [[100, "Thin, Hairline"], [200, "ExtraLight, UltraLight"], [300, "Light"], [400, "Regular, Normal, Book*"], [500, "Medium"], [600, "SemiBold, DemiBold"], [700, "Bold"], [800, "ExtraBold, UltraBold"], [900, "Black, Heavy"]];
+      var S = [["50%", "Ultra Condensed"], ["62.5%", "Extra Condensed"], ["75%", "Condensed, Narrow, Compressed"], ["87.5%", "Semi Condensed"], ["100%", "Normal"], ["112.5%", "Semi Expanded"], ["125%", "Expanded, Wide"], ["150%", "Extra Expanded"], ["200%", "Ultra Expanded"]];
+      var O = [["Caption", L("подписи, сноски, мелкий кегль", "captions, footnotes, small sizes")], ["Small Text", L("мелкий текст", "small text")], ["Text", L("основной текст (по умолчанию)", "body text (default)")], ["Subhead", L("подзаголовки", "subheads")], ["Display", L("заголовки, крупный кегль", "headings, large sizes")]];
+      function group(title, dir, rows) { return '<div class="fv-group"><p class="fig-h">' + esc(title) + ' <span class="fv-dir">' + esc(dir) + '</span></p><ol class="fv-list">' + rows + "</ol></div>"; }
+      root.innerHTML = '<div class="fig-vocab">' +
+        group(L("Насыщенность", "Weight"), L("от светлого к сверхжирному · font-weight", "light to black · font-weight"), W.map(function (w) { return '<li><code>' + w[0] + '</code><span style="' + ff("inter") + "font-weight:" + w[0] + '">Аа</span><b>' + esc(w[1]) + "</b></li>"; }).join("")) +
+        group(L("Ширина", "Width"), L("от узкого к широкому · font-stretch", "narrow to wide · font-stretch"), S.map(function (w) { return '<li><code>' + w[0] + '</code><span class="fv-box" style="width:' + (parseFloat(w[0]) * 0.26) + 'px"></span><b>' + esc(w[1]) + "</b></li>"; }).join("")) +
+        group(L("Оптический размер", "Optical size"), L("от мелкого кегля к крупному", "small to large sizes"), O.map(function (o, i) { return '<li><code>' + (i + 1) + '</code><span style="' + ff("literata") + "font-size:" + (12 + i * 5) + 'px;line-height:1">Аа</span><b>' + esc(o[0]) + "</b><small>" + esc(o[1]) + "</small></li>"; }).join("")) +
+        '<div class="fv-group"><p class="fig-h">' + esc(L("Наклон", "Slope")) + ' <span class="fv-dir">font-style</span></p><ul class="fv-tags"><li><b>Roman, Upright</b> — ' + esc(L("прямое (обычно не пишется)", "upright (usually omitted)")) + "</li><li><b>Italic</b> — " + esc(L("курсив: собственные формы знаков", "italic: its own letterforms")) + "</li><li><b>Oblique, Slanted</b> — " + esc(L("наклонное: прямые знаки под углом", "oblique: upright letters slanted")) + "</li></ul></div>" +
+        '<div class="fv-group"><p class="fig-h">' + esc(L("Класс", "Class")) + '</p><ul class="fv-tags"><li><b>Serif</b> — ' + esc(L("антиква", "serif")) + "</li><li><b>Sans</b> — " + esc(L("гротеск", "sans serif")) + "</li><li><b>Slab</b> — " + esc(L("брусковый", "slab serif")) + "</li><li><b>Mono</b> — " + esc(L("моноширинный", "monospace")) + "</li><li><b>Script</b> — " + esc(L("рукописный", "script")) + "</li></ul></div>" +
+        '<div class="fv-group"><p class="fig-h">' + esc(L("Проект, версия, файл", "Project, version, file")) + '</p><ul class="fv-tags"><li><b>PT, IBM, Noto</b> — ' + esc(L("проект или производитель (PT — проект ParaType Public Types)", "project or foundry (PT — ParaType's Public Types)")) + "</li><li><b>3, 4</b> — " + esc(L("номер версии семейства (Source Serif 4)", "family version number (Source Serif 4)")) + "</li><li><b>Variable, VF</b> — " + esc(L("вариативный файл", "variable file")) + "</li><li><b>Pro</b> — " + esc(L("обычно расширенный набор знаков", "usually an extended character set")) + "</li><li><b>SC</b> — " + esc(L("капитель", "small caps")) + "</li></ul></div>" +
+        "</div>" + cap(L("Обозначения сгруппированы по признаку и упорядочены по шкале. Синонимы в одной строке взаимозаменяемы, но конкретное слово выбирает производитель. * Book у разных шрифтов соответствует 400 или чуть более светлому начертанию.", "Labels are grouped by feature and ordered along a scale. Synonyms on one line are interchangeable; the exact word is the foundry's choice. * Book is 400 or slightly lighter depending on the font."));
+    },
+
+    lines: function (root) {
+      ready(["literata"], function () {
+        var id = "literata", S = 120, base = 190, x0 = 170, W = 0, txt = "Hxbg бд";
+        var mx = m(id, S, "x"), mh = m(id, S, "H"), mb = m(id, S, "b"), mg = m(id, S, "g"), me = m(id, S, txt);
+        cv.font = S + 'px "' + font(id).family + '"';
+        var fm = cv.measureText("Hx"), emTop = base - (fm.fontBoundingBoxAscent || S * 0.9), emBot = base + (fm.fontBoundingBoxDescent || S * 0.25);
+        var Ls = [
+          { y: base - mb.asc, n: L("линия верхних выносных", "ascender line"), c: "s-mut" },
+          { y: base - mh.asc, n: L("линия прописных", "cap height"), c: "s-acc" },
+          { y: base - mx.asc, n: L("линия строчных", "x-height line"), c: "s-good2" },
+          { y: base, n: L("базовая линия", "baseline"), c: "s-warn" },
+          { y: base + mg.desc, n: L("линия нижних выносных", "descender line"), c: "s-mut" }
+        ];
+        W = x0 + me.w + 260;
+        var svg = '<svg viewBox="0 0 ' + W + ' 270" class="fig-svg">';
+        Ls.forEach(function (l) { svg += '<line x1="' + (x0 - 10) + '" x2="' + (W - 10) + '" y1="' + l.y + '" y2="' + l.y + '" class="' + l.c + '" stroke-width="1.6"/>'; });
+        svg += '<text x="' + x0 + '" y="' + base + '" style="' + ff(id) + "font-size:" + S + 'px" class="t-ink">' + esc(txt) + "</text>";
+        Ls.forEach(function (l, i) { svg += label(x0 - 18, l.y + (i === 0 ? -3 : i === 1 ? 12 : 5), l.n, "t-ink fs-s", "end"); });
+        function brace(x, y1, y2, text, cls) { return '<line x1="' + x + '" x2="' + x + '" y1="' + y1 + '" y2="' + y2 + '" class="' + cls + '" stroke-width="2.5"/><line x1="' + (x - 5) + '" x2="' + (x + 5) + '" y1="' + y1 + '" y2="' + y1 + '" class="' + cls + '" stroke-width="2"/><line x1="' + (x - 5) + '" x2="' + (x + 5) + '" y1="' + y2 + '" y2="' + y2 + '" class="' + cls + '" stroke-width="2"/>' + label(x + 10, (y1 + y2) / 2 + 4, text, "t-ink fs-s fw-b"); }
+        var bx = x0 + me.w + 30;
+        svg += brace(bx, base - mx.asc, base, L("высота строчных", "x-height"), "s-good2");
+        svg += brace(bx, base - mb.asc, base - mx.asc, L("верхний выносной", "ascender"), "s-mut");
+        svg += brace(bx, base, base + mg.desc, L("нижний выносной", "descender"), "s-mut");
+        svg += brace(bx + 140, emTop, emBot, "font-size", "s-acc");
+        root.innerHTML = scroll(svg + "</svg>", 680) + cap(L("Система линий на примере Literata. Прописные, как правило, ниже верхних выносных элементов; кегль (font-size) задаёт высоту кегельной площадки, которая включает выносные элементы и небольшой запас.", "The line system in Literata. Capitals are usually lower than ascenders; font-size sets the height of the em box, which includes ascenders, descenders and a little extra space."));
+      });
+    },
+
+    cyrlower: function (root) {
+      ready(["pt-serif"], function () {
+        var CY = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя".split(""), LA = "abcdefghijklmnopqrstuvwxyz".split("");
+        var cA = "бф", cD = "друфцщ", lA = "bdfhklt", lD = "gjpqy";
+        function row(arr, A, D) {
+          return '<div class="cy-row" style="' + ff("pt-serif") + '">' + arr.map(function (ch) {
+            var a = A.indexOf(ch) > -1, d = D.indexOf(ch) > -1;
+            return '<span class="cy-ch' + (a && d ? " cy-both" : a ? " cy-asc" : d ? " cy-desc" : "") + '">' + ch + "</span>";
+          }).join("") + "</div>";
+        }
+        function stat(arr, A, D) {
+          var a = arr.filter(function (c) { return A.indexOf(c) > -1; }).length, d = arr.filter(function (c) { return D.indexOf(c) > -1; }).length;
+          return '<p class="cy-stat">' + L("верхние выносные: ", "ascenders: ") + "<b>" + a + "</b> · " + L("нижние выносные: ", "descenders: ") + "<b>" + d + "</b> · " + L("всего знаков: ", "letters: ") + arr.length + "</p>";
+        }
+        function shape(word, x, y) {
+          var S = 64, out = "", cx = x;
+          word.split("").forEach(function (ch) {
+            var g = m("pt-serif", S, ch), w = m("pt-serif", S, ch).w;
+            out += '<rect x="' + (cx + 1) + '" y="' + (y - g.asc) + '" width="' + (w - 2) + '" height="' + (g.asc + g.desc) + '" class="f-acc" opacity=".22"/>';
+            cx += w;
+          });
+          return '<text x="' + x + '" y="' + y + '" style="' + ff("pt-serif") + 'font-size:64px" class="t-ink">' + esc(word) + "</text>" + out + '<line x1="' + x + '" x2="' + cx + '" y1="' + y + '" y2="' + y + '" class="s-line"/>';
+        }
+        var svg = '<svg viewBox="0 0 760 130" class="fig-svg">' + shape("шиншилла", 20, 90) + shape("highlight", 400, 90) + "</svg>";
+        root.innerHTML = '<p class="fig-h">' + esc(L("Строчная кириллица", "Cyrillic lowercase")) + "</p>" + row(CY, cA, cD) + stat(CY, cA, cD) +
+          '<p class="fig-h" style="margin-top:12px">' + esc(L("Строчная латиница", "Latin lowercase")) + "</p>" + row(LA, lA, lD) + stat(LA, lA, lD) +
+          '<div class="fig-key"><span><i class="cy-k cy-asc"></i>' + esc(L("верхний выносной", "ascender")) + '</span><span><i class="cy-k cy-desc"></i>' + esc(L("нижний выносной", "descender")) + '</span><span><i class="cy-k cy-both"></i>' + esc(L("оба (ф)", "both (ф)")) + "</span></div>" +
+          '<p class="fig-h" style="margin-top:16px">' + esc(L("Очертания слов", "Word shapes")) + "</p>" + scroll(svg, 600) +
+          cap(L("В кириллице лишь два знака с верхними выносными (б, ф), поэтому очертания русских слов однороднее, чем английских: слово «шиншилла» — почти ровный прямоугольник из вертикальных штрихов («частокол»), а highlight имеет выразительный силуэт.", "Cyrillic has only two letters with ascenders (б, ф), so Russian words have more uniform shapes than English ones: «шиншилла» is an almost flat rectangle of vertical strokes (a “picket fence”), while highlight has a distinctive silhouette."));
+      });
+    },
+
 
     /* ---------- classes ---------- */
 

@@ -659,44 +659,55 @@
     /* ---------- added: font names, points and pixels ---------- */
 
     tFontName: function (root) {
-      var R = { maker: L("проект или производитель", "project or foundry"), fam: L("семейство", "family"), cls: L("класс", "class"), ver: L("версия", "version"), opsz: L("оптический размер", "optical size"), wt: L("насыщенность", "weight"), slope: L("наклон", "slope"), width: L("ширина", "width"), tech: L("технический признак файла", "technical file feature") };
+      var R = { maker: L("проект, производитель", "project, foundry"), fam: L("собственное имя", "proper name"), cls: L("класс", "class"), ver: L("версия", "version"), opsz: L("оптический размер", "optical size"), width: L("ширина", "width"), wt: L("насыщенность", "weight"), slope: L("наклон", "slope"), tech: L("тип файла", "file type") };
+      var ROLES = ["maker", "fam", "cls", "ver", "opsz", "width", "wt", "slope", "tech"];
       var BANK = [
         [["PT", "maker"], ["Sans", "cls"], ["Caption", "opsz"], ["Bold", "wt"]],
         [["Source", "fam"], ["Serif", "cls"], ["4", "ver"], ["Display", "opsz"], ["Semibold", "wt"], ["Italic", "slope"]],
         [["Roboto", "fam"], ["Condensed", "width"], ["Light", "wt"]],
         [["IBM", "maker"], ["Plex", "fam"], ["Sans", "cls"], ["Condensed", "width"], ["Medium", "wt"], ["Italic", "slope"]],
-        [["Noto", "fam"], ["Serif", "cls"], ["Display", "opsz"], ["Black", "wt"]],
+        [["Noto", "maker"], ["Serif", "cls"], ["Display", "opsz"], ["Black", "wt"]],
         [["Fira", "fam"], ["Sans", "cls"], ["Extra Condensed", "width"], ["Thin", "wt"]],
         [["PT", "maker"], ["Serif", "cls"], ["Caption", "opsz"], ["Italic", "slope"]],
         [["Literata", "fam"], ["Variable", "tech"]],
         [["Roboto", "fam"], ["Mono", "cls"], ["Bold", "wt"], ["Italic", "slope"]],
         [["Source", "fam"], ["Sans", "cls"], ["3", "ver"], ["ExtraBold", "wt"]],
         [["Roboto", "fam"], ["Slab", "cls"], ["Black", "wt"]],
-        [["Open", "fam"], ["Sans", "cls"], ["Condensed", "width"], ["Light", "wt"]]
+        [["Open", "fam"], ["Sans", "cls"], ["Semi Condensed", "width"], ["Light", "wt"]],
+        [["IBM", "maker"], ["Plex", "fam"], ["Mono", "cls"], ["Light", "wt"], ["Italic", "slope"]],
+        [["Noto", "maker"], ["Sans", "cls"], ["Mono", "cls"], ["Condensed", "width"], ["Bold", "wt"]],
+        [["PT", "maker"], ["Sans", "cls"], ["Narrow", "width"], ["Bold", "wt"]],
+        [["Fira", "fam"], ["Sans", "cls"], ["Book", "wt"], ["Italic", "slope"]],
+        [["Source", "fam"], ["Serif", "cls"], ["4", "ver"], ["Subhead", "opsz"], ["Light", "wt"]],
+        [["Inter", "fam"], ["Variable", "tech"], ["Italic", "slope"]]
       ];
-      var ROLES = Object.keys(R);
-      var ACC = { maker: L("проект или производителя", "project or foundry"), cls: L("класс", "class"), ver: L("версию", "version"), opsz: L("оптический размер", "optical size"), wt: L("насыщенность", "weight"), slope: L("наклон", "slope"), width: L("ширину", "width"), tech: L("технический признак файла", "technical file feature") };
-      drill(root, {
-        rounds: 8, pass: 6,
-        gen: function (n) {
-          var name = pick(BANK), full = name.map(function (p) { return p[0]; }).join(" ");
-          var parts = name.filter(function (p) { return p[1] !== "fam"; });
-          var target = pick(parts);
-          if (n % 2 === 0) {
-            return {
-              q: L("Название шрифта: <b>" + esc(full) + "</b>. Какое слово обозначает <b>" + esc(ACC[target[1]]) + "</b>?", "Font name: <b>" + esc(full) + "</b>. Which word denotes the <b>" + esc(R[target[1]]) + "</b>?"),
-              choices: name.map(function (p) { return '<span style="font-size:18px">' + esc(p[0]) + "</span>"; }), answer: name.indexOf(target),
-              ex: name.map(function (p) { return p[0] + " — " + R[p[1]]; }).join("; ") + "."
-            };
-          }
-          var opts = shuffle([target[1]].concat(shuffle(ROLES.filter(function (r) { return r !== target[1] && r !== "fam"; })).slice(0, 3)));
-          return {
-            q: L("Название шрифта: <b>" + esc(full) + "</b>. Что обозначает слово <b>«" + esc(target[0]) + "»</b>?", "Font name: <b>" + esc(full) + "</b>. What does <b>“" + esc(target[0]) + "”</b> denote?"),
-            choices: opts.map(function (r) { return esc(R[r]); }), answer: opts.indexOf(target[1]),
-            ex: name.map(function (p) { return p[0] + " — " + R[p[1]]; }).join("; ") + "."
-          };
-        }
-      });
+      var ROUNDS = 12, PASS = 10, set, i, score;
+      function start() { set = shuffle(BANK).slice(0, ROUNDS); i = 0; score = 0; show(); }
+      function show() {
+        var name = set[i], answered = false;
+        root.innerHTML = '<div class="tk-head"><span>' + esc(k("round", i + 1, ROUNDS)) + "</span><span>" + esc(k("score", score)) + "</span></div>" +
+          '<p class="tk-q">' + esc(L("Определите, что обозначает каждое слово в названии:", "Identify what each word in the name denotes:")) + ' <b style="font-size:19px">' + esc(name.map(function (p) { return p[0]; }).join(" ")) + "</b></p>" +
+          '<div class="tk-parse">' + name.map(function (p, j) {
+            return '<label class="tk-word"><b>' + esc(p[0]) + '</b><select data-j="' + j + '"><option value="">—</option>' + ROLES.map(function (r) { return '<option value="' + r + '">' + esc(R[r]) + "</option>"; }).join("") + "</select></label>";
+          }).join("") + '</div><p class="quiz-result" role="status"></p><div class="tk-nav"></div>' + doneBox();
+        var nav = root.querySelector(".tk-nav"), res = root.querySelector(".quiz-result"), c = btn(k("check"));
+        nav.appendChild(c);
+        c.addEventListener("click", function () {
+          if (answered) return;
+          var sels = root.querySelectorAll(".tk-word select");
+          if ([].some.call(sels, function (x) { return !x.value; })) { res.className = "quiz-result bad"; res.textContent = L("Укажите значение для каждого слова.", "Choose a role for every word."); return; }
+          answered = true; var ok = true;
+          sels.forEach(function (x) { var right = x.value === name[x.dataset.j][1]; if (!right) ok = false; x.parentNode.classList.add(right ? "is-right" : "is-wrong"); x.disabled = true; });
+          if (ok) score++;
+          root.querySelector(".tk-head span:last-child").textContent = k("score", score);
+          res.className = "quiz-result " + (ok ? "ok" : "bad");
+          res.textContent = (ok ? k("right") : k("wrong")) + " " + name.map(function (p) { return p[0] + " — " + R[p[1]]; }).join("; ") + ".";
+          c.remove();
+          if (i + 1 < ROUNDS) { var n = btn(k("next")); n.addEventListener("click", function () { i++; show(); }); nav.appendChild(n); }
+          else { res.textContent += " " + k("result", score, ROUNDS, PASS); if (score >= PASS) complete(root); var a = btn(k("again"), "btn-ghost"); a.addEventListener("click", start); nav.appendChild(a); }
+        });
+      }
+      start();
     },
 
     tPtPx: function (root) {
