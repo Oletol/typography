@@ -9,7 +9,7 @@
  *   demo    — id of an interactive demo from demos.js
  *   sources — readings shown under “Further reading” (always with an active link)
  *   quiz    — { q, options[], answer (index), explain }
- *   match   — { q, pairs: [{ term, def }] } — matching exercise (definitions ↔ terms)
+ *   match   — { q, pairs: [{ term, def }] } — matching exercise (definitions and terms)
  * Reading: { title, url, type: "book" | "online", lang: "ru" | "en", author?, site?, note? }
  *
  * Modules marked draft: true show their planned topics instead of finished cards.
@@ -116,6 +116,7 @@
     emigreLicko: { type: "online", lang: "en", author: "Zuzana Licko", site: "Emigre", url: "https://www.emigre.com/Essays/ZuzanaLicko/Tind2015", title: t("Интервью 2015 г.: «People read best what we read most»", "Interview (2015): “People read best what we read most”") },
     brumberger: { type: "online", lang: "en", author: "Eva Brumberger", site: "Technical Communication", url: "https://www.ingentaconnect.com/contentone/stc/tc/2003/00000050/00000002/art00008", title: t("The Rhetoric of Typography: The Awareness and Impact of Typeface Appropriateness (2003)", "The Rhetoric of Typography: The Awareness and Impact of Typeface Appropriateness (2003)") },
     noordzij: { type: "book", lang: "en", author: "Gerrit Noordzij", site: "Typotheque", url: "https://www.typotheque.com/books/the-stroke", title: t("The Stroke: Theory of Writing — теория контраста как следа инструмента", "The Stroke: Theory of Writing") },
+    gfOpsz: { type: "online", lang: "en", site: "Google Fonts Knowledge", url: "https://fonts.google.com/knowledge/glossary/optical_sizes", title: t("Глоссарий: Optical sizes (оптические размеры)", "Glossary: Optical sizes") },
     gfKnowledge: { type: "online", lang: "en", site: "Google Fonts", url: "https://fonts.google.com/knowledge", title: t("Google Fonts Knowledge", "Google Fonts Knowledge") },
     typeScale: { type: "online", lang: "en", url: "https://typescale.com/", title: t("Type Scale — генератор шкалы", "Type Scale — scale generator") }
   };
@@ -252,14 +253,14 @@
           kind: "idea",
           title: t("Как читать название шрифта", "How to read a font name"),
           figure: "fontname",
-          body: t("Полное название начертания состоит из двух частей. Первая — имя семейства: его указывают в font-family. Вторая — характеристики конкретного начертания: их задают свойствами font-weight, font-style, font-stretch или они определяют, какой файл подключать. Слова всегда идут в одном порядке: от общего к частному.", "A full style name has two parts. The first is the family name, used in font-family. The second describes the particular style: it maps to font-weight, font-style and font-stretch or tells you which file to load. The words always follow the same order, from general to specific."),
+          body: t("Полное название начертания состоит из двух частей. Первая — имя семейства: его указывают в font-family. Вторая — характеристики конкретного начертания: их задают свойствами font-weight, font-style и font-stretch, либо по ним выбирают нужный файл. Слова в названии идут в устойчивом порядке, от общего к частному.", "A full style name has two parts. The first is the family name, used in font-family. The second describes the particular style: it maps to font-weight, font-style and font-stretch or tells you which file to load. The words follow a stable order, from general to specific."),
           points: [
-            t("Имя семейства может включать проект или производителя (PT, IBM, Noto), собственное имя (Plex, Roboto, Source), класс (Sans, Serif, Mono) и номер версии (Source Serif 4). Всё это вместе — значение font-family: «PT Sans», «IBM Plex Sans», «Source Serif 4».", "The family name may include a project or foundry (PT, IBM, Noto), a proper name (Plex, Roboto, Source), a class (Sans, Serif, Mono) and a version number (Source Serif 4). Together they form the font-family value: “PT Sans”, “IBM Plex Sans”, “Source Serif 4”."),
-            t("Характеристики начертания перечисляются в порядке: оптический размер → ширина → насыщенность → наклон. Например: Source Serif 4 | Display | Semibold | Italic; IBM Plex Sans | Condensed | Medium | Italic.", "Style features are listed in the order optical size → width → weight → slope. For example: Source Serif 4 | Display | Semibold | Italic; IBM Plex Sans | Condensed | Medium | Italic."),
-            t("Если признак не указан, действует значение по умолчанию: оптический размер Text, ширина Normal, насыщенность Regular (400), прямое начертание. Поэтому «PT Sans Bold» — это обычная ширина, прямое начертание, насыщенность 700.", "If a feature is omitted, the default applies: Text optical size, Normal width, Regular (400) weight, upright. So “PT Sans Bold” means normal width, upright, weight 700."),
+            t("Имя семейства может включать сокращение проекта или производителя (PT, ITC, FF, TT, LL), собственное имя (Plex, Roboto, Garamond), класс (Serif, Sans, Mono) и обозначение версии (Source Serif 4, Helvetica Neue, Avenir Next). Всё вместе — значение font-family: «PT Sans», «IBM Plex Sans», «Source Serif 4».", "The family name may include a project or foundry abbreviation (PT, ITC, FF, TT, LL), a proper name (Plex, Roboto, Garamond), a class (Serif, Sans, Mono) and a version (Source Serif 4, Helvetica Neue, Avenir Next). Together they form the font-family value: “PT Sans”, “IBM Plex Sans”, “Source Serif 4”."),
+            t("Характеристики начертания перечисляются в порядке: оптический размер, ширина, насыщенность, наклон. Например: Source Serif 4 | Display | Semibold | Italic; IBM Plex Sans | Condensed | Medium | Italic. Сокращение производителя иногда ставят в конец: Helvetica Neue LT, Futura BT.", "Style features come in the order: optical size, width, weight, slope. For example: Source Serif 4 | Display | Semibold | Italic; IBM Plex Sans | Condensed | Medium | Italic. A foundry abbreviation sometimes comes last: Helvetica Neue LT, Futura BT."),
+            t("Если признак не указан, действует значение по умолчанию: оптический размер Text, нормальная ширина, насыщенность Regular (400), прямое начертание. Поэтому «PT Sans Bold» — нормальная ширина, прямое начертание, насыщенность 700.", "If a feature is omitted, the default applies: Text optical size, normal width, Regular (400), upright. So “PT Sans Bold” means normal width, upright, weight 700."),
             t("Иногда слово-признак становится частью имени семейства: Playfair Display, PT Sans Caption и PT Sans Narrow подключаются как отдельные семейства. Это проверяют в каталоге: если вариант указан в font-family, он часть имени.", "Sometimes a feature word becomes part of the family name: Playfair Display, PT Sans Caption and PT Sans Narrow are loaded as separate families. Check the catalogue: if the variant appears in font-family, it is part of the name.")
           ],
-          sources: [R.gfPtSans, R.mdnOpticalSizing]
+          sources: [R.gfPtSans, R.gfOpsz]
         },
         {
           kind: "idea",
@@ -267,11 +268,11 @@
           figure: "fontterms",
           body: t("Слова-признаки образуют упорядоченные шкалы. Насыщенность и ширина соответствуют числовым значениям CSS, оптический размер — кеглю, для которого рассчитан рисунок. Зная шкалы, можно по названию файла определить, какое начертание в нём находится.", "Feature words form ordered scales. Weight and width map to numeric CSS values, optical size to the type size the design is made for. Knowing the scales, you can tell from a file name which style it contains."),
           points: [
-            t("Насыщенность: Thin (100) → ExtraLight (200) → Light (300) → Regular (400) → Medium (500) → SemiBold (600) → Bold (700) → ExtraBold (800) → Black (900). Синонимы: Hairline = Thin, Heavy = Black, DemiBold = SemiBold, UltraBold = ExtraBold.", "Weight: Thin (100) → ExtraLight (200) → Light (300) → Regular (400) → Medium (500) → SemiBold (600) → Bold (700) → ExtraBold (800) → Black (900). Synonyms: Hairline = Thin, Heavy = Black, DemiBold = SemiBold, UltraBold = ExtraBold."),
-            t("Ширина: Ultra Condensed (50 %) → Extra Condensed → Condensed / Narrow → Semi Condensed → Normal (100 %) → Semi Expanded → Expanded / Wide → Extra Expanded → Ultra Expanded (200 %). В CSS — свойство font-stretch.", "Width: Ultra Condensed (50%) → Extra Condensed → Condensed / Narrow → Semi Condensed → Normal (100%) → Semi Expanded → Expanded / Wide → Extra Expanded → Ultra Expanded (200%). In CSS: font-stretch."),
-            t("Оптический размер: Caption → Small Text → Text → Subhead → Display — от мелкого кегля к крупному. Наклон: Roman (прямое, обычно не пишется), Italic (курсив), Oblique (наклонное). Тип файла: Variable — вариативный, Pro — расширенный набор знаков, SC — капитель.", "Optical size: Caption → Small Text → Text → Subhead → Display — from small to large sizes. Slope: Roman (upright, usually omitted), Italic, Oblique. File type: Variable, Pro (extended character set), SC (small caps).")
+            t("Насыщенность, от светлого к сверхжирному: Thin (100), ExtraLight (200), Light (300), Regular (400), Medium (500), SemiBold (600), Bold (700), ExtraBold (800), Black (900). Синонимы: Hairline — Thin, Heavy — Black, DemiBold — SemiBold, UltraBold — ExtraBold.", "Weight, light to black: Thin (100), ExtraLight (200), Light (300), Regular (400), Medium (500), SemiBold (600), Bold (700), ExtraBold (800), Black (900). Synonyms: Hairline for Thin, Heavy for Black, DemiBold for SemiBold, UltraBold for ExtraBold."),
+            t("Ширина, от узкого к широкому: Ultra Condensed (50 %), Extra Condensed, Condensed (Narrow, Compressed), Semi Condensed, Normal (100 %), Semi Expanded, Expanded (Wide), Extra Expanded, Ultra Expanded (200 %). В CSS — свойство font-stretch.", "Width, narrow to wide: Ultra Condensed (50%), Extra Condensed, Condensed (Narrow, Compressed), Semi Condensed, Normal (100%), Semi Expanded, Expanded (Wide), Extra Expanded, Ultra Expanded (200%). In CSS: font-stretch."),
+            t("Оптический размер, от мелкого кегля к крупному: Micro, Caption, Text, Deck, Subhead, Headline, Display, Banner. Text обычно не пишется; Body — термин макетов, в названиях шрифтов почти не встречается. Класс: Serif и Antiqua — антиква; Sans, Grotesk и Gothic — гротеск; Slab — брусковый; Mono и Code — моноширинный; Script и Hand — рукописный; Display — акцидентный.", "Optical size, small to large: Micro, Caption, Text, Deck, Subhead, Headline, Display, Banner. Text is usually omitted; Body is a layout term and rarely appears in names. Class: Serif and Antiqua for serif; Sans, Grotesk and Gothic for sans; Slab; Mono and Code for monospace; Script and Hand for script; Display for display faces.")
           ],
-          sources: [R.mdnFontWeight, R.mdnVariable]
+          sources: [R.mdnFontWeight, R.mdnVariable, R.gfOpsz]
         },
         {
           kind: "task",
@@ -365,7 +366,7 @@
       readings: [R.gordon, R.skillboxCyrillic, R.bringhurst, R.vcAnatomy, R.gfXHeight, R.gfCapHeight, R.gfCounter, R.gfAperture, R.gfContrast, R.gfEm, R.mdnFontSizeAdjust, R.mdnOpticalSizing, R.mdnLineHeight]
     },
     {
-      id: "classes", minutes: 55,
+      id: "classes", minutes: 65,
       title: t("Классификация шрифтов", "Type classification"),
       goal: t("Различать классы шрифтов, их стилистические и функциональные характеристики и область применения в интерфейсах.", "Distinguish type classes, their stylistic and functional characteristics, and their use in interfaces."),
       topics: [],
@@ -379,14 +380,26 @@
           kind: "idea",
           title: t("Принципы классификации", "Principles of classification"),
           figure: "classtree",
-          body: t("Классификации шрифтов основываются на совокупности формальных признаков и историческом происхождении гарнитур. Ни одна из существующих систем не является исчерпывающей: многие современные шрифты сочетают признаки нескольких групп.", "Type classifications rest on a combination of formal features and the historical origin of typefaces. No existing system is exhaustive: many contemporary typefaces combine features of several groups."),
+          body: t("Классификации шрифтов основываются на формальных признаках и историческом происхождении гарнитур. В курсе используется укрупнённая схема из шести классов: антиква, брусковые, гротески, моноширинные, акцидентные и рукописные шрифты. Первые четыре класса выделяются по конструкции знаков, последние два — по назначению и характеру.", "Type classifications rest on formal features and the historical origin of typefaces. The course uses a simplified scheme of six classes: serif, slab serif, sans serif, monospace, display and script. The first four are defined by letter construction, the last two by purpose and character."),
           points: [
-            t("Основные признаки: наличие и форма засечек, степень контраста, наклон оси контраста, пропорции и характер апертуры.", "Main features: presence and form of serifs, degree of contrast, inclination of the contrast axis, proportions and aperture."),
-            t("Классификация Vox-ATypI (принята в 1962 году) выделяет классические, современные и каллиграфические группы; в 2021 году ATypI отказалась от неё и приступила к разработке новой системы, охватывающей разные письменности.", "The Vox-ATypI classification (adopted in 1962) distinguishes classical, modern and calligraphic groups; in 2021 ATypI de-adopted it and began work on a new system covering different scripts."),
-            t("В отечественной полиграфии применялась группировка шрифтов по ГОСТ 3489.1-71, основанная на наличии и форме засечек и контрасте.", "Soviet and Russian printing used the grouping defined in GOST 3489.1-71, based on serif presence and form and on contrast."),
-            t("В веб-практике используется укрупнённая схема каталогов шрифтов: антиква, гротеск, моноширинные, акцидентные и рукописные шрифты; в этом курсе брусковые шрифты выделены в отдельный класс.", "Web practice uses the broad scheme of font catalogues: serif, sans serif, monospace, display and handwriting; this course treats slab serifs as a separate class.")
+            t("Основные признаки: наличие и форма засечек, степень контраста, наклон оси контраста, ширина знаков, пропорции и апертура.", "Key features: presence and shape of serifs, degree of contrast, contrast axis, character width, proportions and aperture."),
+            t("Каталог Google Fonts использует пять категорий: Serif, Sans Serif, Monospace, Display, Handwriting. Брусковые шрифты в нём входят в Serif; в курсе они выделены в отдельный класс.", "Google Fonts uses five categories: Serif, Sans Serif, Monospace, Display, Handwriting. Slab serifs fall under Serif there; the course treats them as a separate class."),
+            t("Классификация Vox-ATypI (1962) выделяет классические, современные и каллиграфические группы; в 2021 году ATypI отказалась от неё и приступила к разработке новой системы. В отечественной полиграфии применялась группировка по ГОСТ 3489.1-71.", "The Vox-ATypI classification (1962) distinguishes classical, modern and calligraphic groups; in 2021 ATypI withdrew it and began work on a new system. Soviet and Russian printing used the grouping of GOST 3489.1-71."),
+            t("Многие современные шрифты сочетают признаки нескольких групп, поэтому класс определяется по совокупности признаков.", "Many contemporary faces combine features of several groups, so a class is assigned from the combination of features.")
           ],
-          sources: [R.voxWiki, R.localfontsClass]
+          sources: [R.voxWiki, R.localfontsClass, R.gfSerif, R.gfSansSerif]
+        },
+        {
+          kind: "idea",
+          title: t("Антиква", "Serif"),
+          figure: "cls_serif",
+          body: t("Антиквой называют шрифты с засечками и выраженным контрастом штрихов. Название происходит от латинского antiquus — «древний»: гуманисты эпохи Возрождения считали этот шрифт возрождением античного римского письма и противопоставляли его готическому. Антиква восходит к римскому капитальному письму и гуманистическому минускулу.", "Serif typefaces have serifs and noticeable stroke contrast. In Russian and German they are called antiqua, from Latin antiquus, “ancient”: Renaissance humanists saw this letter as a revival of ancient Roman writing and set it against blackletter. Serif type descends from Roman capitals and the humanist minuscule."),
+          points: [
+            t("Как узнать: есть засечки; толщина штрихов меняется (контраст); засечки плавно переходят в основной штрих.", "How to recognise: serifs present; stroke thickness varies (contrast); serifs blend smoothly into the stem."),
+            t("Внутри класса выделяют исторические группы: старого стиля, переходную, классицистическую и современную текстовую антикву — они различаются контрастом, осью контраста и формой засечек.", "The class divides into historical groups: old-style, transitional, didone and contemporary text serifs, which differ in contrast, contrast axis and serif shape."),
+            t("Ассоциации: книжная традиция, академичность, надёжность.", "Associations: book tradition, scholarship, reliability.")
+          ],
+          sources: [R.gfSerif, R.bringhurst]
         },
         {
           kind: "idea",
@@ -414,20 +427,21 @@
         },
         {
           kind: "idea",
-          title: t("Брусковые шрифты", "Slab serifs"),
-          body: t("Брусковые шрифты (slab serif, в классификации Vox-ATypI — механистические) имеют прямоугольные засечки, по толщине близкие к основным штрихам, и низкий контраст. Они возникли в XIX веке как шрифты для рекламы и плакатов.", "Slab serifs (mechanistic in the Vox-ATypI classification) have rectangular serifs close in weight to the main strokes and low contrast. They emerged in the 19th century for advertising and posters."),
+          title: t("Брусковые шрифты", "Slab serif"),
+          figure: "cls_slab",
+          body: t("Брусковые шрифты имеют прямоугольные засечки, по толщине близкие к основным штрихам, и низкий контраст. Русское название отражает форму засечки — «брусок»; английское slab означает «плита». В начале XIX века, когда эти шрифты появились в рекламе и на плакатах, их называли «египетскими» (Egyptian) — по моде на всё египетское; в классификации Vox-ATypI это механистические шрифты.", "Slab serifs have rectangular serifs nearly as thick as the stems and low contrast. The English slab (and the Russian «брусок», “bar”) describes the serif shape. When they appeared in early nineteenth-century advertising and posters they were called “Egyptian” after the fashion for all things Egyptian; Vox-ATypI calls them mechanistic."),
           points: [
-            t("Благодаря низкому контрасту и массивным засечкам устойчивы к неблагоприятным условиям отображения.", "Low contrast and heavy serifs make them robust under poor display conditions."),
-            t("Применяются в заголовках, навигации, а также в основном тексте при наличии текстовых вариантов (например, Bitter, разработанный для чтения с экрана).", "They are used in headings and navigation, and in body text when text versions exist (e.g. Bitter, designed for on-screen reading)."),
-            t("Создают «технический», «редакционный» или «плакатный» характер в зависимости от пропорций.", "Depending on proportions, they convey a technical, editorial or poster-like character.")
+            t("Как узнать: засечки есть, но они массивные и прямоугольные, а контраст штрихов почти отсутствует.", "How to recognise: serifs are present but heavy and rectangular, with almost no stroke contrast."),
+            t("Благодаря низкому контрасту и массивным засечкам устойчивы к неблагоприятным условиям отображения; применяются в заголовках, навигации и в основном тексте при наличии текстовых вариантов (например, Bitter).", "Low contrast and heavy serifs make them robust in poor rendering conditions; used in headings, navigation and body text when text variants exist (for example, Bitter)."),
+            t("Создают «технический», «редакционный» или «плакатный» характер в зависимости от пропорций.", "They create a technical, editorial or poster character depending on proportions.")
           ],
-          sources: [R.voxWiki]
+          sources: [R.voxWiki, R.localfontsClass]
         },
         {
           kind: "idea",
           title: t("Гротески: подгруппы", "Sans serif: subgroups"),
           figure: "grotesques",
-          body: t("Гротески (рубленые шрифты, sans serif) лишены засечек; как правило, они имеют низкий контраст и увеличенную высоту строчных. Подгруппы различаются пропорциями, формой овалов и апертурой.", "Sans serif typefaces lack serifs; they typically have low contrast and a large x-height. Subgroups differ in proportions, oval shapes and aperture."),
+          body: t("Гротески (рубленые шрифты, sans serif) лишены засечек; как правило, они имеют низкий контраст и увеличенную высоту строчных. Название происходит от итальянского grottesco — «причудливый»: первые шрифты без засечек в начале XIX века казались читателям странными. Английское sans serif означает «без засечек», американское Gothic — то же самое. Подгруппы различаются пропорциями, формой овалов и апертурой.", "Sans serif typefaces lack serifs; they typically have low contrast and a large x-height. Subgroups differ in proportions, oval shapes and aperture."),
           points: [
             t("Старые гротески (XIX — начало XX в.): некоторая неравномерность рисунка, лёгкий контраст. Пример узкого гротеска — Oswald.", "Grotesques (19th–early 20th c.): some irregularity of design and slight contrast. A condensed example: Oswald."),
             t("Неогротески (с середины XX в.): нейтральность, единообразие, закрытая апертура. Примеры — Helvetica, Arial; Inter, Roboto, Golos.", "Neo-grotesques (from the mid-20th c.): neutrality, uniformity, closed aperture. Examples: Helvetica, Arial; Inter, Roboto, Golos."),
@@ -435,6 +449,58 @@
             t("Геометрические гротески: формы построены на окружности и прямоугольнике. Примеры — Futura; Montserrat, Jost. Выразительны в заголовках, но в длинном тексте читаются хуже гуманистических.", "Geometric sans: forms built on the circle and rectangle. Examples: Futura; Montserrat, Jost. Expressive in headings but less readable than humanist sans in long text.")
           ],
           sources: [R.gfSansSerif, R.voxWiki]
+        },
+        {
+          kind: "idea",
+          title: t("Моноширинные шрифты", "Monospaced typefaces"),
+          figure: "cls_mono",
+          body: t("В моноширинных шрифтах все знаки имеют одинаковую ширину: узкая буква i занимает столько же места, сколько широкая m. Название означает «с единой шириной». Принцип унаследован от пишущих машинок, где каретка сдвигалась на один и тот же шаг после каждого знака.", "In monospaced faces every character has the same width: a narrow i takes as much room as a wide m. The principle comes from typewriters, whose carriage advanced by the same step after every character."),
+          points: [
+            t("Как узнать: столбцы знаков выравниваются по вертикали; узкие буквы (i, l, 1) снабжены широкими засечками, широкие (m, w, ш) — сжаты.", "How to recognise: characters line up in vertical columns; narrow letters (i, l, 1) get wide serifs, wide ones (m, w, ш) are squeezed."),
+            t("Области применения: фрагменты кода, технические идентификаторы, терминальный вывод, иногда — стилистический акцент в заголовках.", "Uses: code snippets, technical identifiers, terminal output, sometimes a stylistic accent in headings."),
+            t("Для сплошного текста моноширинные шрифты не подходят: неравномерные просветы между знаками снижают скорость чтения.", "They are unsuitable for continuous text: uneven spacing between characters slows reading.")
+          ],
+          sources: [R.mdnFontFamily, R.localfontsClass]
+        },
+        {
+          kind: "idea",
+          title: t("Табличные цифры", "Tabular figures"),
+          body: t("Чтобы цифры в таблицах и счётчиках выравнивались по вертикали, не нужен моноширинный шрифт: во многих гарнитурах есть табличные цифры одинаковой ширины. Их включают свойством font-variant-numeric: tabular-nums.", "Figures in tables and counters do not need a monospaced font to align: many typefaces include tabular figures of equal width, enabled with font-variant-numeric: tabular-nums."),
+          points: [
+            t("Области применения: фрагменты кода, технические идентификаторы, терминальный вывод, иногда — стилистический акцент в заголовках.", "Uses: code snippets, technical identifiers, terminal output, occasionally a stylistic accent in headings."),
+            t("Для выравнивания цифр в таблицах и интерфейсах не требуется моноширинный шрифт: достаточно включить табличные цифры свойством font-variant-numeric: tabular-nums, если они предусмотрены в гарнитуре.", "Aligning figures in tables and interfaces does not require a monospaced font: enable tabular figures with font-variant-numeric: tabular-nums if the typeface provides them.")
+          ],
+          code: "td.amount, .price, .timer {\n  font-variant-numeric: tabular-nums;\n}",
+          demo: "tabular",
+          sources: [R.mdnNumeric]
+        },
+        {
+          kind: "idea",
+          title: t("Акцидентные шрифты", "Display typefaces"),
+          figure: "cls_display",
+          body: t("Акцидентные шрифты предназначены для заголовков, логотипов, афиш и коротких надписей; их задача — выразительность, а не удобочитаемость протяжённого текста. Название происходит от акцидентного набора (лат. accidentia — «случайность») — так в полиграфии называли набор разовой продукции: бланков, объявлений, афиш, в отличие от книжного набора. В английском и в каталоге Google Fonts — Display.", "Display typefaces are meant for headings, logos, posters and short lines; their job is expressiveness, not readability in long text. The Russian name comes from jobbing work (accidentia, “chance” in Latin) — one-off printing such as forms, notices and posters as opposed to book work. In English and in Google Fonts they are called Display."),
+          points: [
+            t("Как узнать: необычные пропорции, детали или декор; рисунок рассчитан на крупный кегль; часто одно начертание. Засечки могут быть или отсутствовать — класс определяется назначением, а не засечками.", "How to recognise: unusual proportions, details or decoration; designed for large sizes; often a single style. Serifs may or may not be present — the class is defined by purpose, not serifs."),
+            t("Применяются в крупном кегле и ограниченном объёме; кириллица нередко проработана слабее латиницы — проверку проводят на реальном тексте.", "Used at large sizes and sparingly; Cyrillic is often weaker than Latin, so test on real text.")
+          ],
+          sources: [R.localfontsClass, R.meduza]
+        },
+        {
+          kind: "idea",
+          title: t("Рукописные шрифты", "Script typefaces"),
+          figure: "cls_script",
+          body: t("Рукописные шрифты имитируют письмо от руки. Каллиграфические воспроизводят письмо пером по правилам каллиграфии: связные знаки, закономерный контраст, наклон. Собственно рукописные передают неформальный почерк, написанный фломастером, маркером или кистью. В каталоге Google Fonts — Handwriting, в названиях шрифтов — Script или Hand.", "Script faces imitate handwriting. Calligraphic ones reproduce pen writing by the rules of calligraphy: connected letters, regular contrast, slant. Handwritten ones convey informal handwriting with a felt-tip, marker or brush. Google Fonts calls them Handwriting; font names use Script or Hand."),
+          points: [
+            t("Как узнать: наклон, соединения между буквами, неровный ритм, штрих как от пера или кисти; одинаковые буквы иногда различаются.", "How to recognise: slant, joins between letters, uneven rhythm, pen- or brush-like strokes; repeated letters sometimes vary."),
+            t("Применяются в коротких надписях и акцентах; текст, набранный прописными рукописного шрифта, читается особенно плохо.", "Used for short lines and accents; all caps in a script face are especially hard to read.")
+          ],
+          sources: [R.localfontsClass, R.meduza]
+        },
+        {
+          kind: "idea",
+          title: t("Как определить класс шрифта", "How to identify a type class"),
+          figure: "classkey",
+          body: t("Класс шрифта определяют, последовательно отвечая на несколько вопросов. Сначала проверяют назначение и характер (рукописный, акцидентный), затем конструкцию (моноширинный), и только после этого — засечки. Такой порядок исключает типичную ошибку: акцидентный шрифт с засечками не принимают за антикву, а моноширинный с засечками — за брусковый.", "A type class is identified by answering questions in sequence. First check purpose and character (script, display), then construction (monospace), and only then serifs. This order avoids a typical mistake: a display face with serifs is not taken for a text serif, nor a monospaced face with serifs for a slab.")
         },
         {
           kind: "task", demo: "guess",
@@ -450,11 +516,13 @@
         {
           kind: "web",
           title: t("Родовые семейства CSS", "CSS generic font families"),
-          body: t("Список font-family должен завершаться родовым семейством: оно определяет, каким шрифтом браузер отобразит текст, если ни одна из указанных гарнитур недоступна. Родовые семейства соответствуют основным классам шрифтов.", "A font-family list must end with a generic family: it determines how the browser renders text if none of the listed typefaces is available. Generic families correspond to the main type classes."),
+          figure: "generic",
+          body: t("Значение font-family — это не один шрифт, а список. Браузер перебирает его слева направо и использует первый доступный шрифт. Веб-шрифт может не загрузиться, системного шрифта может не оказаться на устройстве, поэтому список завершают родовым семейством — ключевым словом, за которым браузер всегда держит какой-либо установленный шрифт нужного класса.", "A font-family value is a list, not a single font. The browser goes through it left to right and uses the first available font. A web font may fail to load and a system font may be missing, so the list ends with a generic family — a keyword for which the browser always keeps some installed font of the right class."),
           points: [
-            t("serif, sans-serif, monospace, cursive, fantasy — классические родовые семейства; cursive и fantasy дают непредсказуемый результат и в интерфейсах практически не используются.", "serif, sans-serif, monospace, cursive and fantasy are the classic generics; cursive and fantasy are unpredictable and rarely used in interfaces."),
-            t("system-ui, ui-serif, ui-sans-serif, ui-monospace, ui-rounded — системные шрифты платформы; поддержка ключевых слов ui-* различается в браузерах.", "system-ui, ui-serif, ui-sans-serif, ui-monospace and ui-rounded map to platform fonts; support for the ui-* keywords varies across browsers."),
-            t("Резервные шрифты в списке подбираются того же класса, что и основной.", "Fallback fonts in the list should belong to the same class as the primary font.")
+            t("Зачем: если родовое семейство не указано и ни один шрифт недоступен, текст будет показан шрифтом браузера по умолчанию — как правило, антиквой Times New Roman. Интерфейс, задуманный в гротеске, внезапно окажется набранным антиквой.", "Why: without a generic family, when no listed font is available the text appears in the browser default — usually Times New Roman, a serif. An interface designed in sans suddenly turns serif."),
+            t("Родовые семейства соответствуют классам: serif — антиква, sans-serif — гротеск, monospace — моноширинный, cursive — рукописный, fantasy — акцидентный. Последние два дают непредсказуемый результат и почти не используются.", "Generic families match classes: serif, sans-serif, monospace, cursive (script), fantasy (display). The last two are unpredictable and rarely used."),
+            t("system-ui указывает шрифт интерфейса операционной системы (Segoe UI в Windows, San Francisco в macOS и iOS, Roboto в Android); ui-serif, ui-sans-serif, ui-monospace и ui-rounded поддерживаются не всеми браузерами.", "system-ui is the operating system's interface font (Segoe UI on Windows, San Francisco on macOS and iOS, Roboto on Android); ui-serif, ui-sans-serif, ui-monospace and ui-rounded are not supported everywhere."),
+            t("Резервные шрифты и родовое семейство выбирают того же класса, что и основной шрифт: тогда даже при подмене характер текста сохранится.", "Choose fallbacks and the generic family from the same class as the main font so the text keeps its character even after a fallback.")
           ],
           code: "body { font-family: \"PT Serif\", Georgia, \"Times New Roman\", serif; }\ncode { font-family: \"JetBrains Mono\", ui-monospace, Consolas, monospace; }",
           demo: "stacks",
@@ -463,6 +531,7 @@
         {
           kind: "web",
           title: t("Системные шрифты", "System fonts"),
+          figure: "systemfonts",
           body: t("Системный шрифт не требует загрузки и привычен пользователю платформы, однако его рисунок различается в разных операционных системах, а качество кириллицы зависит от конкретной платформы. По рекомендации MDN, system-ui предназначен для элементов интерфейса, а не для набора протяжённых текстов.", "A system font needs no download and is familiar to platform users, but its design differs across operating systems, and Cyrillic quality depends on the platform. As MDN notes, system-ui is intended for interface elements rather than long text."),
           points: [
             t("Системные наборы шрифтов можно подбирать по классу (переходная антиква, гуманистический гротеск, неогротеск и др.) — без загрузки веб-шрифтов.", "System font stacks can be chosen by class (transitional serif, humanist sans, neo-grotesque, etc.) without loading web fonts."),
@@ -486,29 +555,6 @@
           title: t("Составьте список font-family", "Compose a font-family list"),
           body: t("Для трёх задач составьте список шрифтов с резервными вариантами и родовым семейством. Проверка оценивает класс резервных шрифтов и завершение списка.", "For three tasks compose a font list with fallbacks and a generic family. The check assesses the fallback class and the end of the list."),
           demo: "tStack"
-        },
-        {
-          kind: "idea",
-          title: t("Моноширинные шрифты и табличные цифры", "Monospaced fonts and tabular figures"),
-          body: t("В моноширинных шрифтах все знаки имеют одинаковую ширину. Это обеспечивает вертикальное выравнивание символов, что необходимо для программного кода, но снижает удобочитаемость сплошного текста.", "In monospaced fonts every character has the same width. This ensures vertical alignment of characters, essential for code, but reduces the readability of continuous text."),
-          points: [
-            t("Области применения: фрагменты кода, технические идентификаторы, терминальный вывод, иногда — стилистический акцент в заголовках.", "Uses: code snippets, technical identifiers, terminal output, occasionally a stylistic accent in headings."),
-            t("Для выравнивания цифр в таблицах и интерфейсах не требуется моноширинный шрифт: достаточно включить табличные цифры свойством font-variant-numeric: tabular-nums, если они предусмотрены в гарнитуре.", "Aligning figures in tables and interfaces does not require a monospaced font: enable tabular figures with font-variant-numeric: tabular-nums if the typeface provides them.")
-          ],
-          code: "td.amount, .price, .timer {\n  font-variant-numeric: tabular-nums;\n}",
-          demo: "tabular",
-          sources: [R.mdnNumeric]
-        },
-        {
-          kind: "idea",
-          title: t("Акцидентные и рукописные шрифты", "Display and script typefaces"),
-          body: t("Акцидентные шрифты предназначены для заголовков, логотипов, афиш и коротких надписей; рукописные имитируют письмо пером, кистью или маркером. Их задача — выразительность, а не удобочитаемость протяжённого текста.", "Display typefaces are intended for headlines, logos, posters and short texts; script typefaces imitate writing with a pen, brush or marker. Their purpose is expressiveness rather than readability of long text."),
-          points: [
-            t("Применяются в крупном кегле и в ограниченном объёме: заголовки, акценты, элементы фирменного стиля.", "Use them at large sizes and sparingly: headings, accents, brand elements."),
-            t("Часто имеют одно начертание и неполный набор знаков; кириллица нередко проработана слабее латиницы — проверку следует проводить на реальном тексте.", "They often come in one style with an incomplete character set; Cyrillic is frequently weaker than Latin, so test with real copy."),
-            t("Текст, набранный прописными рукописного шрифта, читается особенно плохо.", "Script typefaces set in all capitals are particularly hard to read.")
-          ],
-          sources: [R.skillboxCyrillic, R.meduza]
         },
         {
           kind: "web",

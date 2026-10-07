@@ -339,7 +339,7 @@
     lines.push("  --font-body: " + stack(roles.body) + ";");
     lines.push("  --font-head: " + stack(roles.head) + ";");
     lines.push("  --font-accent: " + (roles.accent ? stack(roles.accent) : "var(--font-body)") + ";");
-    lines.push("", "  /* " + st.baseM + " → " + st.base + " px; " + st.ratioM + " → " + st.ratio + " */");
+    lines.push("", "  /* " + st.baseM + "–" + st.base + " px; " + st.ratioM + "–" + st.ratio + " */");
     [-1, 0, 1, 2, 3, 4].forEach(function (k) { lines.push("  --step-" + (k < 0 ? "-1" : k) + ": " + clampCss(st, k) + ";"); });
     lines.push("", "  --lh-body: " + st.lhBody + ";", "  --lh-head: " + st.lhHead + ";", "  --measure: " + st.measure + "ch;", "");
     lines.push("  --color-text: " + st.fg + ";", "  --color-bg: " + st.bg + ";", "  --color-link: " + st.link + ";", "}", "");

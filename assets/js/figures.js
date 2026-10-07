@@ -11,7 +11,7 @@
   function esc(x) { return App.esc(x); }
   function L(r, e) { return App.lang === "ru" ? r : e; }
   function cap(text) { return '<p class="fig-cap">' + esc(text) + "</p>"; }
-  function scroll(svg, minw) { return '<div class="fig-scroll"><div style="min-width:' + minw + 'px">' + svg + '</div></div><p class="fig-swipe">' + esc(L("← схему можно прокрутить по горизонтали →", "← scroll the diagram horizontally →")) + "</p>"; }
+  function scroll(svg, minw) { return '<div class="fig-scroll"><div style="min-width:' + minw + 'px">' + svg + '</div></div><p class="fig-swipe">' + esc(L("Схему можно прокрутить по горизонтали", "Scroll the diagram horizontally")) + "</p>"; }
   function ready(ids, cb) {
     if (!document.fonts) return cb();
     Promise.all(ids.map(function (id) { return document.fonts.load('400 40px "' + font(id).family + '"', "АаHxхое"); })).then(cb, cb);
@@ -24,6 +24,23 @@
   }
   function label(x, y, text, cls, anchor) { return '<text x="' + x + '" y="' + y + '" class="ft ' + (cls || "t-ink") + '" text-anchor="' + (anchor || "start") + '">' + esc(text) + "</text>"; }
   function lead(x1, y1, x2, y2) { return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" class="s-acc" stroke-width="1.2"/><circle cx="' + x1 + '" cy="' + y1 + '" r="3.5" class="f-acc"/>'; }
+
+
+  function classFig(root, o) {
+    var signs = '<div class="cf-signs"><span class="cf-lbl">' + esc(L("Как узнать", "How to recognise")) + "</span>" + o.signs.map(function (x) { return '<span class="cf-sign">' + esc(x) + "</span>"; }).join("") + "</div>";
+    var cmp = "";
+    if (o.compare) cmp = '<div class="cf-cmp">' + o.compare.map(function (id) { return '<div><span style="' + ff(id) + 'font-size:96px;line-height:1">Нн</span><small>' + esc(font(id).family) + "</small></div>"; }).join("") + "</div>";
+    if (o.grid) {
+      var w = ["ilim", "шиш", "WWii"];
+      cmp = '<div class="cf-cmp cf-grid">' + ["jetbrains-mono", "inter"].map(function (id) {
+        return '<div><div class="cf-cells" style="' + ff(id) + '">' + "iiiiiiii<br>шшшшшшшш<br>mil1Ww0O".split("<br>").map(function (line) { return '<span class="cf-line">' + line + "</span>"; }).join("") + "</div><small>" + esc(font(id).family) + "</small></div>";
+      }).join("") + "</div>"; void w;
+    }
+    var ex = '<div class="cf-ex">' + o.ex.map(function (e) {
+      return '<div class="cf-tile"><span class="cf-big" style="' + ff(e[0]) + '">Аа Rr</span><span class="cf-line2" style="' + ff(e[0]) + '">' + esc(L("Съешь же ещё этих мягких французских булок", "Sphinx of black quartz, judge my vow")) + '</span><small><b>' + esc(font(e[0]).family) + "</b> · " + esc(e[1]) + "</small></div>";
+    }).join("") + "</div>";
+    root.innerHTML = signs + cmp + ex + cap(o.cap);
+  }
 
   window.Figures = {
 
@@ -76,35 +93,50 @@
     },
 
     fontname: function (root) {
-      var COLS = [["maker", L("Проект, производитель", "Project, foundry")], ["fam", L("Собственное имя", "Proper name")], ["cls", L("Класс", "Class")], ["ver", L("Версия", "Version")], ["opsz", L("Оптический размер", "Optical size")], ["width", L("Ширина", "Width")], ["wt", L("Насыщенность", "Weight")], ["slope", L("Наклон", "Slope")], ["tech", L("Файл", "File")]];
-      var ROWS = [
-        { maker: "PT", cls: "Sans", opsz: "Caption", wt: "Bold" },
-        { fam: "Source", cls: "Serif", ver: "4", opsz: "Display", wt: "Semibold", slope: "Italic" },
-        { maker: "IBM", fam: "Plex", cls: "Sans", width: "Condensed", wt: "Medium", slope: "Italic" },
-        { fam: "Roboto", width: "Condensed", wt: "Light" },
-        { fam: "Literata", tech: "Variable" }
+      var COLS = [
+        ["maker", L("Проект, производитель", "Project, foundry"), ["PT", "ITC", "FF", "TT", "LL", "BT", "LT", "MT", "Dx", "IBM", "Noto"]],
+        ["fam", L("Собственное имя", "Proper name"), ["Plex", "Roboto", "Source", "Garamond", "Helvetica", "Norms"]],
+        ["cls", L("Класс", "Class"), ["Serif, Antiqua", "Sans, Grotesk, Gothic", "Slab", "Mono, Code", "Script, Hand", "Display"]],
+        ["ver", L("Версия", "Version"), ["2, 3, 4", "Neue", "Next", "Nova"]],
+        ["opsz", L("Оптический размер", "Optical size"), ["Caption", "Text", "Deck", "Subhead", "Headline", "Display", "Banner"]],
+        ["width", L("Ширина", "Width"), ["Condensed", "Narrow", "Compressed", "Expanded", "Wide"]],
+        ["wt", L("Насыщенность", "Weight"), ["Thin", "Light", "Regular", "Medium", "Bold", "Black"]],
+        ["slope", L("Наклон", "Slope"), ["Italic", "Oblique"]],
+        ["tech", L("Файл", "File"), ["Variable", "Pro, Std", "SC"]]
       ];
-      var head = '<tr class="fnt-groups"><th colspan="4" class="fnt-g1">' + esc(L("Имя семейства", "Family name")) + '</th><th colspan="4" class="fnt-g2">' + esc(L("Начертание", "Style")) + '</th><th class="fnt-g3">' + esc(L("Тип файла", "File type")) + "</th></tr>" +
-        "<tr>" + COLS.map(function (c) { return '<th class="fn-' + c[0] + '">' + esc(c[1]) + "</th>"; }).join("") + "</tr>";
-      var body = ROWS.map(function (r) { return "<tr>" + COLS.map(function (c) { return r[c[0]] ? '<td><span class="fnt-w fn-' + c[0] + '">' + esc(r[c[0]]) + "</span></td>" : '<td class="fnt-empty">·</td>'; }).join("") + "</tr>"; }).join("");
-      root.innerHTML = '<div class="fig-scroll"><table class="fnt">' + head + body + "</table></div>" +
-        '<p class="fig-swipe">' + esc(L("← таблицу можно прокрутить по горизонтали →", "← scroll the table horizontally →")) + "</p>" +
-        cap(L("Слова названия всегда идут в одном порядке: сначала имя семейства (кто сделал, как называется, какой класс, какая версия), затем характеристики начертания (оптический размер, ширина, насыщенность, наклон). Пустые ячейки означают, что признак не указан — значит, используется значение по умолчанию: Text, Normal, Regular, прямое.", "Words in a name always come in the same order: first the family name (who made it, its name, class, version), then the style (optical size, width, weight, slope). Empty cells mean the default applies: Text, Normal, Regular, upright."));
+      var EX = [
+        [["PT", "maker"], ["Sans", "cls"], ["Caption", "opsz"], ["Bold", "wt"]],
+        [["Source", "fam"], ["Serif", "cls"], ["4", "ver"], ["Display", "opsz"], ["Semibold", "wt"], ["Italic", "slope"]],
+        [["IBM", "maker"], ["Plex", "fam"], ["Sans", "cls"], ["Condensed", "width"], ["Medium", "wt"], ["Italic", "slope"]],
+        [["Helvetica", "fam"], ["Neue", "ver"], ["LT", "maker"], ["Pro", "tech"]],
+        [["Literata", "fam"], ["Variable", "tech"]]
+      ];
+      var cols = '<div class="fnc">' +
+        '<div class="fnc-g fnc-g1">' + esc(L("Имя семейства — значение font-family", "Family name — the font-family value")) + "</div>" +
+        '<div class="fnc-g fnc-g2">' + esc(L("Начертание — font-weight, font-style, font-stretch", "Style — font-weight, font-style, font-stretch")) + "</div>" +
+        '<div class="fnc-g fnc-g3">' + esc(L("Файл", "File")) + "</div>" +
+        COLS.map(function (c) { return '<div class="fnc-col"><p class="fnc-h fn-' + c[0] + '">' + esc(c[1]) + "</p>" + c[2].map(function (v) { return '<span class="fnc-v fn-' + c[0] + '">' + esc(v) + "</span>"; }).join("") + "</div>"; }).join("") + "</div>";
+      var names = '<p class="fig-h" style="margin-top:16px">' + esc(L("Примеры разбора", "Parsed examples")) + '</p><div class="fig-names">' + EX.map(function (n) {
+        return '<div class="fn-row">' + n.map(function (p) { var col = COLS.filter(function (c) { return c[0] === p[1]; })[0]; return '<span class="fn-part fn-' + p[1] + '"><b>' + esc(p[0]) + "</b><small>" + esc(col[1].toLowerCase()) + "</small></span>"; }).join("") + "</div>";
+      }).join("") + "</div>";
+      root.innerHTML = '<div class="fig-scroll"><div style="min-width:860px">' + cols + "</div></div>" + '<p class="fig-swipe">' + esc(L("Таблицу можно прокрутить по горизонтали", "Scroll the table horizontally")) + "</p>" + names +
+        cap(L("Верхняя часть — конструктор: в каждом столбце собраны возможные слова одной группы, слева направо в том порядке, в каком они обычно стоят в названии. Нижняя часть — реальные названия, разобранные по этим группам. Сокращение производителя иногда ставят в конце (Helvetica Neue LT, Futura BT). Не указанный признак означает значение по умолчанию: Text, нормальная ширина, Regular, прямое начертание.", "Top: a constructor — each column lists the possible words of one group, left to right in the order they usually appear in a name. Bottom: real names parsed into these groups. A foundry abbreviation sometimes comes last (Helvetica Neue LT, Futura BT). An omitted feature means the default: Text, normal width, Regular, upright."));
     },
 
     fontterms: function (root) {
       var W = [[100, "Thin, Hairline"], [200, "ExtraLight, UltraLight"], [300, "Light"], [400, "Regular, Normal, Book*"], [500, "Medium"], [600, "SemiBold, DemiBold"], [700, "Bold"], [800, "ExtraBold, UltraBold"], [900, "Black, Heavy"]];
       var S = [["50%", "Ultra Condensed"], ["62.5%", "Extra Condensed"], ["75%", "Condensed, Narrow, Compressed"], ["87.5%", "Semi Condensed"], ["100%", "Normal"], ["112.5%", "Semi Expanded"], ["125%", "Expanded, Wide"], ["150%", "Extra Expanded"], ["200%", "Ultra Expanded"]];
-      var O = [["Caption", L("подписи, сноски, мелкий кегль", "captions, footnotes, small sizes")], ["Small Text", L("мелкий текст", "small text")], ["Text", L("основной текст (по умолчанию)", "body text (default)")], ["Subhead", L("подзаголовки", "subheads")], ["Display", L("заголовки, крупный кегль", "headings, large sizes")]];
+      var O = [["Micro, Caption", L("сноски, подписи, мелкий кегль", "footnotes, captions, small sizes"), true], ["Text", L("основной текст; обычно не указывается", "body text; usually omitted"), true], ["Body", L("основной текст; термин макетов, в названиях почти не встречается", "body text; a layout term, rarely in names"), false], ["Deck", L("лиды и подзаголовки в журналах", "decks and subheads in magazines"), true], ["Subhead", L("подзаголовки", "subheads"), true], ["Headline", L("газетные заголовки", "newspaper headlines"), true], ["Display", L("заголовки, крупный кегль", "headings, large sizes"), true], ["Banner, Poster", L("очень крупный кегль, от 100 pt", "very large sizes, 100 pt and up"), true]];
       function group(title, dir, rows) { return '<div class="fv-group"><p class="fig-h">' + esc(title) + ' <span class="fv-dir">' + esc(dir) + '</span></p><ol class="fv-list">' + rows + "</ol></div>"; }
+      function tags(title, sub, items) { return '<div class="fv-group"><p class="fig-h">' + esc(title) + (sub ? ' <span class="fv-dir">' + esc(sub) + "</span>" : "") + '</p><ul class="fv-tags">' + items.map(function (i) { return "<li><b>" + esc(i[0]) + "</b> — " + esc(i[1]) + "</li>"; }).join("") + "</ul></div>"; }
       root.innerHTML = '<div class="fig-vocab">' +
         group(L("Насыщенность", "Weight"), L("от светлого к сверхжирному · font-weight", "light to black · font-weight"), W.map(function (w) { return '<li><code>' + w[0] + '</code><span style="' + ff("inter") + "font-weight:" + w[0] + '">Аа</span><b>' + esc(w[1]) + "</b></li>"; }).join("")) +
         group(L("Ширина", "Width"), L("от узкого к широкому · font-stretch", "narrow to wide · font-stretch"), S.map(function (w) { return '<li><code>' + w[0] + '</code><span class="fv-box" style="width:' + (parseFloat(w[0]) * 0.26) + 'px"></span><b>' + esc(w[1]) + "</b></li>"; }).join("")) +
-        group(L("Оптический размер", "Optical size"), L("от мелкого кегля к крупному", "small to large sizes"), O.map(function (o, i) { return '<li><code>' + (i + 1) + '</code><span style="' + ff("literata") + "font-size:" + (12 + i * 5) + 'px;line-height:1">Аа</span><b>' + esc(o[0]) + "</b><small>" + esc(o[1]) + "</small></li>"; }).join("")) +
-        '<div class="fv-group"><p class="fig-h">' + esc(L("Наклон", "Slope")) + ' <span class="fv-dir">font-style</span></p><ul class="fv-tags"><li><b>Roman, Upright</b> — ' + esc(L("прямое (обычно не пишется)", "upright (usually omitted)")) + "</li><li><b>Italic</b> — " + esc(L("курсив: собственные формы знаков", "italic: its own letterforms")) + "</li><li><b>Oblique, Slanted</b> — " + esc(L("наклонное: прямые знаки под углом", "oblique: upright letters slanted")) + "</li></ul></div>" +
-        '<div class="fv-group"><p class="fig-h">' + esc(L("Класс", "Class")) + '</p><ul class="fv-tags"><li><b>Serif</b> — ' + esc(L("антиква", "serif")) + "</li><li><b>Sans</b> — " + esc(L("гротеск", "sans serif")) + "</li><li><b>Slab</b> — " + esc(L("брусковый", "slab serif")) + "</li><li><b>Mono</b> — " + esc(L("моноширинный", "monospace")) + "</li><li><b>Script</b> — " + esc(L("рукописный", "script")) + "</li></ul></div>" +
-        '<div class="fv-group"><p class="fig-h">' + esc(L("Проект, версия, файл", "Project, version, file")) + '</p><ul class="fv-tags"><li><b>PT, IBM, Noto</b> — ' + esc(L("проект или производитель (PT — проект ParaType Public Types)", "project or foundry (PT — ParaType's Public Types)")) + "</li><li><b>3, 4</b> — " + esc(L("номер версии семейства (Source Serif 4)", "family version number (Source Serif 4)")) + "</li><li><b>Variable, VF</b> — " + esc(L("вариативный файл", "variable file")) + "</li><li><b>Pro</b> — " + esc(L("обычно расширенный набор знаков", "usually an extended character set")) + "</li><li><b>SC</b> — " + esc(L("капитель", "small caps")) + "</li></ul></div>" +
-        "</div>" + cap(L("Обозначения сгруппированы по признаку и упорядочены по шкале. Синонимы в одной строке взаимозаменяемы, но конкретное слово выбирает производитель. * Book у разных шрифтов соответствует 400 или чуть более светлому начертанию.", "Labels are grouped by feature and ordered along a scale. Synonyms on one line are interchangeable; the exact word is the foundry's choice. * Book is 400 or slightly lighter depending on the font."));
+        group(L("Оптический размер", "Optical size"), L("от мелкого кегля к крупному", "small to large sizes"), O.map(function (o, i) { return '<li' + (o[2] ? "" : ' class="fv-rare"') + '><code>' + (i + 1) + '</code><span style="' + ff("literata") + "font-size:" + (11 + i * 3.5) + 'px;line-height:1">Аа</span><b>' + esc(o[0]) + "</b><small>" + esc(o[1]) + "</small></li>"; }).join("")) +
+        tags(L("Класс", "Class"), "", [["Serif, Antiqua", L("антиква", "serif")], ["Sans, Sans Serif, Grotesk, Gothic", L("гротеск (Gothic — в американской традиции)", "sans serif (Gothic in American usage)")], ["Slab", L("брусковый", "slab serif")], ["Mono, Code", L("моноширинный", "monospace")], ["Script, Hand", L("рукописный", "script, handwritten")], ["Display", L("акцидентный; в названии чаще означает вариант для крупного кегля", "display; in a name it usually marks the large-size version")]]) +
+        tags(L("Проект, производитель", "Project, foundry"), L("в начале или в конце названия", "at the start or end of a name"), [["PT", "ParaType (Public Types)"], ["ITC", "International Typeface Corporation"], ["FF", "FontFont"], ["TT", "TypeType"], ["LL", "Lineto"], ["BT", "Bitstream"], ["LT, MT", "Linotype, Monotype"], ["Dx", "DX Korea"]]) +
+        tags(L("Наклон, версия, файл", "Slope, version, file"), "", [["Italic", L("курсив: собственные формы знаков", "italic: its own letterforms")], ["Oblique", L("наклонное: прямые знаки под углом", "oblique: upright letters slanted")], ["2, 3, 4, Neue, Next, Nova", L("новая версия семейства", "a new version of the family")], ["Variable, VF", L("вариативный файл", "variable file")], ["Pro, Std", L("расширенный и стандартный наборы знаков", "extended and standard character sets")], ["SC", L("капитель", "small caps")]]) +
+        "</div>" + cap(L("Обозначения сгруппированы по признаку и упорядочены по шкале. Синонимы в одной строке взаимозаменяемы, конкретное слово выбирает производитель. Серым отмечены термины, которые почти не встречаются в названиях шрифтов. * Book у разных шрифтов соответствует 400 или чуть более светлому начертанию.", "Labels are grouped by feature and ordered along a scale. Synonyms on one line are interchangeable; the foundry chooses the exact word. Greyed terms rarely appear in font names. * Book is 400 or slightly lighter depending on the font."));
     },
 
     lines: function (root) {
@@ -196,6 +228,76 @@
       }).join("") + "</div>" + cap(L("Сравните форму букв с, е и о: апертура и овал — главные признаки подгруппы гротеска.", "Compare the letters c, e and o: aperture and the oval are the main signs of a sans subgroup."));
     },
 
+    /* ---------- classes: one figure per class ---------- */
+
+    cls_serif: function (root) { classFig(root, {
+      signs: [L("есть засечки", "serifs present"), L("заметный контраст толстых и тонких штрихов", "visible thick–thin contrast"), L("засечки плавно переходят в штрих", "serifs blend into the stroke")],
+      ex: [["eb-garamond", L("старого стиля", "old-style")], ["pt-serif", L("переходная", "transitional")], ["playfair-display", L("классицистическая", "didone")], ["literata", L("современная текстовая", "contemporary text")]],
+      cap: L("Антиква: четыре исторические группы. Сравните засечки и контраст: от мягких наклонных засечек Garamond до тонких горизонтальных у Playfair Display.", "Serif: four historical groups. Compare serifs and contrast, from Garamond's soft angled serifs to Playfair Display's hairline horizontals.")
+    }); },
+    cls_slab: function (root) { classFig(root, {
+      signs: [L("засечки прямоугольные, как бруски", "rectangular, block-like serifs"), L("засечки почти такой же толщины, как основной штрих", "serifs nearly as thick as the stems"), L("низкий контраст", "low contrast")],
+      ex: [["roboto-slab", L("текстовый", "text")], ["bitter", L("для экранного чтения", "for screen reading")], ["podkova", L("плакатный характер", "poster character")]],
+      compare: ["pt-serif", "roboto-slab"],
+      cap: L("Брусковые шрифты. Вверху — сравнение засечек: у антиквы (PT Serif) засечка тонкая и переходит в штрих плавно, у брускового (Roboto Slab) — массивная и прямоугольная.", "Slab serifs. Top: serifs compared — thin and blended in a serif face (PT Serif), heavy and rectangular in a slab (Roboto Slab).")
+    }); },
+    cls_mono: function (root) {
+      classFig(root, {
+        signs: [L("все знаки одной ширины", "all characters share one width"), L("узкие знаки (i, l) получают широкие засечки", "narrow letters (i, l) get wide serifs"), L("широкие (m, w, ш) сжаты", "wide letters (m, w, ш) are squeezed")],
+        ex: [["jetbrains-mono", L("для кода", "for code")], ["ibm-plex-mono", L("корпоративное семейство", "corporate family")], ["pt-mono", L("из суперсемейства PT", "PT superfamily")]],
+        grid: true,
+        cap: L("Моноширинные шрифты. В сетке видно, что в JetBrains Mono каждая буква занимает одинаковую ячейку, тогда как в Inter ширина знаков различается.", "Monospaced faces. The grid shows that every JetBrains Mono letter fills an equal cell, whereas Inter letters vary in width.")
+      });
+    },
+    cls_display: function (root) { classFig(root, {
+      signs: [L("рассчитан на крупный кегль", "designed for large sizes"), L("необычные пропорции, детали или декор", "unusual proportions, details or decoration"), L("часто одно начертание", "often a single style")],
+      ex: [["unbounded", L("широкий геометрический", "wide geometric")], ["yeseva-one", L("контрастный, с засечками", "high-contrast serif")], ["poiret-one", L("тонкий, ар-деко", "thin, art deco")], ["russo-one", L("спортивный, технический", "sporty, technical")], ["ruslan-display", L("стилизация древнерусского письма", "early Russian script style")], ["press-start-2p", L("пиксельный", "pixel")]],
+      cap: L("Акцидентные шрифты могут иметь засечки или не иметь их: класс определяется не формой засечек, а назначением — выразительностью в крупном кегле.", "Display faces may or may not have serifs: the class is defined by purpose — expressiveness at large sizes — not by serif shape.")
+    }); },
+    cls_script: function (root) { classFig(root, {
+      signs: [L("имитирует письмо от руки", "imitates handwriting"), L("наклон, соединения между буквами, неровный ритм", "slant, joins, uneven rhythm"), L("штрих как от пера, кисти или фломастера", "strokes like a pen, brush or marker")],
+      ex: [["great-vibes", L("каллиграфический, остроконечное перо", "calligraphic, pointed pen")], ["marck-script", L("каллиграфический, связный", "calligraphic, connected")], ["lobster", L("леттеринг, кисть", "lettering, brush")], ["caveat", L("неформальный почерк", "informal handwriting")], ["neucha", L("почерк фломастером", "felt-tip handwriting")], ["amatic-sc", L("узкий, от руки", "narrow, hand-drawn")]],
+      cap: L("Рукописные шрифты делятся на каллиграфические (форма задана правилами письма пером) и собственно рукописные, передающие неформальный почерк.", "Script faces divide into calligraphic ones (form follows pen-writing rules) and handwritten ones that convey informal handwriting.")
+    }); },
+
+    classkey: function (root) {
+      var Q = [
+        [L("Знаки имитируют письмо от руки: наклон, соединения, неровный ритм?", "Do letters imitate handwriting: slant, joins, uneven rhythm?"), L("Рукописный", "Script"), "caveat"],
+        [L("Форма рассчитана на крупный кегль: необычные пропорции, детали, декор?", "Is the form meant for large sizes: unusual proportions, details, decoration?"), L("Акцидентный", "Display"), "unbounded"],
+        [L("Все знаки одной ширины: i занимает столько же места, сколько m?", "Are all letters one width: does i take as much room as m?"), L("Моноширинный", "Monospace"), "jetbrains-mono"],
+        [L("Нет засечек?", "No serifs?"), L("Гротеск", "Sans serif"), "inter"],
+        [L("Засечки прямоугольные, почти толщиной с основной штрих, контраст низкий?", "Are serifs rectangular, almost as thick as stems, with low contrast?"), L("Брусковый", "Slab serif"), "roboto-slab"]
+      ];
+      root.innerHTML = '<ol class="fig-key-tree">' + Q.map(function (q, i) {
+        return '<li><span class="fkt-n">' + (i + 1) + '</span><span class="fkt-q">' + esc(q[0]) + '</span><span class="fkt-yes"><small>' + esc(L("да", "yes")) + '</small><b>' + esc(q[1]) + '</b><i style="' + ff(q[2]) + '">Аа</i></span><span class="fkt-no">' + esc(i < Q.length - 1 ? L("нет — следующий вопрос", "no — next question") : L("нет", "no")) + "</span></li>";
+      }).join("") + '<li class="fkt-last"><span class="fkt-n">=</span><span class="fkt-q">' + esc(L("Засечки есть, контраст заметный, переходы плавные", "Serifs present, visible contrast, smooth transitions")) + '</span><span class="fkt-yes"><b>' + esc(L("Антиква", "Serif")) + '</b><i style="' + ff("literata") + '">Аа</i></span></li></ol>' +
+        cap(L("Порядок вопросов важен: сначала исключаются классы, которые определяются назначением (рукописные, акцидентные) и конструкцией (моноширинные), и только затем рассматриваются засечки. Поэтому акцидентный шрифт с засечками не будет ошибочно отнесён к антикве.", "The order matters: first rule out classes defined by purpose (script, display) and construction (monospace), and only then look at serifs. That way a display face with serifs is not mistaken for a serif text face."));
+    },
+
+    generic: function (root) {
+      var chain = [["\"PT Serif\"", L("веб-шрифт", "web font"), L("файл не загрузился", "file failed to load"), "no"], ["Georgia", L("системный шрифт", "system font"), L("нет на устройстве", "not on the device"), "no"], ["\"Times New Roman\"", L("системный шрифт", "system font"), L("найден — применяется", "found — used"), "yes"], ["serif", L("родовое семейство", "generic family"), L("запасной вариант всегда доступен", "always-available last resort"), "gen"]];
+      var G = [["serif", L("антиква", "serif"), "Times New Roman · Times"], ["sans-serif", L("гротеск", "sans serif"), "Arial · Helvetica"], ["monospace", L("моноширинный", "monospace"), "Courier New · Courier"], ["cursive", L("рукописный", "script"), L("зависит от браузера", "browser-dependent")], ["fantasy", L("акцидентный", "display"), L("непредсказуем", "unpredictable")], ["system-ui", L("шрифт интерфейса ОС", "OS interface font"), "Segoe UI · San Francisco · Roboto"]];
+      root.innerHTML = '<p class="fig-h">' + esc(L("Как браузер читает список font-family", "How the browser reads a font-family list")) + '</p><div class="gen-chain">' + chain.map(function (c, i) {
+        return '<div class="gen-step gen-' + c[3] + '"><code>' + esc(c[0]) + "</code><small>" + esc(c[1]) + "</small><b>" + esc(c[2]) + "</b></div>";
+      }).join('<span class="gen-link" aria-hidden="true"></span>') + "</div>" +
+        '<p class="fig-h" style="margin-top:16px">' + esc(L("Родовые семейства и что за ними стоит", "Generic families and what they map to")) + '</p><table class="gen-table"><tr><th>' + esc(L("Ключевое слово", "Keyword")) + "</th><th>" + esc(L("Класс", "Class")) + "</th><th>" + esc(L("Как правило, Windows · macOS", "Typically Windows · macOS")) + "</th></tr>" +
+        G.map(function (g) { return "<tr><td><code>" + g[0] + "</code></td><td>" + esc(g[1]) + "</td><td>" + esc(g[2]) + "</td></tr>"; }).join("") + "</table>" +
+        cap(L("Браузер перебирает список слева направо и берёт первый доступный шрифт; если в нём нет нужного знака, этот знак ищется в следующих шрифтах. Родовое семейство в конце списка гарантирует, что текст будет показан шрифтом нужного класса, а не шрифтом браузера по умолчанию. Строка system-ui указывает шрифт интерфейса Windows, macOS и Android соответственно.", "The browser goes through the list left to right and uses the first available font; a missing glyph is looked up in the following fonts. A generic family at the end guarantees the text is shown in the right class rather than the browser default. The system-ui row lists the interface fonts of Windows, macOS and Android."));
+    },
+
+    systemfonts: function (root) {
+      var R = [
+        [L("Антиква", "Serif"), [["Georgia", "Windows, macOS"], ["Times New Roman", "Windows, macOS"], ["Cambria", "Windows"], ["Charter", "macOS"]]],
+        [L("Гротеск", "Sans serif"), [["Arial", "Windows, macOS"], ["Segoe UI", "Windows"], ["Helvetica", "macOS"], ["Roboto", "Android"]]],
+        [L("Моноширинный", "Monospace"), [["Consolas", "Windows"], ["Courier New", "Windows, macOS"], ["Menlo", "macOS"]]],
+        [L("Рукописный", "Script"), [["Comic Sans MS", "Windows, macOS"]]]
+      ];
+      root.innerHTML = '<div class="sysf">' + R.map(function (r) {
+        return '<div class="sysf-row"><b>' + esc(r[0]) + '</b><div class="sysf-list">' + r[1].map(function (f) { return '<span class="sysf-f"><span style="font-family:\'' + f[0] + '\',' + (r[0] === L("Антиква", "Serif") ? "serif" : r[0] === L("Моноширинный", "Monospace") ? "monospace" : "sans-serif") + '">' + esc(f[0]) + "</span><small>" + esc(f[1]) + "</small></span>"; }).join("") + "</div></div>";
+      }).join("") + "</div>" + cap(L("Распространённые системные шрифты по классам и платформам. Если шрифт не установлен на вашем устройстве, образец показан родовым семейством того же класса.", "Common system fonts by class and platform. If a font is not installed on your device, the sample falls back to the generic family of the same class."));
+    },
+
+
     /* ---------- character ---------- */
 
     neutrality: function (root) {
@@ -225,7 +327,7 @@
       var a0 = pt(-62, RINGS[0] * R + 4), a1 = pt(-62, R - 4);
       svg += '<line x1="' + a0[0] + '" y1="' + a0[1] + '" x2="' + a1[0] + '" y2="' + a1[1] + '" class="s-acc" stroke-width="3" marker-end="url(#fwArr)"/>';
       svg += "</svg>";
-      root.innerHTML = '<div class="fig-wheel-wrap">' + svg + '<div class="fig-legend"><p><b>' + esc(L("От центра к краю", "From centre to edge")) + "</b> — " + esc(L("растёт выразительность: текстовые → регулярные → акцидентные. Чем дальше от центра, тем крупнее кегль и короче текст.", "expressiveness grows: text → regular → display. The further out, the larger the size and the shorter the text.")) + "</p><p><b>" + esc(L("По кругу", "Around the wheel")) + "</b> — " + esc(L("жанр шрифта: от книжных антикв до имитаций и исторических почерков.", "the genre: from book serifs to imitations and historical scripts.")) + "</p></div></div>" +
+      root.innerHTML = '<div class="fig-wheel-wrap">' + svg + '<div class="fig-legend"><p><b>' + esc(L("От центра к краю", "From centre to edge")) + "</b> — " + esc(L("растёт выразительность: от текстовых через регулярные к акцидентным. Чем дальше от центра, тем крупнее кегль и короче текст.", "expressiveness grows from text through regular to display. The further out, the larger the size and the shorter the text.")) + "</p><p><b>" + esc(L("По кругу", "Around the wheel")) + "</b> — " + esc(L("жанр шрифта: от книжных антикв до имитаций и исторических почерков.", "the genre: from book serifs to imitations and historical scripts.")) + "</p></div></div>" +
         cap(L("Схема по мотивам классификации А. Корольковой: положение шрифта задаётся двумя координатами — жанром и степенью выразительности.", "Diagram after A. Korolkova's classification: a typeface is placed by two coordinates — genre and degree of expressiveness."));
     },
 
@@ -423,7 +525,7 @@
 
     fontface: function (root) {
       var F = [["400", "normal", "onest-400.woff2"], ["400", "italic", "onest-400-italic.woff2"], ["700", "normal", "onest-700.woff2"], ["700", "italic", "onest-700-italic.woff2"]];
-      root.innerHTML = '<div class="fig-ff"><div class="ffc-css"><code>h2 {<br>&nbsp;&nbsp;font-family: "Onest";<br>&nbsp;&nbsp;<b>font-weight: 700;</b><br>}</code></div><div class="ffc-arrow">→</div><div class="ffc-faces">' + F.map(function (f) {
+      root.innerHTML = '<div class="fig-ff"><div class="ffc-css"><code>h2 {<br>&nbsp;&nbsp;font-family: "Onest";<br>&nbsp;&nbsp;<b>font-weight: 700;</b><br>}</code></div><div class="ffc-arrow" aria-hidden="true"></div><div class="ffc-faces">' + F.map(function (f) {
         var on = f[0] === "700" && f[1] === "normal";
         return '<div class="ffc-face' + (on ? " is-on" : "") + '"><code>@font-face · "Onest" · ' + f[0] + " · " + f[1] + '</code><span>' + f[2] + "</span></div>";
       }).join("") + "</div></div>" + cap(L("Браузер сопоставляет font-family, font-weight и font-style элемента с описаниями @font-face и загружает только подходящий файл — и только тогда, когда он действительно нужен на странице.", "The browser matches the element's font-family, font-weight and font-style against the @font-face rules and downloads only the matching file, and only when the page actually needs it."));

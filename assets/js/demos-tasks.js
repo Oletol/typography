@@ -228,15 +228,15 @@
     /* ---------- Module 2: classes ---------- */
 
     tStack: function (root) {
-      var FB = [["Georgia", "serif"], ['"Times New Roman"', "serif"], ["Arial", "sans"], ['"Segoe UI"', "sans"], ["Roboto", "sans"], ["Menlo", "mono"], ["Consolas", "mono"], ['"Courier New"', "mono"], ['"Comic Sans MS"', "script"]];
+      var FB = shuffle([["Georgia", "serif", "Windows, macOS"], ['"Times New Roman"', "serif", "Windows, macOS"], ["Cambria", "serif", "Windows"], ["Arial", "sans", "Windows, macOS"], ['"Segoe UI"', "sans", "Windows"], ["Helvetica", "sans", "macOS"], ["Roboto", "sans", "Android"], ["Menlo", "mono", "macOS"], ["Consolas", "mono", "Windows"], ['"Courier New"', "mono", "Windows, macOS"], ['"Comic Sans MS"', "script", "Windows, macOS"]]);
       var GEN = ["serif", "sans-serif", "monospace", "cursive", "system-ui", "fantasy"];
       var OKGEN = { serif: ["serif"], sans: ["sans-serif", "system-ui"], mono: ["monospace"] };
       var list = [{ f: "PT Serif", c: "serif", ru: "основной текст лонгрида", en: "long-read body text" }, { f: "Inter", c: "sans", ru: "интерфейс веб-приложения", en: "web app interface" }, { f: "JetBrains Mono", c: "mono", ru: "фрагменты кода в документации", en: "code snippets in documentation" }];
       stages(root, list, function (el, sc, passed) {
         function sel(id, opts) { return '<select id="' + id + '"><option value="">—</option>' + opts.map(function (o, i) { return '<option value="' + i + '">' + esc(o) + "</option>"; }).join("") + "</select>"; }
-        el.innerHTML = '<p class="tk-q">' + esc(L("Составьте значение font-family для задачи «" + sc.ru + "». Основной шрифт — " + sc.f + ". Добавьте один-два резервных шрифта и завершите список родовым семейством.", "Compose a font-family value for “" + sc.en + "”. The main typeface is " + sc.f + ". Add one or two fallbacks and end the list with a generic family.")) + "</p>" +
-          '<div class="demo-row three"><label class="ctl"><span class="ctl-head"><span>' + esc(L("Резервный 1", "Fallback 1")) + "</span></span>" + sel("tsA", FB.map(function (x) { return x[0].replace(/"/g, ""); })) + "</label>" +
-          '<label class="ctl"><span class="ctl-head"><span>' + esc(L("Резервный 2 (необязательно)", "Fallback 2 (optional)")) + "</span></span>" + sel("tsB", FB.map(function (x) { return x[0].replace(/"/g, ""); })) + "</label>" +
+        el.innerHTML = '<p class="tk-q">' + esc(L("Составьте значение font-family для задачи «" + sc.ru + "». Основной шрифт — " + sc.f + ". Добавьте один-два системных резервных шрифта того же класса (см. карточку «Системные шрифты») и завершите список родовым семейством.", "Compose a font-family value for “" + sc.en + "”. The main typeface is " + sc.f + ". Add one or two fallbacks and end the list with a generic family.")) + "</p>" +
+          '<div class="demo-row three"><label class="ctl"><span class="ctl-head"><span>' + esc(L("Резервный 1", "Fallback 1")) + "</span></span>" + sel("tsA", FB.map(function (x) { return x[0].replace(/"/g, "") + " (" + x[2] + ")"; })) + "</label>" +
+          '<label class="ctl"><span class="ctl-head"><span>' + esc(L("Резервный 2 (необязательно)", "Fallback 2 (optional)")) + "</span></span>" + sel("tsB", FB.map(function (x) { return x[0].replace(/"/g, "") + " (" + x[2] + ")"; })) + "</label>" +
           '<label class="ctl"><span class="ctl-head"><span>' + esc(L("Родовое семейство", "Generic family")) + "</span></span>" + sel("tsG", GEN) + "</label></div>" +
           '<pre class="tk-code" id="tsCode"></pre><ul class="tk-checks"></ul><div class="tk-nav0"></div>';
         var a = el.querySelector("#tsA"), b = el.querySelector("#tsB"), g = el.querySelector("#tsG");
@@ -252,7 +252,13 @@
           var fb = [a, b].filter(function (s) { return s.value !== ""; }).map(function (s) { return FB[s.value]; });
           var items = [
             { ok: fb.length > 0, text: L("Указан хотя бы один резервный шрифт", "At least one fallback is listed") },
-            { ok: fb.length > 0 && fb.every(function (x) { return x[1] === sc.c; }), text: L("Резервные шрифты относятся к тому же классу, что и основной", "Fallbacks belong to the same class as the main typeface") },
+            (function () {
+              var CN = { serif: L("антиква", "serif"), sans: L("гротеск", "sans serif"), mono: L("моноширинный", "monospace"), script: L("рукописный", "script") };
+              var wrong = fb.filter(function (x) { return x[1] !== sc.c; });
+              return { ok: fb.length > 0 && !wrong.length, text: wrong.length
+                ? L("Не того класса: ", "Wrong class: ") + wrong.map(function (x) { return x[0].replace(/"/g, "") + " — " + CN[x[1]]; }).join(", ") + L(". Основной шрифт — ", ". The main typeface is ") + CN[sc.c] + "."
+                : L("Резервные шрифты относятся к тому же классу, что и основной (" + CN[sc.c] + ")", "Fallbacks belong to the same class as the main typeface (" + CN[sc.c] + ")") };
+            })(),
             { ok: !(a.value !== "" && a.value === b.value), text: L("Резервные шрифты не повторяются", "Fallbacks are not repeated") },
             { ok: g.value !== "" && OKGEN[sc.c].indexOf(GEN[g.value]) > -1, text: L("Список завершается родовым семейством того же класса", "The list ends with a generic family of the same class") }
           ];
@@ -430,7 +436,7 @@
         function () { var r = pick([1.125, 1.2, 1.25, 1.333, 1.5]), h = Math.round(16 * r * r * 10) / 10; return { q: L("Основной текст — 16 px, заголовок H3 на ступени +2 — " + num(h, 1) + " px. Каково модульное отношение?", "Body text is 16 px, the H3 at step +2 is " + h + " px. What is the ratio?"), answer: r, tol: 0.01, unit: "", ex: L("Отношение = √(" + num(h, 1) + " / 16).", "Ratio = √(" + h + " / 16).") }; },
         function () { var b = pick([16, 18]), r = pick([1.2, 1.25]); return { q: L("Базовый кегль " + b + " px, отношение " + r + ". Каков кегль подписи на ступени −1?", "Base " + b + " px, ratio " + r + ". What is the caption size at step −1?"), answer: b / r, tol: 0.2, unit: "px", ex: L("Ступень вниз — деление на отношение.", "A step down divides by the ratio.") }; },
         function () { var mn = pick([16, 18, 20, 24]), mx = mn + pick([6, 8, 12, 16]); return { q: L("Кегль должен плавно расти от " + mn + " px при ширине 360 px до " + mx + " px при ширине 1280 px. Каков коэффициент при vw в выражении clamp()?", "The size should grow from " + mn + " px at 360 px to " + mx + " px at 1280 px. What is the vw coefficient in clamp()?"), answer: (mx - mn) / 920 * 100, tol: 0.02, unit: "vw", ex: L("Наклон = (" + mx + " − " + mn + ") / (1280 − 360) × 100.", "Slope = (" + mx + " − " + mn + ") / (1280 − 360) × 100.") }; },
-        function () { var mn = pick([16, 18, 20]), mx = mn + pick([8, 12, 16]), sl = (mx - mn) / 920; return { q: L("Для перехода " + mn + " → " + mx + " px между шириной 360 и 1280 px наклон равен " + num(sl * 100, 3) + "vw. Каково постоянное слагаемое в rem (при 1rem = 16 px)?", "For " + mn + " → " + mx + " px between 360 and 1280 px the slope is " + num(sl * 100, 3) + "vw. What is the constant term in rem (1rem = 16 px)?"), answer: (mn - sl * 360) / 16, tol: 0.02, unit: "rem", ex: L("Слагаемое = (" + mn + " − наклон × 360) / 16.", "Constant = (" + mn + " − slope × 360) / 16.") }; },
+        function () { var mn = pick([16, 18, 20]), mx = mn + pick([8, 12, 16]), sl = (mx - mn) / 920; return { q: L("Для перехода от " + mn + " до " + mx + " px между шириной 360 и 1280 px наклон равен " + num(sl * 100, 3) + "vw. Каково постоянное слагаемое в rem (при 1rem = 16 px)?", "For " + mn + " to " + mx + " px between 360 and 1280 px the slope is " + num(sl * 100, 3) + "vw. What is the constant term in rem (1rem = 16 px)?"), answer: (mn - sl * 360) / 16, tol: 0.02, unit: "rem", ex: L("Слагаемое = (" + mn + " − наклон × 360) / 16.", "Constant = (" + mn + " − slope × 360) / 16.") }; },
         function () { var r = pick([1.2, 1.25, 1.333]), n = pick([3, 4, 5]), h = Math.round(16 * Math.pow(r, n)); return { q: L("Основной текст — 16 px, отношение " + r + ". На какой ступени шкалы кегль ближе всего к " + h + " px?", "Body 16 px, ratio " + r + ". At which step is the size closest to " + h + " px?"), answer: n, tol: 0, unit: "", ex: L("16 × " + r + "^" + n + " ≈ " + num(16 * Math.pow(r, n), 1) + " px.", "16 × " + r + "^" + n + " ≈ " + (16 * Math.pow(r, n)).toFixed(1) + " px.") }; }
       ];
       drill(root, { rounds: 6, pass: 5, gen: function (n) { return gens[n](); } });
@@ -679,7 +685,10 @@
         [["PT", "maker"], ["Sans", "cls"], ["Narrow", "width"], ["Bold", "wt"]],
         [["Fira", "fam"], ["Sans", "cls"], ["Book", "wt"], ["Italic", "slope"]],
         [["Source", "fam"], ["Serif", "cls"], ["4", "ver"], ["Subhead", "opsz"], ["Light", "wt"]],
-        [["Inter", "fam"], ["Variable", "tech"], ["Italic", "slope"]]
+        [["Inter", "fam"], ["Variable", "tech"], ["Italic", "slope"]],
+        [["Helvetica", "fam"], ["Neue", "ver"], ["LT", "maker"], ["Pro", "tech"]],
+        [["TT", "maker"], ["Norms", "fam"], ["Pro", "tech"], ["Bold", "wt"]],
+        [["ITC", "maker"], ["Franklin", "fam"], ["Gothic", "cls"], ["Condensed", "width"]]
       ];
       var ROUNDS = 12, PASS = 10, set, i, score;
       function start() { set = shuffle(BANK).slice(0, ROUNDS); i = 0; score = 0; show(); }
