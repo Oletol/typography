@@ -396,7 +396,7 @@
           body: t("Антиквой называют шрифты с засечками и выраженным контрастом штрихов. Название происходит от латинского antiquus — «древний»: гуманисты эпохи Возрождения считали этот шрифт возрождением античного римского письма и противопоставляли его готическому. Антиква восходит к римскому капитальному письму и гуманистическому минускулу.", "Serif typefaces have serifs and noticeable stroke contrast. In Russian and German they are called antiqua, from Latin antiquus, “ancient”: Renaissance humanists saw this letter as a revival of ancient Roman writing and set it against blackletter. Serif type descends from Roman capitals and the humanist minuscule."),
           points: [
             t("Как узнать: есть засечки; толщина штрихов меняется (контраст); засечки плавно переходят в основной штрих.", "How to recognise: serifs present; stroke thickness varies (contrast); serifs blend smoothly into the stem."),
-            t("Внутри класса выделяют исторические группы: старого стиля, переходную, классицистическую и современную текстовую антикву — они различаются контрастом, осью контраста и формой засечек.", "The class divides into historical groups: old-style, transitional, didone and contemporary text serifs, which differ in contrast, contrast axis and serif shape."),
+            t("Внутри класса выделяют четыре исторические группы; их признаки разобраны в следующей карточке.", "The class divides into four historical groups, described in the next card."),
             t("Ассоциации: книжная традиция, академичность, надёжность.", "Associations: book tradition, scholarship, reliability.")
           ],
           sources: [R.gfSerif, R.bringhurst]
@@ -404,7 +404,7 @@
         {
           kind: "idea",
           title: t("Антиква: исторические группы", "Serif: historical groups"),
-          body: t("Антиквой называют шрифты с засечками, восходящие к ренессансному римскому письму. Её исторические группы различаются прежде всего контрастом, осью контраста и формой засечек.", "Serif typefaces descend from Renaissance roman letterforms. Their historical groups differ primarily in contrast, axis of contrast and serif shape."),
+          body: t("Исторические группы антиквы различаются прежде всего контрастом, осью контраста и формой засечек. Порядок групп отражает смену инструмента: от широконечного пера к остроконечному (подробнее — в модуле 3).", "The historical groups of serif type differ primarily in contrast, axis of contrast and serif shape. Their sequence reflects a change of tool, from the broad-nib to the pointed pen (see module 3)."),
           points: [
             t("Антиква старого стиля (XV–XVII вв.): умеренный контраст, наклонная ось, скошенные засечки с плавным переходом к штриху. Пример — Garamond (EB Garamond).", "Old-style (15th–17th c.): moderate contrast, inclined axis, bracketed angled serifs. Example: Garamond (EB Garamond)."),
             t("Переходная антиква (XVIII в.): более высокий контраст, ось, близкая к вертикальной, более горизонтальные засечки. Примеры — Baskerville, Times; PT Serif, Source Serif.", "Transitional (18th c.): higher contrast, near-vertical axis, flatter serifs. Examples: Baskerville, Times; PT Serif, Source Serif."),
@@ -420,8 +420,8 @@
           body: t("С распространением экранов высокой плотности антиква стала полноценным решением для основного текста на сайтах, прежде всего в изданиях и лонгридах. Вместе с тем выбор подгруппы определяется кеглем и условиями отображения.", "With the spread of high-density screens, serif type has become a viable choice for body text on websites, particularly in publications and long reads. The choice of subgroup, however, depends on size and display conditions."),
           points: [
             t("Для основного текста предпочтительны современные текстовые антиквы с умеренным контрастом и увеличенной высотой строчных.", "For body text, prefer contemporary text serifs with moderate contrast and a large x-height."),
-            t("Дидоны и иные высококонтрастные антиквы применяются в заголовках крупного кегля; в мелком кегле тонкие штрихи теряют чёткость.", "Didones and other high-contrast serifs belong in large headings; at small sizes their hairlines lose definition."),
-            t("Если в гарнитуре есть ось оптического размера (opsz), браузер адаптирует контраст к кеглю автоматически.", "If the typeface has an optical size axis (opsz), the browser adapts contrast to the size automatically.")
+            t("Дидоны и иные высококонтрастные антиквы — только для заголовков (причина описана в модуле 1, «Контраст, засечки и апертура на экране»).", "Didones and other high-contrast serifs are for headings only (see module 1, \"Contrast, serifs and aperture on screen\")."),
+            t("Для антиквы ось opsz особенно полезна: в мелком кегле она снижает контраст и усиливает засечки.", "For serifs the opsz axis is especially useful: at small sizes it lowers contrast and sturdies the serifs.")
           ],
           sources: [R.mdnOpticalSizing, R.gfSerif]
         },
@@ -466,10 +466,6 @@
           kind: "idea",
           title: t("Табличные цифры", "Tabular figures"),
           body: t("Чтобы цифры в таблицах и счётчиках выравнивались по вертикали, не нужен моноширинный шрифт: во многих гарнитурах есть табличные цифры одинаковой ширины. Их включают свойством font-variant-numeric: tabular-nums.", "Figures in tables and counters do not need a monospaced font to align: many typefaces include tabular figures of equal width, enabled with font-variant-numeric: tabular-nums."),
-          points: [
-            t("Области применения: фрагменты кода, технические идентификаторы, терминальный вывод, иногда — стилистический акцент в заголовках.", "Uses: code snippets, technical identifiers, terminal output, occasionally a stylistic accent in headings."),
-            t("Для выравнивания цифр в таблицах и интерфейсах не требуется моноширинный шрифт: достаточно включить табличные цифры свойством font-variant-numeric: tabular-nums, если они предусмотрены в гарнитуре.", "Aligning figures in tables and interfaces does not require a monospaced font: enable tabular figures with font-variant-numeric: tabular-nums if the typeface provides them.")
-          ],
           code: "td.amount, .price, .timer {\n  font-variant-numeric: tabular-nums;\n}",
           demo: "tabular",
           sources: [R.mdnNumeric]
@@ -606,7 +602,7 @@
       cheatsheet: [
         t("Классификация опирается на засечки, контраст, ось контраста, пропорции и апертуру; многие шрифты сочетают признаки нескольких групп.", "Classification relies on serifs, contrast, contrast axis, proportions and aperture; many typefaces combine features of several groups."),
         t("Антиква: старого стиля (наклонная ось), переходная, классицистическая (вертикальная ось, высокий контраст), современная текстовая.", "Serif: old-style (inclined axis), transitional, didone (vertical axis, high contrast), contemporary text."),
-        t("Дидоны и высококонтрастные антиквы — для крупного кегля; для текста на экране — антиквы с умеренным контрастом.", "Didones and high-contrast serifs suit large sizes; on screen, use moderate-contrast serifs for text."),
+        t("Для основного текста на экране — современные текстовые антиквы; дидоны — в заголовках.", "For on-screen body text, contemporary text serifs; didones in headings."),
         t("Брусковые: прямоугольные засечки, низкий контраст, устойчивость к условиям отображения.", "Slab serifs: rectangular serifs, low contrast, robust rendering."),
         t("Гротески: старые, неогротески (нейтральность, закрытая апертура), гуманистические (открытая апертура), геометрические (окружность и прямоугольник).", "Sans: grotesque, neo-grotesque (neutral, closed aperture), humanist (open aperture), geometric (circle and rectangle)."),
         t("Список font-family завершается родовым семейством того же класса.", "End every font-family list with a generic family of the same class."),
@@ -715,7 +711,7 @@
           points: [
             t("Интерфейсные гарнитуры (Inter, Golos, Onest, системные шрифты) рассчитаны на мелкий кегль и плотные экраны.", "Interface typefaces (Inter, Golos, Onest, system fonts) are designed for small sizes and dense screens."),
             t("Фирменный акцидентный шрифт ограничивают маркетинговыми страницами и крупными заголовками.", "A brand display face is limited to marketing pages and large headings."),
-            t("Характер должен сохраняться при подмене: резервный шрифт в font-family выбирают того же жанра.", "Character must survive fallback: choose a fallback in font-family from the same genre.")
+            t("Характер сохраняется при подмене, только если резервный шрифт того же жанра (правило списка font-family — модуль 2).", "Character survives fallback only if the fallback is of the same genre (font-family list rules, module 2).")
           ],
           code: t("/* нейтральный интерфейс, характер — в заголовках */\n:root {\n  --font-ui: \"Golos Text\", system-ui, sans-serif;\n  --font-display: \"Unbounded\", \"Arial Black\", sans-serif;\n}\nbody, button, input { font-family: var(--font-ui); }\n.hero-title { font-family: var(--font-display); }", "/* neutral interface, character in headings */\n:root {\n  --font-ui: \"Golos Text\", system-ui, sans-serif;\n  --font-display: \"Unbounded\", \"Arial Black\", sans-serif;\n}\nbody, button, input { font-family: var(--font-ui); }\n.hero-title { font-family: var(--font-display); }"),
           sources: [R.modernStacks, R.meduza]
@@ -798,7 +794,7 @@
           points: [
             t("Насыщенность (weight) — толщина штрихов: от светлого до сверхжирного.", "Weight — stroke thickness, from thin to black."),
             t("Наклон: прямое, курсивное (italic) или наклонное (oblique) начертание.", "Slope: upright, italic or oblique."),
-            t("Ширина (width): узкое (condensed), нормальное, широкое (extended) начертание.", "Width: condensed, normal or extended."),
+            t("Ширина (width): узкое (condensed), нормальное, широкое (extended) начертание; полная шкала — в модуле 1.", "Width: condensed, normal or extended; the full scale is in module 1."),
             t("Технически каждое начертание статического шрифта — отдельный файл; вариативный шрифт содержит диапазон начертаний в одном файле.", "Technically, each style of a static font is a separate file; a variable font contains a range of styles in one file.")
           ],
           sources: [R.mdnFontWeight, R.mdnVariable]
@@ -808,7 +804,7 @@
           title: t("Числовые значения насыщенности", "Numeric weight values"),
           body: t("В CSS насыщенность задаётся числом от 1 до 1000; традиционно используются значения, кратные 100. Ключевые слова normal и bold соответствуют 400 и 700. Названия начертаний (Light, Medium, Semi Bold) условны и могут различаться у разных словолитен, поэтому ориентироваться следует на числовое значение.", "In CSS, weight is a number from 1 to 1000; values in steps of 100 are traditional. The keywords normal and bold correspond to 400 and 700. Style names (Light, Medium, Semi Bold) are conventional and vary between foundries, so rely on the numeric value."),
           points: [
-            t("100 Thin · 200 Extra Light · 300 Light · 400 Regular · 500 Medium · 600 Semi Bold · 700 Bold · 800 Extra Bold · 900 Black.", "100 Thin · 200 Extra Light · 300 Light · 400 Regular · 500 Medium · 600 Semi Bold · 700 Bold · 800 Extra Bold · 900 Black."),
+            t("Соответствие названий и чисел (Thin — 100, Regular — 400, Black — 900) и синонимы приведены в модуле 1, «Обозначения в названиях шрифтов».", "Names, numbers (Thin 100, Regular 400, Black 900) and synonyms are listed in module 1, \"Terms in font names\"."),
             t("Относительные значения bolder и lighter учитывают только четыре ступени (100, 400, 700, 900) и дают неочевидный результат.", "The relative values bolder and lighter consider only four steps (100, 400, 700, 900) and give non-obvious results."),
             t("По данным MDN, начертания 100 и 200 затрудняют чтение людям со слабым зрением, особенно при недостаточном контрасте.", "According to MDN, weights 100 and 200 are hard to read for people with low vision, especially with low contrast.")
           ],
@@ -1069,7 +1065,7 @@
         {
           kind: "idea",
           title: t("Кегль: 16 px как нижняя граница", "Font size: 16 px as the lower bound"),
-          body: t("Значение 16 px соответствует размеру шрифта браузера по умолчанию и рассматривается как минимально допустимое для основного текста; для протяжённых текстов нередко используют 17–20 px. При этом кегль определяет высоту кегельной площадки, а не самих знаков: при одинаковом кегле гарнитура с большей высотой строчных воспринимается крупнее.", "16 px is the browser's default font size and is regarded as the minimum for body text; long-form text often uses 17–20 px. Font size, however, defines the height of the em box rather than of the letters: at the same size, a typeface with a larger x-height appears bigger."),
+          body: t("Значение 16 px соответствует размеру шрифта браузера по умолчанию и рассматривается как минимально допустимое для основного текста; для протяжённых текстов нередко используют 17–20 px. Порог относится к значению font-size: гарнитурам с малой высотой строчных (модуль 1) нужен кегль на 1–2 px больше.", "16 px is the browser's default font size and is regarded as the minimum for body text; long-form text often uses 17–20 px. The threshold refers to font-size: typefaces with a small x-height (module 1) need 1–2 px more."),
           demo: "xheight",
           sources: [R.butterick, R.webdevCssType]
         },
@@ -1205,7 +1201,6 @@
           title: t("Типографическая иерархия", "Typographic hierarchy"),
           body: t("Типографическая иерархия — система визуальных различий, отражающая относительную значимость элементов текста. Она позволяет читателю оценить структуру страницы до начала чтения и быстро находить нужные фрагменты.", "Typographic hierarchy is a system of visual distinctions reflecting the relative importance of text elements. It lets readers grasp the page structure before reading and locate information quickly."),
           points: [
-            t("Средства иерархии: кегль, насыщенность, цвет и контраст, регистр и разрядка, пробелы, положение на странице.", "Means of hierarchy: size, weight, colour and contrast, case and letter spacing, white space, position."),
             t("Каждый уровень должен заметно отличаться от соседнего; незначительные различия воспринимаются как ошибка, а не как иерархия.", "Each level must differ noticeably from the adjacent one; slight differences read as errors rather than hierarchy."),
             t("Количество уровней заголовков следует ограничивать: как правило, достаточно двух-трёх.", "Limit the number of heading levels: two or three are usually sufficient.")
           ],
@@ -1273,7 +1268,7 @@
           title: t("Адаптивная шкала", "Fluid type scale"),
           body: t("На узком экране крупные ступени шкалы занимают непропорционально много места, поэтому для мобильных устройств выбирают меньший базовый кегль и коэффициент, для широких экранов — больший. Функция clamp() позволяет плавно интерполировать каждую ступень между двумя состояниями без медиазапросов.", "On narrow screens large steps take disproportionate space, so mobile layouts use a smaller base and ratio, wide screens larger ones. clamp() interpolates each step smoothly between two states without media queries."),
           points: [
-            t("Предпочтительное значение внутри clamp() записывается как сумма rem и vw: так кегль реагирует и на ширину окна, и на масштабирование страницы (WCAG 1.4.4).", "The preferred value in clamp() is a sum of rem and vw, so the size responds both to window width and to page zoom (WCAG 1.4.4)."),
+            t("Предпочтительное значение внутри clamp() — сумма rem и vw, по той же причине, что в модуле 5 (WCAG 1.4.4).", "The preferred value in clamp() is a sum of rem and vw, for the reason given in module 5 (WCAG 1.4.4)."),
             t("Расчёт удобно выполнять в специализированных калькуляторах, например Utopia, который генерирует токены --step-n.", "Use a dedicated calculator such as Utopia, which generates --step-n tokens.")
           ],
           demo: "fluidscale",
@@ -1296,11 +1291,10 @@
           kind: "web",
           title: t("Интерлиньяж и отступы заголовков", "Heading line height and spacing"),
           figure: "headspace",
-          body: t("Заголовки набираются с меньшим интерлиньяжем, чем основной текст (1.1–1.25), а вертикальные отступы между элементами целесообразно выводить из базового интерлиньяжа. Это создаёт вертикальный ритм — согласованность интервалов по всей странице.", "Headings use tighter line height than body text (1.1–1.25), and vertical spacing between elements is best derived from the base line height. This creates vertical rhythm, a consistency of intervals across the page."),
+          body: t("Интерлиньяж заголовков меньше, чем у основного текста (значения — в модуле 5), а вертикальные отступы между элементами целесообразно выводить из базового интерлиньяжа. Это создаёт вертикальный ритм — согласованность интервалов по всей странице.", "Headings use tighter line height than body text (values in module 5), and vertical spacing between elements is best derived from the base line height. This creates vertical rhythm, a consistency of intervals across the page."),
           points: [
             t("Отступ над заголовком делается больше, чем под ним: margin-block: 2em 0.5em.", "Space above a heading is larger than below: margin-block: 2em 0.5em."),
-            t("Единицы lh и rlh равны интерлиньяжу элемента и корневого элемента соответственно и позволяют задавать отступы, кратные строке.", "The lh and rlh units equal the line height of the element and of the root, allowing spacing in multiples of a line."),
-            t("Для многострочных заголовков применяйте text-wrap: balance.", "Apply text-wrap: balance to multi-line headings.")
+            t("Единицы lh и rlh равны интерлиньяжу элемента и корневого элемента соответственно и позволяют задавать отступы, кратные строке.", "The lh and rlh units equal the line height of the element and of the root, allowing spacing in multiples of a line.")
           ],
           code: "h2 {\n  font-size: var(--step-3);\n  line-height: 1.2;\n  margin-block: 2rlh 0.5rlh;\n  text-wrap: balance;\n}",
           sources: [R.rutterRhythm, R.mdnLength, R.mdnTextWrap]
@@ -1366,7 +1360,7 @@
         t("1.125–1.2 — интерфейсы и мобильные экраны; 1.25–1.333 — универсально; 1.5–1.618 — выразительные заголовки.", "1.125–1.2 for interfaces and mobile; 1.25–1.333 versatile; 1.5–1.618 for expressive headlines."),
         t("Шкала хранится в токенах (--step-n), компоненты используют смысловые токены.", "Keep the scale in tokens (--step-n); components use semantic tokens."),
         t("Адаптивная шкала — clamp() с rem + vw; на мобильных меньше база и коэффициент.", "Fluid scale: clamp() with rem + vw; smaller base and ratio on mobile."),
-        t("Отступ над заголовком больше, чем под ним; интерлиньяж заголовков 1.1–1.25.", "More space above a heading than below; heading line height 1.1–1.25."),
+        t("Отступ над заголовком больше, чем под ним; отступы кратны интерлиньяжу (lh, rlh).", "More space above a heading than below; spacing in multiples of line height (lh, rlh)."),
         t("Уровень h1–h6 — по структуре, размер — классом; один h1, без пропуска уровней.", "h1–h6 by structure, size by class; one h1, no skipped levels.")
       ],
       readings: [R.timBrown, R.typeScale, R.utopia, R.butterickHeadings, R.rutterRhythm, R.mdnClamp, R.mdnLength, R.mdnHeadings, R.wcagHeadings, R.webdevDesignType]
@@ -1389,8 +1383,7 @@
           body: t("Вторая гарнитура оправдана, только если она выполняет отдельную функцию: заголовки и основной текст, интерфейс и содержание, текст и программный код. Во многих случаях иерархию достаточно построить средствами одной гарнитуры — кеглем, насыщенностью и курсивом.", "A second typeface is justified only when it serves a distinct function: headings vs body, interface vs content, text vs code. In many cases one typeface suffices, with hierarchy built through size, weight and italic."),
           points: [
             t("Большинство макетов допускает вторую гарнитуру, немногие — третью; четыре и более практически всегда избыточны.", "Most layouts tolerate a second typeface, few a third; four or more are almost always excessive."),
-            t("За каждой гарнитурой закрепляется постоянная роль; смена шрифта внутри абзаца недопустима.", "Each typeface has a consistent role; switching fonts within a paragraph is not acceptable."),
-            t("Перед добавлением новой гарнитуры следует исчерпать возможности начертаний уже выбранной.", "Before adding a typeface, exhaust the styles of the one already chosen.")
+            t("За каждой гарнитурой закрепляется постоянная роль; смена шрифта внутри абзаца недопустима.", "Each typeface has a consistent role; switching fonts within a paragraph is not acceptable.")
           ],
           sources: [R.butterickMixing, R.skillboxPairs]
         },
@@ -1448,7 +1441,7 @@
           title: t("Кириллица в шрифтовой паре", "Cyrillic in a font pair"),
           body: t("Рекомендации по сочетанию шрифтов и сервисы подбора пар, как правило, ориентированы на латиницу. Кириллица одной из гарнитур может быть проработана слабее или иметь иной характер, чем латиница, и пара, удачная в английском тексте, может не сложиться в русском.", "Pairing guides and pairing services are usually Latin-oriented. The Cyrillic of one typeface may be weaker or differ in character from its Latin, so a pair that works in English may fail in Russian."),
           points: [
-            t("Оценивайте пару на русском тексте с характерными знаками: Ж, Ф, Д, Л, б, ы.", "Evaluate the pair on Russian text with characteristic letters: Ж, Ф, Д, Л, б, ы."),
+            t("Оценивайте пару на русском тексте; знаки, выявляющие качество кириллицы, перечислены в модуле 1.", "Evaluate the pair on Russian text; the letters that reveal Cyrillic quality are listed in module 1."),
             t("Проверяйте, во всех ли нужных начертаниях есть кириллица.", "Check that Cyrillic is available in all the styles you need."),
             t("Для кириллицы существуют специализированные инструменты подбора пар, например комбинатор кириллических шрифтов Typotheque.", "Dedicated Cyrillic pairing tools exist, such as Typotheque's Cyrillic font combinator.")
           ],
@@ -1470,7 +1463,7 @@
           title: t("Роли шрифтов в CSS", "Font roles in CSS"),
           body: t("Шрифтовую пару удобно описывать через пользовательские свойства, отражающие роли, а не названия гарнитур. Это позволяет заменить гарнитуру в одном месте и обеспечивает согласованность между макетом и кодом.", "Describe the font pair with custom properties named after roles rather than typefaces. This lets you replace a typeface in one place and keeps design and code consistent."),
           points: [
-            t("Для каждой роли задаётся собственный список резервных шрифтов того же класса.", "Each role gets its own fallback list of the same class."),
+            t("Для каждой роли задаётся собственный список резервных шрифтов (правила — модуль 2).", "Each role gets its own fallback list (rules in module 2)."),
             t("Типичные роли: --font-heading, --font-body, --font-ui, --font-mono.", "Typical roles: --font-heading, --font-body, --font-ui, --font-mono.")
           ],
           code: ":root {\n  --font-heading: \"Playfair Display\", Georgia, serif;\n  --font-body: \"Source Sans 3\", system-ui, sans-serif;\n  --font-mono: \"Source Code Pro\", ui-monospace, monospace;\n}\nh1, h2, h3 { font-family: var(--font-heading); }\nbody { font-family: var(--font-body); }\ncode { font-family: var(--font-mono); }",
@@ -1537,7 +1530,7 @@
           figure: "contrastscale",
           body: t("Контраст определяется как отношение относительной яркости более светлого и более тёмного цветов и выражается величиной от 1:1 до 21:1. Требования WCAG 2.1 положены в основу российского стандарта ГОСТ Р 52872-2019, действующего с 1 апреля 2020 года.", "Contrast is the ratio of the relative luminance of the lighter and darker colours, ranging from 1:1 to 21:1. WCAG 2.1 requirements underlie the Russian standard GOST R 52872-2019, in force since 1 April 2020."),
           points: [
-            t("Уровень AA (критерий 1.4.3): не менее 4.5:1 для обычного текста и 3:1 для крупного. Крупным считается текст от 18 pt (около 24 px) или от 14 pt полужирного начертания (около 18.5 px).", "Level AA (1.4.3): at least 4.5:1 for normal text and 3:1 for large text. Large text is 18 pt (about 24 px) or 14 pt bold (about 18.5 px) and above."),
+            t("Уровень AA (критерий 1.4.3): не менее 4.5:1 для обычного текста и 3:1 для крупного. Крупным считается текст от 18 pt (около 24 px) или от 14 pt полужирного начертания (около 18.7 px; перевод пунктов в пиксели — модуль 5).", "Level AA (1.4.3): at least 4.5:1 for normal text and 3:1 for large text. Large text is 18 pt (about 24 px) or 14 pt bold (about 18.7 px) and above; pt-to-px conversion is in module 5."),
             t("Уровень AAA (критерий 1.4.6): 7:1 для обычного текста и 4.5:1 для крупного.", "Level AAA (1.4.6): 7:1 for normal text and 4.5:1 for large text."),
             t("Исключения: логотипы, декоративный текст, неактивные элементы интерфейса.", "Exceptions: logotypes, decorative text, inactive interface components."),
             t("Для границ полей, значков и индикаторов фокуса действует критерий 1.4.11 — не менее 3:1 относительно соседних цветов.", "Field borders, icons and focus indicators fall under 1.4.11: at least 3:1 against adjacent colours.")
@@ -1585,7 +1578,7 @@
           points: [
             t("Контраст проверяется в обеих темах: цвет, достаточный на белом фоне, может оказаться недостаточным на тёмном.", "Check contrast in both themes: a colour sufficient on white may be insufficient on dark."),
             t("Сочетание чисто белого текста с чисто чёрным фоном даёт максимальный контраст 21:1, однако многие дизайн-системы используют смягчённые пары, чтобы снизить эффект ореола.", "Pure white on pure black gives the maximum 21:1, but many design systems use softened pairs to reduce halation."),
-            t("Насыщенность основного текста в тёмной теме допустимо снизить (см. модуль 3).", "Body weight may be reduced in dark mode (see module 3).")
+            t("Насыщенность основного текста в тёмной теме допустимо снизить (см. модуль 4).", "Body weight may be reduced in dark mode (see module 4).")
           ],
           code: ":root { color-scheme: light dark; }\nbody {\n  color: light-dark(#1b2233, #e3e6eb);\n  background: light-dark(#ffffff, #16181d);\n}",
           demo: "darkpair",
@@ -1702,7 +1695,7 @@
         }
       ],
       cheatsheet: [
-        t("Контраст текста: 4.5:1 (обычный), 3:1 (крупный: от 24 px или 18.5 px полужирного); AAA — 7:1.", "Text contrast: 4.5:1 normal, 3:1 large (24 px+ or 18.5 px bold); AAA 7:1."),
+        t("Контраст текста: 4.5:1 (обычный), 3:1 (крупный: от 24 px или 18.7 px полужирного); AAA — 7:1.", "Text contrast: 4.5:1 normal, 3:1 large (24 px+ or 18.7 px bold); AAA 7:1."),
         t("Элементы интерфейса и фокус — не менее 3:1 к соседним цветам.", "UI components and focus: at least 3:1 against adjacent colours."),
         t("Проверяйте вторичный текст, заполнители, кнопки и текст на изображениях; контраст — в обеих темах.", "Check secondary text, placeholders, buttons and text on images; contrast in both themes."),
         t("Не запрещайте масштабирование; учитывайте prefers-contrast и forced-colors.", "Never disable zoom; support prefers-contrast and forced-colors."),
@@ -1855,8 +1848,7 @@
           body: t("Типографские знаки вводятся непосредственно в кодировке UTF-8 или именованными ссылками HTML. Для текстов из систем управления контентом применяют автоматические типографы, однако их результат требует проверки.", "Typographic characters are entered directly in UTF-8 or as HTML named references. Automatic typographers are used for CMS content, but their output must be checked."),
           points: [
             t("Ссылки HTML: &nbsp; — неразрывный пробел, &mdash; — тире, &ndash; — короткое тире, &laquo; и &raquo; — «ёлочки», &bdquo; и &ldquo; — „лапки“, &minus; — минус.", "HTML references: &nbsp; non-breaking space, &mdash; em dash, &ndash; en dash, &laquo; and &raquo; guillemets, &bdquo; and &ldquo; low-high quotes, &minus; minus."),
-            t("Элемент <q> со свойством quotes: auto выводит кавычки, соответствующие языку из атрибута lang.", "The <q> element with quotes: auto renders quotes appropriate to the lang attribute."),
-            t("Проверяйте наличие всех этих знаков в выбранном шрифте и подмножестве.", "Check that the chosen font and subset contain all these characters.")
+            t("Элемент <q> со свойством quotes: auto выводит кавычки, соответствующие языку из атрибута lang.", "The <q> element with quotes: auto renders quotes appropriate to the lang attribute.")
           ],
           code: "<html lang=\"ru\">\n<p>Курс рассчитан на&nbsp;10&ndash;15&nbsp;занятий&nbsp;&mdash; около трёх месяцев.</p>\n<p><q>Шрифт&nbsp;&mdash; это <q>голос</q> текста</q></p>\n\nq { quotes: auto; }",
           sources: [R.mdnQuotes, R.typograf]
